@@ -1,11 +1,30 @@
 import React from 'react';
-import css from './App.module.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-function App() {
+import Home from './scenes/Home'
+import Submission from './scenes/Submission';
+import Report from './scenes/Report'
+
+import css from './app.module.css'
+
+const App = () => {
   return (
-    <div className={css.host}>
-      Welcome to Bitcoin Exchange
-    </div>
+    <BrowserRouter>
+      <div className={css.wrapper}>
+        <h1 className={css.title}>Welcome to Mordor Coin Exchange</h1>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/report">
+            <Report />
+          </Route>
+          <Route path="/:id">
+            <Submission />
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
