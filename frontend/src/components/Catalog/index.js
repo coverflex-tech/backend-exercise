@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getProducts } from '../../services/benefits';
 import Button from '../Button';
 import OrderModal from '../OrderModal';
+import Toast from '../Toast';
 
 import css from './catalog.module.css';
 
@@ -17,6 +18,7 @@ const Catalog = ({ user, onChange }) => {
   const [order, setOrder] = useState([]);
   const [balance, setBalance] = useState(user.balance || 0);
   const [showModal, setShowModal] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const onToggle = id => {
     const selectedIdx = selected.indexOf(id);
@@ -59,9 +61,13 @@ const Catalog = ({ user, onChange }) => {
   };
 
   useEffect(() => {
-    getProducts().then(products => {
-      setCatalog(products);
-    });
+    getProducts()
+      .then(products => {
+        setCatalog(products);
+      })
+      .catch(_ => {
+        setToast('Could not fetch catalog');
+      });
   }, []);
 
   return (
@@ -96,6 +102,7 @@ const Catalog = ({ user, onChange }) => {
           onConfirm={onConfirmOrder}
         />
       )}
+      {toast ? <Toast message="toast" onClose={() => setToast(null)} /> : null}
     </div>
   );
 };

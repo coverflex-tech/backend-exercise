@@ -26,9 +26,7 @@ const OrderModal = ({ order, user, onClose, onConfirm }) => {
         onConfirm(order.map(item => item.id));
       })
       .catch(err => {
-        if (err.response && err.response.data) {
-          setToast(err.response.data.error);
-        }
+        setToast('Could not place order');
         setFetching(false);
       });
   };

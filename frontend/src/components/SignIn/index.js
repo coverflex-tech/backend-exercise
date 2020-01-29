@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Button from '../Button';
+import Toast from '../Toast';
 import { getUser } from '../../services/benefits';
 
 import css from './signin.module.css';
@@ -8,16 +9,22 @@ import css from './signin.module.css';
 const SignIn = ({ onSignIn }) => {
   const [username, setUsername] = useState('');
   const [fetching, setFetching] = useState(false);
+  const [toast, setToast] = useState(null);
 
   /**
    * How do you usually handle authentication?
    */
   const onSubmit = newUsername => {
     setFetching(true);
-    getUser(newUsername).then(user => {
-      setFetching(false);
-      onSignIn(user);
-    });
+    getUser(newUsername)
+      .then(user => {
+        setFetching(false);
+        onSignIn(user);
+      })
+      .catch(() => {
+        setFetching(false);
+        setToast('Could not fetch User');
+      });
   };
 
   return (
@@ -48,6 +55,7 @@ const SignIn = ({ onSignIn }) => {
           <Button label="Sign In" type="submit" disabled={fetching} />
         </div>
       </form>
+      {toast ? <Toast message={toast} onClose={() => setToast(null)} /> : null}
     </div>
   );
 };

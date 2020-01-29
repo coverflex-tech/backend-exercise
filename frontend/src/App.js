@@ -22,14 +22,14 @@ const App = () => {
     <div className={css.host}>
       <div className={css.content}>
         <div className={css.header}>
-          <img src={logoSVG} className={css.logo} />
+          <img src={logoSVG} className={css.logo} alt="Coverflex Logo" />
           {user && (
             <div className={css.user}>
               <div>
-                <span role="img">👋</span> Hello, {user.user_id}
+                <span role="img" aria-label="Hello">👋</span> Hello, {user.user_id}
               </div>
               <div className={css.balance}>
-                <span role="img">💰</span>
+                <span role="img" aria-label="Balance">💰</span>
                 {balance} FlexPoints
               </div>
             </div>
