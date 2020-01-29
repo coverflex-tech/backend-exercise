@@ -1,0 +1,23 @@
+.host {
+  width: 120px;
+  padding: 10px 16px;
+  margin-top: 12px;
+
+  background-color: #f0814d;
+  color: #fff;
+  border-radius: 4px;
+
+  font-weight: 600;
+  white-space: nowrap;
+
+  transition: background-color 0.25s ease-in-out;
+}
+
+.host:hover {
+  background-color: #ef7941;
+}
+
+.host:disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

@@ -1,0 +1,122 @@
+.host {
+  max-width: 980px;
+  margin: auto;
+}
+
+.grid {
+  padding-top: 100px;
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  width: calc(20% - 16px);
+  height: 140px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0, 0.4);
+  border-radius: 4px;
+
+  transition: background-color 0.15s ease-in-out,
+    opacity 0.15s ease-in-out;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  cursor: pointer;
+}
+
+.item:nth-child(5n) {
+  margin-right: 0;
+}
+
+.item:hover {
+  background-color: #f0814d;
+  color: #fff;
+}
+
+.item.selected {
+  background-color: #ef7941;
+  color: #fff;
+}
+
+.item.bought {
+  background-color: grey;
+  color: #fff;
+  pointer-events: none;
+}
+
+.itemName {
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+.itemPrice {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+
+.cart {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.items {
+  font-size: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+@media only screen and (max-width: 860px) {
+  .item {
+    width: calc(25% - 16px);
+  }
+
+  .item:nth-child(4n) {
+    margin-right: 0;
+  }
+
+  .item:nth-child(5n) {
+    margin-right: 20px;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .item {
+    width: calc(33.3% - 16px);
+  }
+
+  .item:nth-child(3n) {
+    margin-right: 0;
+  }
+
+  .item:nth-child(4n) {
+    margin-right: 20px;
+  }
+}
+
+@media only screen and (max-width: 460px) {
+  .item {
+    width: calc(50% - 16px);
+  }
+
+  .item:nth-child(3n) {
+    margin-right: 20px;
+  }
+
+  .item:nth-child(2n) {
+    margin-right: 0;
+  }
+}
+

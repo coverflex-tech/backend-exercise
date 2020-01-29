@@ -7,6 +7,6 @@ body {
   color: #2d3144;
 }
 
-> * {
+* {
   box-sizing: border-box;
 }
