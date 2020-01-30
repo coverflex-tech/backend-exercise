@@ -2,11 +2,6 @@
 
 Welcome dear candidate!
 
-Here you will find a set of projects to help you test your coding exercise.
-If you find any issues, please let use know! 
-
-## Backend Exercise
-
 If you are applying for a Backend position here at Coverflex, we kindly provide you a simple React app for you to test out your service.
 
 Let me follow you through how to set it up:
