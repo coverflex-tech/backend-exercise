@@ -1,16 +1,9 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  /**
-   * Instead of hardcoding the URL here, what would be a better and more secure approach.
-   */
-  baseURL: 'https://coverflex-hiring-exercise.herokuapp.com/api' // Insert here backend env URL
+  baseURL: ''
 });
 
-
-/**
- * What would be your error handling approach?
- */
 export const getUser = username => {
   return instance.get(`/users/${username}`).then(response => {
     const { data } = response;

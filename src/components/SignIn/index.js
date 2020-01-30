@@ -11,9 +11,6 @@ const SignIn = ({ onSignIn }) => {
   const [fetching, setFetching] = useState(false);
   const [toast, setToast] = useState(null);
 
-  /**
-   * How do you usually handle authentication?
-   */
   const onSubmit = newUsername => {
     setFetching(true);
     getUser(newUsername)
@@ -48,9 +45,6 @@ const SignIn = ({ onSignIn }) => {
           value={username}
           onChange={evt => setUsername(evt.target.value)}
         />
-        {/**
-         * Form validation
-         */}
         <div className={css.footer}>
           <Button label="Sign In" type="submit" disabled={fetching} />
         </div>

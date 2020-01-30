@@ -7,10 +7,6 @@ import Toast from '../Toast';
 
 import css from './catalog.module.css';
 
-/**
- * Client-side validation
- * Server-side error handling.
- */
 const Catalog = ({ user, onChange }) => {
   const [catalog, setCatalog] = useState([]);
   const [selected, setSelected] = useState([]);

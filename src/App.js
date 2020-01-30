@@ -7,9 +7,6 @@ import logoSVG from './assets/logo.svg';
 import css from './app.module.css';
 
 const App = () => {
-  /**
-   * Session/State management
-   */
   const [user, setUser] = useState(null);
   const [balance, setBalance] = useState(0);
 
@@ -35,9 +32,6 @@ const App = () => {
             </div>
           )}
         </div>
-        {/**
-         * Assuming this application will grow and scale, how would you handle this type of complexity.
-         */}
         {user ? (
           <Catalog user={user} onChange={setBalance} />
         ) : (
