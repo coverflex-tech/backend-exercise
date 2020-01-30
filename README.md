@@ -4,7 +4,7 @@ Welcome dear candidate!
 
 If you are applying for a Backend position here at Coverflex, we kindly provide you a simple React app for you to test out your service.
 
-Let me follow you through how to set it up:
+Let me guide you through how to set it up:
 
 1. Go ahead and clone this repo.
 1. Make sure you have Node installed.
