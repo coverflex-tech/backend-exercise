@@ -1,4 +1,4 @@
-# Coverflex Hiring Boilerplates
+# Coverflex Hiring Boilerplate
 
 Welcome dear candidate!
 
