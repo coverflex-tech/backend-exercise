@@ -12,7 +12,7 @@ If you are applying for a Backend position here at Coverflex, we kindly provide 
 Let me follow you through how to set it up:
 
 1. Go ahead and clone this repo.
-1. Enter the frontend folder: ```cd frontend/```
+1. Make sure you have Node installed.
 1. Install npm dependencies: ```npm install```
 1. Run it in development mode: ```npm start```
 
