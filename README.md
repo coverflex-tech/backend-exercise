@@ -51,3 +51,10 @@ Now you should see something at ```http://localhost:3000```
 **Additional Requirements:**
 
 In development mode, this react app is expecting the local backend service to expose port ```4000```.
+
+## Setup
+
+For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
+As soon as you are finished, go ahead and make a Pull Request back to this repository.
+
+Good Luck! 🙌
