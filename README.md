@@ -22,7 +22,7 @@ Our Frontend Developer is expecting these API endpoints:
     - output `{"user": {"user_id": "johndoe", "data": {"balance": 500, "product_ids": [...]}}}`
 - `GET /api/products`
     - returns a list of all products
-    - output `{"products": [...] }`
+    - output `{"products": [{id: "netflix", "name": "Netflix", price: 75}, ...] }`
 - `POST /api/orders`
     - creates a new order
     - input `{"order": {"items": ["product-1", "product-2"], "user_id": "johndoe"}}`
@@ -51,3 +51,10 @@ Now you should see something at ```http://localhost:3000```
 **Additional Requirements:**
 
 In development mode, this react app is expecting the local backend service to expose port ```4000```.
+
+## Setup
+
+For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
+As soon as you are finished, go ahead and make a Pull Request back to this repository.
+
+Good Luck! 🙌
