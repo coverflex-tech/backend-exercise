@@ -3,7 +3,7 @@ defmodule BackendWeb.FallbackController do
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
-    |> put_status(:unprocessable_entity)
+    |> put_status(:bad_request)
     |> put_view(BackendWeb.ChangesetView)
     |> render("error.json", changeset: changeset)
   end

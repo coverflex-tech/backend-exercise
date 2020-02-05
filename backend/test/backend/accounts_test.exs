@@ -5,7 +5,6 @@ defmodule Backend.AccountsTest do
 
   describe "users" do
     @valid_attrs %{data: %{}, user_id: "some user_id"}
-    @invalid_attrs %{user_id: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
