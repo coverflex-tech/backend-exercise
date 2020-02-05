@@ -4,8 +4,6 @@ defmodule Backend.AccountsTest do
   alias Backend.Accounts
 
   describe "users" do
-    alias Backend.Accounts.User
-
     @valid_attrs %{data: %{}, user_id: "some user_id"}
     @invalid_attrs %{user_id: nil}
 

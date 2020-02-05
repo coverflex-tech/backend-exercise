@@ -2,7 +2,6 @@ defmodule BackendWeb.UserControllerTest do
   use BackendWeb.ConnCase
 
   alias Backend.Accounts
-  alias Backend.Accounts.User
 
   @create_attrs %{
     data: %{},
