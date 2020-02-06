@@ -2,6 +2,7 @@ defmodule Backend.Benefits do
   import Ecto.Query, warn: false
   alias Backend.Repo
 
+  alias Backend.Accounts
   alias Backend.Benefits.Product
   alias Backend.Benefits.Order
 
@@ -21,30 +22,43 @@ defmodule Backend.Benefits do
         where: p.id in ^attrs["items"]
 
     list = Repo.all(query)
+    user = Accounts.get_user(attrs["user_id"])
+    {:ok, balance} = Map.fetch(user.data, "balance")
 
-    parsed_attrs = %{
+    order_attrs = %{
       data: %{
         items: order_items(list, attrs["items"]),
         total: order_total(list)
       },
-      user_id: attrs["user_id"]
+      user: user
     }
 
-    %Order{}
-    |> Order.changeset(parsed_attrs)
-    |> Repo.insert()
-  end
+    user_attrs = %{
+      data: %{
+        product_ids: order_attrs.data.items,
+        balance: balance - order_attrs.data.total
+      }
+    }
 
-  defp order_total(list) do
-    if Enum.all?(list) do
-      Enum.reduce(list, 0, fn p, acc -> p.price + acc end)
-    else
-      nil
+    result =
+      %Order{}
+      |> Order.changeset(order_attrs)
+      |> Repo.insert()
+
+    case result do
+      {:ok, order} ->
+        Accounts.update_user(user, user_attrs)
+        {:ok, order}
+
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 
+  defp order_total(list), do: Enum.reduce(list, 0, fn p, acc -> p.price + acc end)
+
   defp order_items(list, attr_list) do
     db_list = Enum.map(list, fn p -> p.id end)
-    if db_list == attr_list, do: db_list, else: []
+    if Enum.all?(attr_list, fn item -> item in db_list end), do: attr_list, else: []
   end
 end

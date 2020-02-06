@@ -16,8 +16,14 @@ defmodule Backend.Accounts do
   end
 
   def create_user(attrs \\ %{}) do
-    %User{data: %{balance: 500, product_ids: []}}
+    %User{data: %{balance: 100, product_ids: []}}
     |> User.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def update_user(user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
   end
 end

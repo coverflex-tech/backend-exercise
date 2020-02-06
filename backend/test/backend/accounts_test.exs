@@ -24,8 +24,14 @@ defmodule Backend.AccountsTest do
       user = Accounts.get_user("new user_id")
 
       assert user.user_id == "new user_id"
-      assert user.data.balance == 500
+      assert user.data.balance == 100
       assert user.data.product_ids == []
+    end
+
+    test "update_user/2 returns the user with updated data" do
+      user = user_fixture()
+      assert {:ok, user} = Accounts.update_user(user, %{data: %{balance: 99}})
+      assert user.data.balance == 99
     end
   end
 end
