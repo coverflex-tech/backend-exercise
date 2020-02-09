@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: ''
+  baseURL: process.env.REACT_APP_API_BASE_URL
 });
 
-export const getUser = username => {
+export const getUser = username => {  
   return instance.get(`/users/${username}`).then(response => {
     const { data } = response;
     return {
