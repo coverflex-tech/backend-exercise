@@ -23,7 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # exclude folders
-/backend/tmp/*
-/backend/log/*
+tmp
+log
 
-/backend/.byebug_history
+.byebug_history
