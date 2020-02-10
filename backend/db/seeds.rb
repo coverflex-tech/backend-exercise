@@ -1,0 +1,8 @@
+Product.create!(code: 'netflix', name: "Netflix", price: rand(-100))
+Product.create!(code: 'apple', name: "Apple TV", price: rand(-100))
+Product.create!(code: 'hbo', name: "HBO Go", price: rand(-100))
+Product.create!(code: 'crackle', name: "Crackle", price: rand(-100))
+Product.create!(code: 'looke', name: "Looke", price: rand(-100))
+Product.create!(code: 'mubi', name: "Mubi", price: rand(-100))
+Product.create!(code: 'net_movies', name: "NetMovies", price: rand(-100))
+Product.create!(code: 'google_play_store', name: "Google Play Store", price: rand(-100))  

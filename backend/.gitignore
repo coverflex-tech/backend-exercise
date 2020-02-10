@@ -1,0 +1,5 @@
+# exclude folders
+tmp/*
+log/*
+
+.byebug_history

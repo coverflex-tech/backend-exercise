@@ -280,3 +280,370 @@ Processing by Api::ProductsController#index as JSON
 Completed 200 OK in 2ms (Views: 1.7ms | ActiveRecord: 0.2ms | Allocations: 1384)
 
 
+  [1m[35m (1.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1[0m  [["key", "environment"]]
+  [1m[35m (751.1ms)[0m  [1m[35mDROP DATABASE IF EXISTS "coverflex_development"[0m
+  [1m[35m (37.2ms)[0m  [1m[35mDROP DATABASE IF EXISTS "coverflex_test"[0m
+  [1m[35m (102.0ms)[0m  [1m[35mCREATE DATABASE "coverflex_development" ENCODING = 'unicode'[0m
+  [1m[35m (50.0ms)[0m  [1m[35mCREATE DATABASE "coverflex_test" ENCODING = 'unicode'[0m
+  [1m[35m (3.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_try_advisory_lock(2073526805391686085)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20200209145203)
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.9ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "username" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE  INDEX  "index_users_on_username" ON "users"  ("username")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200209145203"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateProducts (20200209182154)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE TABLE "products" ("id" bigserial primary key, "code" character varying, "name" character varying, "price" float, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE  INDEX  "index_products_on_code" ON "products"  ("code")[0m
+  [1m[36mprimary::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200209182154"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateBalances (20200209193540)
+  [1m[35m (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE TABLE "balances" ("id" bigserial primary key, "user_id" integer, "amount" float, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE  INDEX  "index_balances_on_user_id" ON "balances"  ("user_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200209193540"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreateOrders (20200209202829)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE TABLE "orders" ("id" bigserial primary key, "user_id" bigint NOT NULL, "total" float, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_f868b47f6a"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE  INDEX  "index_orders_on_user_id" ON "orders"  ("user_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE  INDEX  "index_orders_on_id" ON "orders"  ("id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200209202829"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+Migrating to CreatePurchaseds (20200209210114)
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE TABLE "purchaseds" ("id" bigserial primary key, "order_id" bigint NOT NULL, "product_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, CONSTRAINT "fk_rails_622548a1de"
+FOREIGN KEY ("order_id")
+  REFERENCES "orders" ("id")
+, CONSTRAINT "fk_rails_dee259c3dd"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE  INDEX  "index_purchaseds_on_order_id" ON "purchaseds"  ("order_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE  INDEX  "index_purchaseds_on_product_id" ON "purchaseds"  ("product_id")[0m
+  [1m[36mprimary::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20200209210114"]]
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2020-02-10 00:01:10.423056"], ["updated_at", "2020-02-10 00:01:10.423056"]]
+  [1m[35m (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_advisory_unlock(2073526805391686085)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "netflix"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.6ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "netflix"], ["name", "Netflix"], ["price", 45.0], ["created_at", "2020-02-10 00:01:10.504463"], ["updated_at", "2020-02-10 00:01:10.504463"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "apple"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "apple"], ["name", "Apple TV"], ["price", 10.0], ["created_at", "2020-02-10 00:01:10.508930"], ["updated_at", "2020-02-10 00:01:10.508930"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "hbo"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "hbo"], ["name", "HBO Go"], ["price", 62.0], ["created_at", "2020-02-10 00:01:10.512193"], ["updated_at", "2020-02-10 00:01:10.512193"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "crackle"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "crackle"], ["name", "Crackle"], ["price", 82.0], ["created_at", "2020-02-10 00:01:10.515893"], ["updated_at", "2020-02-10 00:01:10.515893"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "looke"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "looke"], ["name", "Looke"], ["price", 41.0], ["created_at", "2020-02-10 00:01:10.519299"], ["updated_at", "2020-02-10 00:01:10.519299"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "mubi"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "mubi"], ["name", "Mubi"], ["price", 43.0], ["created_at", "2020-02-10 00:01:10.522772"], ["updated_at", "2020-02-10 00:01:10.522772"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "net_movies"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "net_movies"], ["name", "NetMovies"], ["price", 75.0], ["created_at", "2020-02-10 00:01:10.526232"], ["updated_at", "2020-02-10 00:01:10.526232"]]
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "products" WHERE "products"."code" = $1 LIMIT $2[0m  [["code", "google_play_store"], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.2ms)[0m  [1m[32mINSERT INTO "products" ("code", "name", "price", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["code", "google_play_store"], ["name", "Google Play Store"], ["price", 39.0], ["created_at", "2020-02-10 00:01:10.530087"], ["updated_at", "2020-02-10 00:01:10.530087"]]
+  [1m[35m (0.2ms)[0m  [1m[35mCOMMIT[0m
+Started GET "/users/123" for 127.0.0.1 at 2020-02-10 00:01:36 +0000
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users/123"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.1) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.1) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/users/123" for 127.0.0.1 at 2020-02-10 00:01:38 +0000
+  
+ActionController::RoutingError (No route matches [GET] "/users/123"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.1) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.1) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+DEPRECATION WARNING: Using `bin/rake routes` is deprecated and will be removed in Rails 6.1. Use `bin/rails routes` instead.
+ (called from load at /Users/danielcarvalho/.rvm/gems/ruby-2.6.5/bin/rake:23)
+Started GET "/users/123" for 127.0.0.1 at 2020-02-10 00:02:00 +0000
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users/123"):
+  
+actionpack (6.0.2.1) lib/action_dispatch/middleware/debug_exceptions.rb:36:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/show_exceptions.rb:33:in `call'
+railties (6.0.2.1) lib/rails/rack/logger.rb:38:in `call_app'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `block in call'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `block in tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:28:in `tagged'
+activesupport (6.0.2.1) lib/active_support/tagged_logging.rb:80:in `tagged'
+railties (6.0.2.1) lib/rails/rack/logger.rb:26:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/remote_ip.rb:81:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/request_id.rb:27:in `call'
+rack (2.2.1) lib/rack/runtime.rb:22:in `call'
+activesupport (6.0.2.1) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/static.rb:126:in `call'
+rack (2.2.1) lib/rack/sendfile.rb:110:in `call'
+actionpack (6.0.2.1) lib/action_dispatch/middleware/host_authorization.rb:83:in `call'
+rack-cors (1.1.1) lib/rack/cors.rb:100:in `call'
+railties (6.0.2.1) lib/rails/engine.rb:526:in `call'
+puma (4.3.1) lib/puma/configuration.rb:228:in `call'
+puma (4.3.1) lib/puma/server.rb:681:in `handle_request'
+puma (4.3.1) lib/puma/server.rb:472:in `process_client'
+puma (4.3.1) lib/puma/server.rb:328:in `block in run'
+puma (4.3.1) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/api/users/123" for ::1 at 2020-02-10 00:04:24 +0000
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Api::UsersController#show as JSON
+  Parameters: {"id"=>"123"}
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Load (1.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "123"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "123"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Create (0.6ms)[0m  [1m[32mINSERT INTO "users" ("username", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["username", "123"], ["created_at", "2020-02-10 00:04:25.174922"], ["updated_at", "2020-02-10 00:04:25.174922"]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mBalance Create (0.9ms)[0m  [1m[32mINSERT INTO "balances" ("user_id", "amount", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["user_id", 1], ["amount", 500.0], ["created_at", "2020-02-10 00:04:25.197567"], ["updated_at", "2020-02-10 00:04:25.197567"]]
+  ↳ app/models/user.rb:10:in `block in <class:User>'
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/user_find_or_create.rb:26:in `find_or_create_user'
+  [1m[36mOrder Load (1.6ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:35:in `user_products'
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:43:in `return'
+Completed 200 OK in 291ms (Views: 0.3ms | ActiveRecord: 13.2ms | Allocations: 221914)
+
+
+Started GET "/api/products" for ::1 at 2020-02-10 00:04:25 +0000
+Processing by Api::ProductsController#index as JSON
+  [1m[36mProduct Load (0.7ms)[0m  [1m[34mSELECT "products".* FROM "products"[0m
+  ↳ app/controllers/api/products_controller.rb:9:in `index'
+Completed 200 OK in 11ms (Views: 5.6ms | ActiveRecord: 3.1ms | Allocations: 6743)
+
+
+Started POST "/api/orders" for ::1 at 2020-02-10 00:04:27 +0000
+Processing by Api::OrdersController#create as JSON
+  Parameters: {"order"=>{"items"=>["hbo", "crackle"], "user_id"=>"123"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "123"], ["LIMIT", 1]]
+  ↳ app/services/order_create.rb:16:in `init'
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT SUM("products"."price") FROM "products" WHERE "products"."code" IN ($1, $2)[0m  [["code", "hbo"], ["code", "crackle"]]
+  ↳ app/services/order_create.rb:18:in `init'
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."code" IN ($1, $2)[0m  [["code", "hbo"], ["code", "crackle"]]
+  ↳ app/services/order_create.rb:24:in `validate_data'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "products"."code" FROM "products"[0m
+  ↳ app/services/order_create.rb:28:in `check_products_exists'
+  [1m[36mOrder Load (0.2ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/order_create.rb:36:in `already_purchased'
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/order_create.rb:43:in `check_balance'
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/order_create.rb:48:in `block in create_order'
+  [1m[36mOrder Create (0.8ms)[0m  [1m[32mINSERT INTO "orders" ("user_id", "total", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["user_id", 1], ["total", 144.0], ["created_at", "2020-02-10 00:04:27.839969"], ["updated_at", "2020-02-10 00:04:27.839969"]]
+  ↳ app/services/order_create.rb:48:in `block in create_order'
+  [1m[36mPurchased Create (1.4ms)[0m  [1m[32mINSERT INTO "purchaseds" ("order_id", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["order_id", 1], ["product_id", 3], ["created_at", "2020-02-10 00:04:27.848554"], ["updated_at", "2020-02-10 00:04:27.848554"]]
+  ↳ app/services/order_create.rb:50:in `block (2 levels) in create_order'
+  [1m[36mPurchased Create (0.3ms)[0m  [1m[32mINSERT INTO "purchaseds" ("order_id", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["order_id", 1], ["product_id", 4], ["created_at", "2020-02-10 00:04:27.851311"], ["updated_at", "2020-02-10 00:04:27.851311"]]
+  ↳ app/services/order_create.rb:50:in `block (2 levels) in create_order'
+  [1m[35m (0.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/order_create.rb:47:in `create_order'
+Completed 200 OK in 28ms (Views: 0.2ms | ActiveRecord: 7.3ms | Allocations: 14934)
+
+
+Started GET "/api/users/123" for ::1 at 2020-02-10 00:04:29 +0000
+Processing by Api::UsersController#show as JSON
+  Parameters: {"id"=>"123"}
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "123"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/user_find_or_create.rb:26:in `find_or_create_user'
+  [1m[36mOrder Load (0.2ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:35:in `user_products'
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "products"."code" FROM "products" INNER JOIN "purchaseds" ON "products"."id" = "purchaseds"."product_id" WHERE "purchaseds"."order_id" = $1[0m  [["order_id", 1]]
+  ↳ app/services/user_find_or_create.rb:35:in `block in user_products'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:43:in `return'
+Completed 200 OK in 12ms (Views: 0.2ms | ActiveRecord: 1.3ms | Allocations: 5382)
+
+
+Started GET "/api/products" for ::1 at 2020-02-10 00:04:29 +0000
+Processing by Api::ProductsController#index as JSON
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products"[0m
+  ↳ app/controllers/api/products_controller.rb:9:in `index'
+Completed 200 OK in 2ms (Views: 1.4ms | ActiveRecord: 0.2ms | Allocations: 1384)
+
+
+Started GET "/api/users/456" for ::1 at 2020-02-10 00:04:33 +0000
+Processing by Api::UsersController#show as JSON
+  Parameters: {"id"=>"456"}
+  [1m[35m (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "456"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "456"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("username", "created_at", "updated_at") VALUES ($1, $2, $3) RETURNING "id"[0m  [["username", "456"], ["created_at", "2020-02-10 00:04:33.651124"], ["updated_at", "2020-02-10 00:04:33.651124"]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mBalance Create (0.2ms)[0m  [1m[32mINSERT INTO "balances" ("user_id", "amount", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["user_id", 2], ["amount", 500.0], ["created_at", "2020-02-10 00:04:33.652833"], ["updated_at", "2020-02-10 00:04:33.652833"]]
+  ↳ app/models/user.rb:10:in `block in <class:User>'
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/user_find_or_create.rb:26:in `find_or_create_user'
+  [1m[36mOrder Load (0.2ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/user_find_or_create.rb:35:in `user_products'
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/user_find_or_create.rb:43:in `return'
+Completed 200 OK in 9ms (Views: 0.2ms | ActiveRecord: 1.5ms | Allocations: 6417)
+
+
+Started GET "/api/products" for ::1 at 2020-02-10 00:04:33 +0000
+Processing by Api::ProductsController#index as JSON
+  [1m[36mProduct Load (0.4ms)[0m  [1m[34mSELECT "products".* FROM "products"[0m
+  ↳ app/controllers/api/products_controller.rb:9:in `index'
+Completed 200 OK in 2ms (Views: 1.8ms | ActiveRecord: 0.4ms | Allocations: 1384)
+
+
+Started POST "/api/orders" for ::1 at 2020-02-10 00:04:35 +0000
+Processing by Api::OrdersController#create as JSON
+  Parameters: {"order"=>{"items"=>["looke"], "user_id"=>"456"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "456"], ["LIMIT", 1]]
+  ↳ app/services/order_create.rb:16:in `init'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("products"."price") FROM "products" WHERE "products"."code" = $1[0m  [["code", "looke"]]
+  ↳ app/services/order_create.rb:18:in `init'
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."code" = $1[0m  [["code", "looke"]]
+  ↳ app/services/order_create.rb:24:in `validate_data'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "products"."code" FROM "products"[0m
+  ↳ app/services/order_create.rb:28:in `check_products_exists'
+  [1m[36mOrder Load (0.3ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/order_create.rb:36:in `already_purchased'
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/order_create.rb:43:in `check_balance'
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/order_create.rb:48:in `block in create_order'
+  [1m[36mOrder Create (0.3ms)[0m  [1m[32mINSERT INTO "orders" ("user_id", "total", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["user_id", 2], ["total", 41.0], ["created_at", "2020-02-10 00:04:35.469393"], ["updated_at", "2020-02-10 00:04:35.469393"]]
+  ↳ app/services/order_create.rb:48:in `block in create_order'
+  [1m[36mPurchased Create (0.3ms)[0m  [1m[32mINSERT INTO "purchaseds" ("order_id", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["order_id", 2], ["product_id", 5], ["created_at", "2020-02-10 00:04:35.471765"], ["updated_at", "2020-02-10 00:04:35.471765"]]
+  ↳ app/services/order_create.rb:50:in `block (2 levels) in create_order'
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/order_create.rb:47:in `create_order'
+Completed 200 OK in 12ms (Views: 0.2ms | ActiveRecord: 2.5ms | Allocations: 7005)
+
+
+Started GET "/api/users/123" for ::1 at 2020-02-10 00:04:41 +0000
+Processing by Api::UsersController#show as JSON
+  Parameters: {"id"=>"123"}
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "123"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/user_find_or_create.rb:26:in `find_or_create_user'
+  [1m[36mOrder Load (0.2ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:35:in `user_products'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "products"."code" FROM "products" INNER JOIN "purchaseds" ON "products"."id" = "purchaseds"."product_id" WHERE "purchaseds"."order_id" = $1[0m  [["order_id", 1]]
+  ↳ app/services/user_find_or_create.rb:35:in `block in user_products'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 1]]
+  ↳ app/services/user_find_or_create.rb:43:in `return'
+Completed 200 OK in 6ms (Views: 0.2ms | ActiveRecord: 1.1ms | Allocations: 4194)
+
+
+Started GET "/api/products" for ::1 at 2020-02-10 00:04:41 +0000
+Processing by Api::ProductsController#index as JSON
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products"[0m
+  ↳ app/controllers/api/products_controller.rb:9:in `index'
+Completed 200 OK in 2ms (Views: 1.5ms | ActiveRecord: 0.3ms | Allocations: 1384)
+
+
+Started GET "/api/users/456" for ::1 at 2020-02-10 00:04:44 +0000
+Processing by Api::UsersController#show as JSON
+  Parameters: {"id"=>"456"}
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."username" = $1 LIMIT $2[0m  [["username", "456"], ["LIMIT", 1]]
+  ↳ app/services/user_find_or_create.rb:27:in `block in find_or_create_user'
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/services/user_find_or_create.rb:26:in `find_or_create_user'
+  [1m[36mOrder Load (0.1ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/user_find_or_create.rb:35:in `user_products'
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT "products"."code" FROM "products" INNER JOIN "purchaseds" ON "products"."id" = "purchaseds"."product_id" WHERE "purchaseds"."order_id" = $1[0m  [["order_id", 2]]
+  ↳ app/services/user_find_or_create.rb:35:in `block in user_products'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT SUM("balances"."amount") FROM "balances" WHERE "balances"."user_id" = $1[0m  [["user_id", 2]]
+  ↳ app/services/user_find_or_create.rb:43:in `return'
+Completed 200 OK in 7ms (Views: 0.2ms | ActiveRecord: 1.1ms | Allocations: 4183)
+
+
+Started GET "/api/products" for ::1 at 2020-02-10 00:04:44 +0000
+Processing by Api::ProductsController#index as JSON
+  [1m[36mProduct Load (0.4ms)[0m  [1m[34mSELECT "products".* FROM "products"[0m
+  ↳ app/controllers/api/products_controller.rb:9:in `index'
+Completed 200 OK in 3ms (Views: 2.0ms | ActiveRecord: 0.4ms | Allocations: 1384)
+
+
