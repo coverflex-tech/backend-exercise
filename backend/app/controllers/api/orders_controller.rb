@@ -6,6 +6,7 @@ module Api
     # @params [Object] order placement info
     # @return [Object] Order created Object
     def create
+      # QUESTION: Lack of consistency on response contract for the API
       begin              
         service = OrderCreate.call(params: params)      
         if service.success?

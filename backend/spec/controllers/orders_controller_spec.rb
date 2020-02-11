@@ -1,5 +1,8 @@
 require 'rails_helper'
 
+# QUESTION: Probably missing here some test that would ensure that balance
+# goes down and is persisted when something is purchased.
+
 RSpec.describe Api::OrdersController, type: :controller do
 
     context "when creating a valid order" do

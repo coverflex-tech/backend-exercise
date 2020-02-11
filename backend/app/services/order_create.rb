@@ -3,6 +3,9 @@ class OrderCreate < BusinessProcess::Base
     # Specify requirements    
     needs :params    
   
+    # QUESTION: How is using this benefitial for the overall code?
+    # QUESTION: Is using a 5 year old library a potential issue?
+    # QUESTION: Feels like elixir is in town hehe
     steps :init,
           :validate_data,                    
           :check_products_exists,
@@ -14,6 +17,7 @@ class OrderCreate < BusinessProcess::Base
     def init
       @order = nil
       @user = User.find_by(username: ActiveSupport::Inflector.transliterate(params[:order][:user_id].downcase.sub(/\s+/, '').to_s))
+      # QUESTION: Could there be an issue here if Product is nil?
       @products = Product.where(code: params[:order][:items])
       @total = @products.sum(:price)
     end
@@ -25,13 +29,15 @@ class OrderCreate < BusinessProcess::Base
     end    
 
     def check_products_exists
+      # QUESTION: Any performance concerns here by doing #.all?
       product_available = Product.all.pluck(:code)  
       unless params[:order][:items].nil?
         params[:order][:items].each { |pr| fail(:products_not_found) unless product_available.include?(pr) }       
       end
     end
 
-    def already_purchased 
+    def already_purchased
+      # QUESTION: Guard clause?
       unless @user.orders.nil?     
         @user.orders.each do |order|
           fail(:products_already_purchased) unless order.products.where(code: params[:order][:items]).empty?
