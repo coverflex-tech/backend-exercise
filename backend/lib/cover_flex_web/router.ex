@@ -9,5 +9,7 @@ defmodule CoverFlexWeb.Router do
     pipe_through :api
 
     get "/users/:id", UserController, :show
+
+    get "/products", ProductController, :index
   end
 end
