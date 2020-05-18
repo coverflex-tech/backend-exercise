@@ -1,7 +1,6 @@
 defmodule CoverFlex.UserControllerTest do
   use CoverFlexWeb.ConnCase
   alias CoverFlexWeb.Router.Helpers, as: Routes
-  Phoenix.Router
 
   describe "show" do
     test "shows user when given ID", %{conn: conn} do
