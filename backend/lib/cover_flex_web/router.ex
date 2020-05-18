@@ -7,5 +7,7 @@ defmodule CoverFlexWeb.Router do
 
   scope "/api", CoverFlexWeb do
     pipe_through :api
+
+    get "/users/:id", UserController, :show
   end
 end
