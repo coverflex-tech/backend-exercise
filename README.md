@@ -58,6 +58,7 @@ Create a `Repo`, migrate the migrations and seed some starting `Products`. The p
 ```bash
 mix ecto.create
 mix ecto.migrate
+mix run priv/repo/seeds.exs
 ```
 
 Go to `localhost:3000` and spend your FlexPoints!
