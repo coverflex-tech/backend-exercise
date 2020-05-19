@@ -61,4 +61,9 @@ mix ecto.migrate
 mix run priv/repo/seeds.exs
 ```
 
+Run the server on `localhost:4000`.
+```bash
+mix phx.server
+```
+
 Go to `localhost:3000` and spend your FlexPoints!
