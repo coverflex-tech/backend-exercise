@@ -1,60 +1,63 @@
 # Coverflex Backend Exercise
 
-Hello dear Backend developer!
+This is a solution for the Coverflex backend exercise implemented with Elixir.
 
-Your Project Manager needs you to quickly build an app that can be used by company employees to self-manage their benefits.
-Our Frontend Developer has already built a UI prototype to cover the required flows. You'll need to build an API to provide backend functionality to this prototype and integrate both.
+## Summary
+This exercise requires the building of a backend that listens on some RESTful(-ish) endpoints for three resources. It should return JSON payloads.
 
-The API should include these use cases:
-* Retrieve data from a single user
-    * users are indexed and queried by username
-* Retrieve a collection of products
-    * products must have a unique identifier, a price and a name
-* Placing an order
-    * users aren't allowed to place an order if their current balance isn't enough for the order total
-    * users aren't allowed to order a product previously ordered
-    * orders must record which user is ordering, which products are being ordered and what the total amount is
+**Users** can be read by string IDs. This GET request is **not** idempotent, since it creates a user if it does not exist already.
 
-Our Frontend Developer is expecting these API endpoints:
-- `GET /api/users/:user_id`
-    - returns a single user
-    - if user_id doesn't exist, it creates a new user
-    - output `{"user": {"user_id": "johndoe", "data": {"balance": 500, "product_ids": [...]}}}`
-- `GET /api/products`
-    - returns a list of all products
-    - output `{"products": [{id: "netflix", "name": "Netflix", price: 75}, ...] }`
-- `POST /api/orders`
-    - creates a new order
-    - input `{"order": {"items": ["product-1", "product-2"], "user_id": "johndoe"}}`
-    - output 200 `{"order": {"order_id": "123", "data": {"items": [...], "total": 500}}}`
-    - output 400 `{"error": "products_not_found"}`
-    - output 400 `{"error": "products_already_purchased"}`
-    - output 400 `{"error": "insufficient_balance"}`
+**Products** represent the benefits that a user can _order_. They have a price, and a human-friendly name.
 
-**Notes:**
-- You're free to use whatever means and technology to achieve the goal
+**Orders** can be created with a POST request. They are linked to users, and encompass one or more products, the price total of which is stored by orders.
+Users cannot order products they already have purchased, invalidating the whole order.
+Users cannot order products if the order total is superior to their current balance.
 
+## Backend Stack
+* Erlang/OTP 22
+* Elixir 1.10.3
+* Phoenix 1.5.1
+* PostgreSQL 12.3-alpine (🐋)
+* Docker
 
-## Web App
-Our Frontend Developer has kindly provided you a simple React app for you to test out your service.
+## Installation
+### Frontend
+Navigate to the `/frontend` directory and install dependencies. Afterwards, prop up the dev server.
+```bash
+$ cd frontend
+$ npm install
 
-Let me guide you through how to set it up:
+# [...]
 
-1. Go ahead and clone this repo.
-1. Go inside frontend folder : ```cd frontend/```
-1. Make sure you have Node installed.
-1. Install npm dependencies: ```npm install```
-1. Run it in development mode: ```npm start```
+$ npm start
+```
 
-Now you should see something at ```http://localhost:3000```
+### Backend
+Follow the following instructions to install Elixir and Phoenix, the web framework for Elixir, as well as Docker.
+* [Elixir](https://elixir-lang.org/install.html)
+* [Phoenix](https://hexdocs.pm/phoenix/installation.html#content)
+* [Docker](https://docs.docker.com/get-docker/)
 
-**Additional Requirements:**
+Start a new terminal session and navigate to the root of the project.
+```bash
+cd backend-exercise
+```
 
-In development mode, this react app is expecting the local backend service to expose port ```4000```.
+Spin up the PostgreSQL service in the background.
+```bash
+docker-compose up -d
+```
 
-## Setup
+Navigate to the `/backend` directory and install project dependencies.
+```bash
+cd backend
+mix deps
+```
 
-For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
-As soon as you are finished, go ahead and make a Pull Request back to this repository.
+Create a `Repo`, migrate the migrations and seed some starting `Products`. The postgres service needs to be up.
+```bash
+mix ecto.create
+mix ecto.migrate
+```
 
-Good Luck! 🙌
+Go to `localhost:3000` and spend your FlexPoints!
