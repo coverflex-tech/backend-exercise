@@ -1,12 +1,14 @@
 defmodule CoverFlex.Products.Product do
   use Ecto.Schema
   import Ecto.Changeset
+  alias CoverFlex.Products.Order
 
   @primary_key {:id, :string, []}
 
   schema "products" do
     field :name, :string
     field :price, :integer
+    many_to_many :orders, Order, join_through: "products_orders"
 
     timestamps()
   end

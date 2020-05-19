@@ -11,5 +11,7 @@ defmodule CoverFlexWeb.Router do
     get "/users/:id", UserController, :show
 
     get "/products", ProductController, :index
+
+    post "/orders", OrderController, :create
   end
 end

@@ -17,4 +17,8 @@ defmodule CoverFlex.ProductsTest do
       assert length(products) == 2
     end
   end
+
+  describe "orders" do
+
+  end
 end

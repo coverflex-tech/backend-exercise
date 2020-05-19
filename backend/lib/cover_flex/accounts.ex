@@ -48,4 +48,12 @@ defmodule CoverFlex.Accounts do
         user
     end
   end
+
+  @spec bill_user(User.t(), integer()) :: User.t()
+  def bill_user(%User{} = user, ammount) do
+    new_balance = user.balance - ammount
+
+    Ecto.Changeset.change(user, balance: new_balance)
+    |> Repo.update!()
+  end
 end
