@@ -1,7 +1,6 @@
 defmodule CoverFlex.Products.Order do
   use Ecto.Schema
   import Ecto.Changeset
-  alias CoverFlex.Repo
   alias CoverFlex.Accounts
   alias CoverFlex.Accounts.User
   alias CoverFlex.Products
