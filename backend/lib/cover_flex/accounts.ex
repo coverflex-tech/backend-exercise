@@ -50,6 +50,9 @@ defmodule CoverFlex.Accounts do
   end
 
   @spec bill_user(User.t(), integer()) :: User.t()
+  @doc """
+  Subtract `ammount` from the `user`'s balance and update it.
+  """
   def bill_user(%User{} = user, ammount) do
     new_balance = user.balance - ammount
 
