@@ -51,7 +51,7 @@ docker-compose up -d
 Navigate to the `/backend` directory and install project dependencies.
 ```bash
 cd backend
-mix deps
+mix deps.get
 ```
 
 Create a `Repo`, migrate the migrations and seed some starting `Products`. The postgres service needs to be up.
