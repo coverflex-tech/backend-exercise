@@ -25,13 +25,22 @@ defmodule CoverFlex.AccountsTest do
       assert user == existing_user
     end
 
-    test "ensure_user/1 with ne ID returns new user" do
+    test "ensure_user/1 with new ID returns new user" do
       existing_user = Repo.insert!(%User{id: "alice"})
 
       assert user = Accounts.ensure_user("bob")
       assert user != existing_user
       assert user.id == "bob"
       assert user.balance == 500
+    end
+
+    test "bill_user/2 subtracts from balance" do
+      assert {:ok, user} = Accounts.create_user(%{id: "alice"})
+      Accounts.bill_user(user, 300)
+      user = Repo.get!(User, "alice")
+
+      assert user.id == "alice"
+      assert user.balance == 200
     end
   end
 end
