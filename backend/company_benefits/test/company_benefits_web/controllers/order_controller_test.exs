@@ -2,8 +2,9 @@ defmodule CompanyBenefitsWeb.OrderControllerTest do
   use CompanyBenefitsWeb.ConnCase
 
   alias CompanyBenefits.Accounts
-  alias CompanyBenefits.Products.ProductContext
+  alias CompanyBenefits.Products.{Product, ProductContext}
   alias CompanyBenefits.Accounts.{User, UserContext}
+  alias CompanyBenefits.Orders
 
   @username "some username"
   @invalid_attrs %{user_id: "other user", items: []}
@@ -58,6 +59,22 @@ defmodule CompanyBenefitsWeb.OrderControllerTest do
         post(conn, order_path(conn, :create),
           order: %{user_id: username, items: [product.identifier]}
         )
+
+      assert json_response(conn, 400)["errors"] != %{}
+    end
+
+    test "renders errors when user tries to buy the same product", %{
+      conn: conn,
+      user: %User{username: username},
+      product: %Product{identifier: identifier}
+    } do
+      Orders.create_order(%{
+        username: username,
+        identifiers: [identifier]
+      })
+
+      conn =
+        post(conn, order_path(conn, :create), order: %{user_id: username, items: [identifier]})
 
       assert json_response(conn, 400)["errors"] != %{}
     end

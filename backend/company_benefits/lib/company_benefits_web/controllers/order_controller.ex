@@ -32,6 +32,9 @@ defmodule CompanyBenefitsWeb.OrderController do
       {:error, :insufficient_balance} ->
         {:business_rule, "Insufficient balance"}
 
+      {:error, :products_already_bought} ->
+        {:business_rule, "Products already bought"}
+
       error ->
         error
     end

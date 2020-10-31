@@ -7,17 +7,18 @@ defmodule CompanyBenefits.Orders do
   alias CompanyBenefits.Products.ProductContext
   alias CompanyBenefits.Products
   alias CompanyBenefits.Accounts.{User, UserContext}
+  alias CompanyBenefits.Accounts
 
   @doc """
   Creates order.
   """
   def create_order(%{identifiers: identifiers, username: username})
       when is_bitstring(username) and is_list(identifiers) do
-    # validate products already bought
     Repo.transaction(fn ->
       with(
-        {:ok, {products, total}} <- validate_products(identifiers),
+        {:ok, {products, total}} <- validate_identifiers(identifiers),
         %User{} = user <- UserContext.get_user_by_username(username),
+        :ok <- can_buy(user, products),
         {:ok, newBalance} <- deduct_funds(user, total),
         {:ok, %Order{} = order} <-
           OrderContext.create_order(%{
@@ -42,7 +43,7 @@ defmodule CompanyBenefits.Orders do
     |> elem(1)
   end
 
-  defp validate_products(identifiers) do
+  defp validate_identifiers(identifiers) do
     products = ProductContext.list_products_by_identifier(identifiers)
     total = Products.sum_prices(products)
 
@@ -58,6 +59,17 @@ defmodule CompanyBenefits.Orders do
       {:ok, balance - total}
     else
       {:error, :insufficient_balance}
+    end
+  end
+
+  defp can_buy(%User{} = user, products) do
+    bought_products =
+      Accounts.get_ordered_products(user) |> Enum.map(fn product -> product.id end)
+
+    if Enum.all?(products, fn product -> product.id not in bought_products end) do
+      :ok
+    else
+      {:error, :products_already_bought}
     end
   end
 end
