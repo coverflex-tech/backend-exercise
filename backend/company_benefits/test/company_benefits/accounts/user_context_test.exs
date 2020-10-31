@@ -1,4 +1,4 @@
-defmodule CompanyBenefits.UserContextTest do
+defmodule CompanyBenefits.Accounts.UserContextTest do
   use CompanyBenefits.DataCase
 
   alias CompanyBenefits.Accounts.UserContext

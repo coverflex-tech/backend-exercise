@@ -10,4 +10,10 @@ defmodule CompanyBenefitsWeb.Router do
 
     get("/:username", UserController, :login)
   end
+
+  scope "/products", CompanyBenefitsWeb do
+    pipe_through(:api)
+
+    get("/", ProductController, :index)
+  end
 end
