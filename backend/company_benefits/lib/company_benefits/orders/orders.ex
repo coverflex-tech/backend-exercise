@@ -12,21 +12,32 @@ defmodule CompanyBenefits.Orders do
   """
   def create_order(%{identifiers: identifiers, username: username})
       when is_bitstring(username) and is_list(identifiers) do
-    products = ProductContext.list_products_by_identifier(identifiers)
+    Repo.transaction(fn ->
+      products = ProductContext.list_products_by_identifier(identifiers)
 
-    with(
-      %User{} = user <- UserContext.get_user_by_username(username),
-      {:ok, %Order{} = order} <-
-        OrderContext.create_order(%{
-          user_id: user.id,
-          products: products
-        })
-    ) do
-      {:ok, Repo.preload(order, :products)}
-    else
-      nil -> {:error, :user_not_found}
-      error -> error
-    end
+      with(
+        %User{} = user <- UserContext.get_user_by_username(username),
+        {:ok, %Order{} = order} <-
+          OrderContext.create_order(%{
+            user_id: user.id,
+            products: products
+          }),
+        order <- Repo.preload(order, :products),
+        {:ok, %User{}} <-
+          UserContext.update_user(user, %{
+            balance: user.balance - get_order_total(order)
+          })
+      ) do
+        {:ok, order}
+      else
+        nil ->
+          Repo.rollback({:error, :user_not_found})
+
+        error ->
+          Repo.rollback(error)
+      end
+    end)
+    |> elem(1)
   end
 
   @doc """

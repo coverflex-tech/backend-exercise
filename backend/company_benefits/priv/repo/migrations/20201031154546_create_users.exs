@@ -4,7 +4,7 @@ defmodule CompanyBenefits.Repo.Migrations.CreateUsers do
   def change do
     create table(:users) do
       add(:username, :string, null: false)
-      add(:balance, :integer, null: false, default: 0)
+      add(:balance, :float, null: false, default: 0)
 
       timestamps()
     end

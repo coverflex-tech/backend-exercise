@@ -3,7 +3,7 @@ defmodule CompanyBenefits.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
-    field(:balance, :integer, default: 0)
+    field(:balance, :float, default: 0)
     field(:username, :string)
 
     has_many(:orders, CompanyBenefits.Orders.Order, on_delete: :delete_all)
