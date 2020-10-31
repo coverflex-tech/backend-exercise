@@ -1,8 +1,12 @@
 defmodule CompanyBenefitsWeb.ErrorView do
   use CompanyBenefitsWeb, :view
 
-  def render("404.json", _assigns) do
-    %{errors: %{detail: "Page not found"}}
+  def render("400.json", _assigns) do
+    %{errors: %{detail: "Bad request"}}
+  end
+
+  def render("404.json", %{message: message}) do
+    %{errors: %{detail: message}}
   end
 
   def render("500.json", _assigns) do

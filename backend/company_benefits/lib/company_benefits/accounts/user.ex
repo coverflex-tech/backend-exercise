@@ -6,6 +6,8 @@ defmodule CompanyBenefits.Accounts.User do
     field(:balance, :integer, default: 0)
     field(:username, :string)
 
+    has_many(:orders, CompanyBenefits.Orders.Order, on_delete: :delete_all)
+
     timestamps()
   end
 

@@ -1,10 +1,7 @@
 defmodule CompanyBenefits.Accounts do
   @moduledoc """
-  The Accounts context.
+  The Accounts API.
   """
-
-  import Ecto.Query, warn: false
-  alias CompanyBenefits.Repo
 
   alias CompanyBenefits.Accounts.{User, UserContext}
 

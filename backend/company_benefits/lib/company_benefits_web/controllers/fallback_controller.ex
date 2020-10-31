@@ -12,9 +12,15 @@ defmodule CompanyBenefitsWeb.FallbackController do
     |> render(CompanyBenefitsWeb.ChangesetView, "error.json", changeset: changeset)
   end
 
-  def call(conn, _) do
+  def call(conn, {:not_found, message}) do
     conn
     |> put_status(:not_found)
-    |> render(CompanyBenefitsWeb.ErrorView, :"404")
+    |> render(CompanyBenefitsWeb.ErrorView, :"404", message: message)
+  end
+
+  def call(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render(CompanyBenefitsWeb.ErrorView, :"400")
   end
 end

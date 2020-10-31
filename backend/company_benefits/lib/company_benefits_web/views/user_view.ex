@@ -8,7 +8,7 @@ defmodule CompanyBenefitsWeb.UserView do
         user_id: user.username,
         data: %{
           balance: user.balance,
-          products_ids: []
+          product_ids: []
         }
       }
     }

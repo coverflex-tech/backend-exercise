@@ -5,7 +5,7 @@ defmodule CompanyBenefitsWeb.ErrorViewTest do
   import Phoenix.View
 
   test "renders 404.json" do
-    assert render(CompanyBenefitsWeb.ErrorView, "404.json", []) ==
+    assert render(CompanyBenefitsWeb.ErrorView, "404.json", message: "Page not found") ==
              %{errors: %{detail: "Page not found"}}
   end
 

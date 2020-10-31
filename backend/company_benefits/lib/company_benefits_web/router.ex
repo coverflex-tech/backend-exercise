@@ -16,4 +16,10 @@ defmodule CompanyBenefitsWeb.Router do
 
     get("/", ProductController, :index)
   end
+
+  scope "/orders", CompanyBenefitsWeb do
+    pipe_through(:api)
+
+    post("/", OrderController, :create)
+  end
 end

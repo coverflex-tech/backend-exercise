@@ -21,6 +21,11 @@ defmodule CompanyBenefits.Products.ProductContext do
     Repo.all(Product)
   end
 
+  def list_products_by_identifier(identifiers) do
+    from(p in Product, where: p.identifier in ^identifiers)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single product.
 
