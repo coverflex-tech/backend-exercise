@@ -18,7 +18,7 @@ defmodule CompanyBenefitsWeb.UserControllerTest do
   describe "login" do
     test "should create user", %{conn: conn} do
       assert Accounts.UserContext.list_users() |> length() === 0
-      conn = get(conn, user_path(conn, :login, @username))
+      get(conn, user_path(conn, :login, @username))
       assert Accounts.UserContext.list_users() |> length() === 1
     end
 

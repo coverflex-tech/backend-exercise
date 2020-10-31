@@ -8,6 +8,9 @@ defmodule CompanyBenefits.Accounts do
 
   alias CompanyBenefits.Accounts.{User, UserContext}
 
+  @default_balance Application.get_env(:company_benefits, __MODULE__, [])
+                   |> Keyword.get(:default_balance, 0)
+
   @doc """
   Logs in an user.
   Creates if not exists
@@ -19,7 +22,7 @@ defmodule CompanyBenefits.Accounts do
       _ ->
         UserContext.create_user(%{
           username: username,
-          balance: 0
+          balance: @default_balance
         })
     end
   end
