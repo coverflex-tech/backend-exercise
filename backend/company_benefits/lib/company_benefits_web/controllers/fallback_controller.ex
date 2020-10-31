@@ -18,6 +18,12 @@ defmodule CompanyBenefitsWeb.FallbackController do
     |> render(CompanyBenefitsWeb.ErrorView, :"404", message: message)
   end
 
+  def call(conn, {:business_rule, message}) do
+    conn
+    |> put_status(:bad_request)
+    |> render(CompanyBenefitsWeb.ErrorView, "business_rule.json", message: message)
+  end
+
   def call(conn, _) do
     conn
     |> put_status(:bad_request)

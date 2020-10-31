@@ -3,7 +3,7 @@ defmodule CompanyBenefitsWeb.OrderControllerTest do
 
   alias CompanyBenefits.Accounts
   alias CompanyBenefits.Products.ProductContext
-  alias CompanyBenefits.Accounts.User
+  alias CompanyBenefits.Accounts.{User, UserContext}
 
   @username "some username"
   @invalid_attrs %{user_id: "other user", items: []}
@@ -47,9 +47,33 @@ defmodule CompanyBenefitsWeb.OrderControllerTest do
       assert data["total"] == product.price
     end
 
-    test "renders errors when data is invalid", %{conn: conn, user: %User{username: username}} do
+    test "renders errors when user does not have funds", %{
+      conn: conn,
+      user: %User{username: username} = user,
+      product: product
+    } do
+      UserContext.update_user(user, %{balance: 0})
+
+      conn =
+        post(conn, order_path(conn, :create),
+          order: %{user_id: username, items: [product.identifier]}
+        )
+
+      assert json_response(conn, 400)["errors"] != %{}
+    end
+
+    test "renders errors when items are invalid", %{conn: conn, user: %User{username: username}} do
+      conn =
+        post(conn, order_path(conn, :create),
+          order: %{user_id: username, items: ["other product"]}
+        )
+
+      assert json_response(conn, 404)
+    end
+
+    test "renders errors when items are empty", %{conn: conn, user: %User{username: username}} do
       conn = post(conn, order_path(conn, :create), order: %{user_id: username, items: []})
-      assert json_response(conn, 422)["errors"] != %{}
+      assert json_response(conn, 422)
     end
 
     test "renders errors when user does not exist", %{conn: conn} do

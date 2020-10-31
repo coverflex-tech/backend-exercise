@@ -13,28 +13,24 @@ defmodule CompanyBenefits.Orders do
   """
   def create_order(%{identifiers: identifiers, username: username})
       when is_bitstring(username) and is_list(identifiers) do
-    # vaidate suficient balance
-    # validate products found
     # validate products already bought
     Repo.transaction(fn ->
-      products = ProductContext.list_products_by_identifier(identifiers)
-      total = Products.sum_prices(products)
-
       with(
+        {:ok, {products, total}} <- validate_products(identifiers),
         %User{} = user <- UserContext.get_user_by_username(username),
+        {:ok, newBalance} <- deduct_funds(user, total),
         {:ok, %Order{} = order} <-
           OrderContext.create_order(%{
             user_id: user.id,
             products: products,
             total: total
           }),
-        order <- Repo.preload(order, :products),
         {:ok, %User{}} <-
           UserContext.update_user(user, %{
-            balance: user.balance - total
+            balance: newBalance
           })
       ) do
-        {:ok, order}
+        {:ok, Repo.preload(order, :products)}
       else
         nil ->
           Repo.rollback({:error, :user_not_found})
@@ -44,5 +40,24 @@ defmodule CompanyBenefits.Orders do
       end
     end)
     |> elem(1)
+  end
+
+  defp validate_products(identifiers) do
+    products = ProductContext.list_products_by_identifier(identifiers)
+    total = Products.sum_prices(products)
+
+    if length(identifiers) == length(products) do
+      {:ok, {products, total}}
+    else
+      {:error, :products_not_found}
+    end
+  end
+
+  defp deduct_funds(%User{balance: balance}, total) do
+    if(balance >= total) do
+      {:ok, balance - total}
+    else
+      {:error, :insufficient_balance}
+    end
   end
 end

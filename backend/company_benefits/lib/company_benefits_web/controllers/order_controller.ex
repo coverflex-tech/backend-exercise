@@ -26,6 +26,12 @@ defmodule CompanyBenefitsWeb.OrderController do
       {:error, :user_not_found} ->
         {:not_found, "User not found"}
 
+      {:error, :products_not_found} ->
+        {:not_found, "Products not found"}
+
+      {:error, :insufficient_balance} ->
+        {:business_rule, "Insufficient balance"}
+
       error ->
         error
     end
