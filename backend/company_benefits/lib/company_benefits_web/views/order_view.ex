@@ -11,7 +11,7 @@ defmodule CompanyBenefitsWeb.OrderView do
     %{
       order_id: order.id,
       data: %{
-        total: Orders.get_order_total(order),
+        total: order.total,
         items: render_many(order.products, OrderView, "order_product.json")
       }
     }

@@ -8,7 +8,7 @@ defmodule CompanyBenefits.Orders.OrderContextTest do
   describe "orders" do
     alias CompanyBenefits.Orders.Order
 
-    @invalid_attrs %{user_id: nil, products: []}
+    @invalid_attrs %{user_id: nil, products: [], total: nil}
 
     def user_fixture(username \\ "some username") do
       {:ok, user} = Accounts.login(username)
@@ -36,6 +36,7 @@ defmodule CompanyBenefits.Orders.OrderContextTest do
         attrs
         |> Map.put_new(:user_id, user.id)
         |> Map.put_new(:products, [product])
+        |> Map.put_new(:total, product.price)
         |> OrderContext.create_order()
 
       order
@@ -56,7 +57,11 @@ defmodule CompanyBenefits.Orders.OrderContextTest do
       product = product_fixture()
 
       assert {:ok, %Order{} = order} =
-               OrderContext.create_order(%{user_id: user.id, products: [product]})
+               OrderContext.create_order(%{
+                 user_id: user.id,
+                 products: [product],
+                 total: product.price
+               })
 
       assert order.user_id == user.id
     end

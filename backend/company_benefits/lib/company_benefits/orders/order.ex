@@ -3,6 +3,7 @@ defmodule CompanyBenefits.Orders.Order do
   import Ecto.Changeset
 
   schema "orders" do
+    field(:total, :float)
     belongs_to(:user, CompanyBenefits.Accounts.User)
 
     many_to_many(
@@ -19,8 +20,8 @@ defmodule CompanyBenefits.Orders.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:user_id])
-    |> validate_required([:user_id])
+    |> cast(attrs, [:user_id, :total])
+    |> validate_required([:user_id, :total])
     |> foreign_key_constraint(:user_id)
     |> put_assoc(:products, Map.get(attrs, :products, Map.get(order, :products, [])))
     |> validate_length(:products, min: 1)

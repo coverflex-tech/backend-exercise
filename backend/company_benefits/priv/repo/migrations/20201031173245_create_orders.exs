@@ -9,6 +9,8 @@ defmodule CompanyBenefits.Repo.Migrations.CreateOrders do
         null: false
       )
 
+      add(:total, :float, null: false)
+
       timestamps()
     end
 
