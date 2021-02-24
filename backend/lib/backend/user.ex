@@ -5,10 +5,13 @@ defmodule Backend.User do
 
   @primary_key {:user_id, :string, autogenerate: false}
 
+  @derive {Jason.Encoder, only: [:user_id, :data]}
+
   @type t :: %User{}
 
   schema "users" do
     embeds_one :data, Data, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field :balance, :integer, default: 1000
       field :product_ids, {:array, :string}, default: []
     end

@@ -7,6 +7,8 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through :api
+
+    get "/users/:user_id", UsersController, :get_or_create
   end
 
   # Enables LiveDashboard only for development
