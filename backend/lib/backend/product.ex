@@ -4,6 +4,8 @@ defmodule Backend.Product do
 
   @primary_key {:id, :string, autogenerate: false}
 
+  @derive {Jason.Encoder, only: [:id, :name, :price]}
+
   @type t :: %__MODULE__{}
 
   schema "products" do

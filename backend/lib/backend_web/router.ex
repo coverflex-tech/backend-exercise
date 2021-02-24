@@ -9,6 +9,7 @@ defmodule BackendWeb.Router do
     pipe_through :api
 
     get "/users/:user_id", UsersController, :get_or_create
+    get "/products", ProductsController, :list
   end
 
   # Enables LiveDashboard only for development
