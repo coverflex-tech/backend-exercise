@@ -6,10 +6,13 @@ defmodule Backend.Order do
 
   @primary_key {:order_id, :binary_id, autogenerate: true}
 
+  @derive {Jason.Encoder, only: [:order_id, :data]}
+
   @type t :: %__MODULE__{}
 
   schema "orders" do
     embeds_one :data, Data, primary_key: false, on_replace: :update do
+      @derive Jason.Encoder
       field :user_id
       field :items, {:array, :string}
       field :total, :integer
