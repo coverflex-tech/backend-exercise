@@ -1,19 +1,21 @@
-# Backend
+# Coverflex Backend Challenge
 
-To start your Phoenix server:
+## Setup
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server`
+To run the backend you need to have Elixir 1.7+ and Erlang OTP 22+ installed.
+Also you need to have a PostgreSQL database running locally on port 5432, you can start one by using the provided docker-compose service with the command `docker-compose up -d db`.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Run application
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+To start the application you need to follow this steps:
 
-## Learn more
+- Fetch the application dependencies with `mix deps.get`
+- Compile the application with `mix compile`
+- Create database, execute migrations and seed the database with `mix ecto.setup`
+- Start the application with `mix phx.server`
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+The application will be listening on port 4000 in your machine and expose a RESTful API at the path `/api`.
+
+## Run tests
+
+To run the application tests just run the command `mix test`. It should execute 20 tests.
