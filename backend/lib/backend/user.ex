@@ -1,8 +1,11 @@
 defmodule Backend.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias __MODULE__, as: User
 
   @primary_key {:user_id, :string, autogenerate: false}
+
+  @type t :: %User{}
 
   schema "users" do
     embeds_one :data, Data, primary_key: false, on_replace: :update do
@@ -20,5 +23,19 @@ defmodule Backend.User do
 
   defp data_changeset(data, attrs) do
     cast(data, attrs, [:balance, :product_ids])
+  end
+
+  @doc """
+  Returns an existing user or creates a user with the given user_id
+  """
+  @spec get_or_create(String.t()) :: {:ok, t()}
+  def get_or_create(user_id) do
+    case Backend.Repo.get(User, user_id) do
+      nil ->
+        Backend.Repo.insert(%User{user_id: user_id, data: %User.Data{}})
+
+      user ->
+        {:ok, user}
+    end
   end
 end
