@@ -20,6 +20,9 @@ defmodule Backend.OrderTest do
                Order.create(user_id, items)
 
       assert {:ok, _} = Ecto.UUID.cast(id)
+
+      assert %Order{} = Repo.get(Order, id)
+      assert %User{data: %User.Data{balance: 980}} = Repo.get(User, user_id)
     end
 
     test "returns {:error, :products_already_purchased} if the user already purchased the product" do

@@ -9,10 +9,14 @@ defmodule Backend.UserTest do
       Repo.insert!(%User{user_id: user_id, data: %User.Data{}})
 
       assert {:ok, %User{user_id: ^user_id}} = User.get_or_create(user_id)
+      assert %User{user_id: ^user_id} = Repo.get(User, user_id)
     end
 
     test "returns {:ok, %Backend.User{}} if an user with the give user_id does not exist in the database" do
-      assert {:ok, %User{user_id: "user_id"}} = User.get_or_create("user_id")
+      user_id = "user_id"
+
+      assert {:ok, %User{user_id: ^user_id}} = User.get_or_create(user_id)
+      assert %User{user_id: ^user_id} = Repo.get(User, user_id)
     end
   end
 end
