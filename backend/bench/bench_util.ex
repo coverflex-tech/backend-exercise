@@ -3,11 +3,11 @@ defmodule Bench.Util do
   Utility functions to keep the benchmark code simpler.
   """
 
-  alias Backend.Repo
   alias Backend.Products.Product
+  alias Backend.Repo
   alias Backend.Users.{Order, User}
 
-  def clean_db() do
+  def clean_db do
     Repo.delete_all(Product)
     Repo.delete_all(User)
     Repo.delete_all(Order)
@@ -38,9 +38,7 @@ defmodule Bench.Util do
   end
 
   def add_record(schema, create_fun, count, offset \\ 0) when is_integer(count) do
-    date =
-      NaiveDateTime.utc_now()
-      |> NaiveDateTime.truncate(:second)
+    date = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     records =
       Enum.reduce(offset..count, [], fn idx, acc ->
@@ -69,7 +67,7 @@ defmodule Bench.Util do
           fn
             {fun, args} when is_function(fun) -> fun.(args)
             fun when is_function(fun) -> fun.()
-            _ -> raise "Not a function"
+            _other -> raise "Not a function"
           end,
           before_scenario: fn %{setup: before_scenario} ->
             before_scenario.(count)

@@ -1,7 +1,7 @@
 defmodule BackendWeb.UsersControllerTest do
   use BackendWeb.ConnCase, async: true
-  alias Backend.Repo
   alias Backend.Products.Product
+  alias Backend.Repo
   alias Backend.Users.{Order, User}
 
   @default_user_balance Application.compile_env!(:backend, [

@@ -1,4 +1,8 @@
 defmodule Backend.Repo.Seeder do
+  @moduledoc """
+  Auxiliary module to perform backend repo seeding for testing purposes
+  """
+
   alias Backend.Repo
   alias Backend.{Products.Product, Users.User}
 

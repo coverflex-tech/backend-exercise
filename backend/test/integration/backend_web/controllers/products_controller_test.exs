@@ -1,6 +1,6 @@
 defmodule BackendWeb.ProductsControllerTest do
   use BackendWeb.ConnCase, async: true
-  alias Backend.{Repo, Products.Product}
+  alias Backend.{Products.Product, Repo}
 
   describe "get" do
     test "returns all products", %{conn: conn} do

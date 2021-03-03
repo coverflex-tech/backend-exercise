@@ -1,6 +1,6 @@
 defmodule BackendWeb.UsersController do
   use BackendWeb, :controller
-  alias Backend.Users.{User, Order}
+  alias Backend.Users.{Order, User}
 
   @manager_module Application.compile_env!(:backend, [:modules, :user_manager])
   @product_manager_module Application.compile_env!(:backend, [:modules, :product_manager])

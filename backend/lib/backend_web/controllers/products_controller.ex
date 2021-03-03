@@ -4,7 +4,7 @@ defmodule BackendWeb.ProductsController do
 
   @manager_module Application.compile_env!(:backend, [:modules, :product_manager])
 
-  def list(conn, _) do
+  def list(conn, _params) do
     case @manager_module.get() do
       {:error, reason} -> send_resp(conn, inspect(reason), 500)
       list -> json(conn, %{products: list})

@@ -1,4 +1,8 @@
 defmodule Repo.Migrator do
+  @moduledoc """
+  Auxiliary module to perform repo migrations
+  """
+
   @app :backend
 
   def migrate do
