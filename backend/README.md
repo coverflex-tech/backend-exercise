@@ -24,7 +24,8 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 The client was also containerized so issuing `docker-compose up` will also start that container while exposing port 3000 on the host.
 Access `http://localhost:3000` and everything should be up and running.
-> :warning: This works in Windows and Mac environments. For Linux systems, replace `proxy` @ `/frontend/package.json`
+
+> :warning: This works on Windows and Mac environments. For Linux systems, replace `proxy` @ `/frontend/package.json`
 
 <hr>
 
@@ -67,6 +68,18 @@ mix test.integration   # Runs integration tests
 mix test.unit          # Runs unit tests
 mix verify             # Check formating, run tests, check code quality and vulnerabilities (your own compact, local CI)
 mix vulns              # Check for vulnerabilities
+```
+
+<hr>
+
+## Testng
+``` bash
+mix test.all
+```
+
+f you don't have postgres running, use divo to spin up a container during test execution:
+``` bash
+DIVO=true mix test.all
 ```
 
 <hr>

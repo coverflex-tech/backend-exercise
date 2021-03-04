@@ -3,6 +3,8 @@ import Config
 config :backend,
   ecto_repos: [Backend.Repo]
 
+config :backend, Backend.Repo, url: "ecto://postgres:postgres@localhost/coverflex"
+
 config :backend, :user, default_balance: 1000
 
 # Configures the endpoint

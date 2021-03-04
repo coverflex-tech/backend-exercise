@@ -23,6 +23,6 @@ defmodule Backend.Users.Order do
     |> cast(attrs, [:order_id, :items, :total])
     |> validate_number(:total, greater_than_or_equal_to: 0)
 
-    # Product consistency coul also be set here instead of at an upper level (Performance improving perhaps)
+    # Product consistency could also be set here instead of at an upper level (Performance improving perhaps)
   end
 end

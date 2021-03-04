@@ -21,7 +21,7 @@ defmodule Unit.Backend.Users.ManagerTest do
     setup :verify_on_exit!
 
     test "should succeed if valid"
-    test "should fail if user does not have sufficient ballance"
+    test "should fail if user does not have sufficient balance"
     test "should fail if user has previously bought the products"
   end
 end

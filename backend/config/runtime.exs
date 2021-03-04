@@ -21,14 +21,10 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base,
     server: true
-end
 
-database_url =
-  System.get_env("BACKEND_DB_URL") ||
-    if config_env() == :prod do
+  database_url =
+    System.get_env("BACKEND_DB_URL") ||
       raise "The BACKEND_DB_URL environment variable must be defined"
-    else
-      "ecto://postgres:postgres@localhost/coverflex"
-    end
 
-config :backend, Backend.Repo, url: database_url
+  config :backend, Backend.Repo, url: database_url
+end

@@ -57,10 +57,10 @@ defmodule Backend.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.seed": ["run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      verify: ["setup", "test.all", "format", "credo --strict", "vulns"],
       "test.all": ["format --check-formatted", "test.unit", "test.integration"],
       "test.unit": &run_unit_tests/1,
       "test.integration": &run_integration_tests/1,
+      verify: ["setup", "test.all", "format", "vulns", "credo --strict"],
       vulns: &run_vulnerability_tests/1,
       profile: [
         "run bench/backend/products/manager_profile.exs",

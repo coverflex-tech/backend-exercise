@@ -10,10 +10,14 @@ defmodule Backend.Users.Manager do
    - ORDER
   """
 
-  @callback get(user_id :: binary()) :: {:ok, User.t()} | {:error, reason :: term()}
+  @callback get(user_id :: binary()) :: {:ok, User.t()} | {:error, :invalid_user_id}
   @callback add(user_id :: binary()) :: {:ok, User.t()} | {:error, reason :: term()}
   @callback order(user_id :: binary(), list(binary()), total :: integer()) ::
-              {:ok, Order.t()} | {:error, reason :: term()}
+              {:ok, Order.t()}
+              | {:error,
+                 :invalid_user_id
+                 | :insufficient_balance
+                 | :products_already_purchased}
 
   @default_user_balance Application.compile_env!(:backend, [
                           :user,

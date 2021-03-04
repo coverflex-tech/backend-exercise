@@ -20,6 +20,7 @@ defmodule Backend.Users.User do
     user
     |> cast(attrs, [:user_id, :balance, :product_ids])
     |> validate_required([:user_id])
+    |> validate_length(:user_id, min: 1)
     |> validate_number(:balance, greater_than_or_equal_to: 0)
     |> unique_constraint(:user_id)
   end

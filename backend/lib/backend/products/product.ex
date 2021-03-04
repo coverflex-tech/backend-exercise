@@ -21,5 +21,6 @@ defmodule Backend.Products.Product do
     |> cast(attrs, [:id, :name, :price])
     |> validate_required([:id, :name, :price])
     |> validate_number(:price, greater_than_or_equal_to: 0)
+    |> unique_constraint(:id)
   end
 end
