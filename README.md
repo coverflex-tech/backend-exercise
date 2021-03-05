@@ -22,7 +22,7 @@ Our Frontend Developer is expecting these API endpoints:
     - output `{"user": {"user_id": "johndoe", "data": {"balance": 500, "product_ids": [...]}}}`
 - `GET /api/products`
     - returns a list of all products
-    - output `{"products": [{id: "netflix", "name": "Netflix", price: 75}, ...] }`
+    - output `{"products": [{id: "netflix", "name": "Netflix", price: 75.99}, ...] }`
 - `POST /api/orders`
     - creates a new order
     - input `{"order": {"items": ["product-1", "product-2"], "user_id": "johndoe"}}`
