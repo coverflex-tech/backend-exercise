@@ -1,0 +1,13 @@
+[
+  verbose: true,
+  private: false,
+  skip: true,
+  router: "",
+  exit: "low",
+  format: "txt",
+  out: "",
+  threshold: "low",
+  # This is here because we don't support HTTPS
+  ignore: ["Config.HTTPS"],
+  ignore_files: [""]
+]

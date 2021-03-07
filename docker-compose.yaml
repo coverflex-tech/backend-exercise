@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    hostname: postgres
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=postgres"
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-ui:
+    build: docker/pgadmin
+    environment:
+      - "PGADMIN_DEFAULT_EMAIL=user@domain.com"
+      - "PGADMIN_DEFAULT_PASSWORD=admin"
+    ports:
+      - 8080:80
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend:
+    image: coverflex/backend
+    build: backend
+    ports:
+      - 4000:4000
+    environment:
+      - "BACKEND_SECRET=something_something_dark_side"
+      - "BACKEND_PORT=4000"
+      - "BACKEND_DB_URL=ecto://postgres:postgres@postgres/coverflex"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    image: coverflex/frontend
+    build: frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend

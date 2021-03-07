@@ -5,7 +5,7 @@ const instance = axios.create({
 });
 
 export const getUser = username => {
-  return instance.get(`/users/${username}`).then(response => {
+  return instance.get(`/api/users/${username}`).then(response => {
     const { data } = response;
     return {
       user_id: data.user.user_id,
@@ -15,7 +15,7 @@ export const getUser = username => {
 };
 
 export const getProducts = () => {
-  return instance.get(`/products`).then(response => {
+  return instance.get(`/api/products`).then(response => {
     const { data } = response;
     return data.products;
   });
@@ -23,7 +23,7 @@ export const getProducts = () => {
 
 export const placeOrder = (order, username) => {
   return instance
-    .post(`/orders`, {
+    .post(`/api/orders`, {
       order: {
         items: order.map(item => item.id),
         user_id: username
