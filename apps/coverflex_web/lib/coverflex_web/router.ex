@@ -7,6 +7,7 @@ defmodule CoverflexWeb.Router do
 
   scope "/api", CoverflexWeb do
     pipe_through :api
+    resources "/users", UserController, only: [:show]
   end
 
   # Enables LiveDashboard only for development
