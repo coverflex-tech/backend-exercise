@@ -4,7 +4,7 @@ defmodule CoverflexWeb.UserControllerTest do
   alias Coverflex.Accounts
 
   @create_attrs %{
-    user_id: "some user_id"
+    user_id: "richardfeynman"
   }
 
   def fixture(:user) do
@@ -19,12 +19,12 @@ defmodule CoverflexWeb.UserControllerTest do
   describe "get user" do
     setup [:create_user]
 
-    test "already created user", %{conn: conn, user: %{id: id}} do
-      conn = get(conn, Routes.user_path(conn, :show, id))
+    test "already created user", %{conn: conn, user: %{user_id: user_id, id: id}} do
+      conn = get(conn, Routes.user_path(conn, :show, user_id))
 
       assert %{
                "id" => ^id,
-               "user_id" => "some user_id"
+               "user_id" => ^user_id
              } = json_response(conn, 200)["data"]
     end
   end
