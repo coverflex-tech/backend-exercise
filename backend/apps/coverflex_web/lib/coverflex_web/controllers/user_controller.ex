@@ -4,7 +4,7 @@ defmodule CoverflexWeb.UserController do
   alias Coverflex.Accounts
   alias Coverflex.Accounts.User
 
-  action_fallback CoverflexWeb.FallbackController
+  action_fallback(CoverflexWeb.FallbackController)
 
   def show(conn, %{"user_id" => user_id}) do
     case Accounts.get_user_by(:user_id, user_id) do

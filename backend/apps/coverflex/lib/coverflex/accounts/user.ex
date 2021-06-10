@@ -5,7 +5,7 @@ defmodule Coverflex.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
-    field :user_id, :string
+    field(:user_id, :string)
 
     timestamps()
   end
