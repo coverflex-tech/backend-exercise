@@ -101,4 +101,18 @@ defmodule Coverflex.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+  @doc """
+  Gets a single user by a specific field.
+
+  ## Examples
+
+      iex> get_user_by(id, 123)
+      %User{}
+
+      iex> get_user_by(user_id, "davidthomas")
+      nil
+
+  """
+  def get_user_by(field, value), do: Repo.get_by(User, [{field, value}])
 end

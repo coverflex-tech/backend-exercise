@@ -29,6 +29,11 @@ defmodule Coverflex.AccountsTest do
       assert Accounts.get_user!(user.id) == user
     end
 
+    test "get_user_by/1 returns the user with given user_id" do
+      user = user_fixture()
+      assert Accounts.get_user_by(:user_id, user.user_id) == user
+    end
+
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.user_id == "some user_id"
