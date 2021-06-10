@@ -27,6 +27,15 @@ defmodule CoverflexWeb.UserControllerTest do
                "user_id" => ^user_id
              } = json_response(conn, 200)["data"]
     end
+
+    test "creates a new user when do not exist", %{conn: conn} do
+      conn = get(conn, Routes.user_path(conn, :show, "alanturing"))
+
+      assert %{
+               "id" => _some_id,
+               "user_id" => "alanturing"
+             } = json_response(conn, 201)["data"]
+    end
   end
 
   defp create_user(_) do
