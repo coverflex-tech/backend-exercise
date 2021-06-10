@@ -8,6 +8,7 @@ defmodule CoverflexWeb.Router do
   scope "/api", CoverflexWeb do
     pipe_through :api
     get "/users/:user_id", UserController, :show
+    get "/products", ProductController, :index
   end
 
   # Enables LiveDashboard only for development
