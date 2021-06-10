@@ -23,8 +23,10 @@ defmodule CoverflexWeb.UserControllerTest do
       conn = get(conn, Routes.user_path(conn, :show, user_id))
 
       assert %{
-               "id" => ^id,
-               "user_id" => ^user_id
+               "user" => %{
+                 "id" => ^id,
+                 "user_id" => ^user_id
+               }
              } = json_response(conn, 200)["data"]
     end
 
@@ -32,8 +34,10 @@ defmodule CoverflexWeb.UserControllerTest do
       conn = get(conn, Routes.user_path(conn, :show, "alanturing"))
 
       assert %{
-               "id" => _some_id,
-               "user_id" => "alanturing"
+               "user" => %{
+                 "id" => _some_id,
+                 "user_id" => "alanturing"
+               }
              } = json_response(conn, 201)["data"]
     end
   end

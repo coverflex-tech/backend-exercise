@@ -11,6 +11,6 @@ defmodule CoverflexWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id, user_id: user.user_id}
+    %{user: %{id: user.id, user_id: user.user_id}}
   end
 end
