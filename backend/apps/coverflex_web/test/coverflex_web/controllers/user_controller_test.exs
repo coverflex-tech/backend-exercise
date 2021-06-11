@@ -1,16 +1,7 @@
 defmodule CoverflexWeb.UserControllerTest do
   use CoverflexWeb.ConnCase
 
-  alias Coverflex.Accounts
-
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
-      |> Accounts.create_user()
-
-    user
-  end
+  alias TestHelper.Fixtures
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -43,7 +34,7 @@ defmodule CoverflexWeb.UserControllerTest do
   end
 
   defp create_user(_) do
-    user = user_fixture()
+    user = Fixtures.user_fixture()
     %{user: user}
   end
 end

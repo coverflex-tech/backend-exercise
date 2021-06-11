@@ -1,17 +1,6 @@
 defmodule CoverflexWeb.ProductControllerTest do
   use CoverflexWeb.ConnCase
-
-  alias Coverflex.Products
-
-  @create_attrs %{
-    name: "some name",
-    price: 42
-  }
-
-  def fixture(:product) do
-    {:ok, product} = Products.create_product(@create_attrs)
-    product
-  end
+  alias TestHelper.Fixtures
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -32,7 +21,7 @@ defmodule CoverflexWeb.ProductControllerTest do
   end
 
   defp create_product(_) do
-    product = fixture(:product)
+    product = Fixtures.product_fixture()
     %{product: product}
   end
 end
