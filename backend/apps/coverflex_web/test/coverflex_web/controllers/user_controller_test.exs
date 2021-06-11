@@ -3,12 +3,12 @@ defmodule CoverflexWeb.UserControllerTest do
 
   alias Coverflex.Accounts
 
-  @create_attrs %{
-    user_id: "richardfeynman"
-  }
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
+      |> Accounts.create_user()
 
-  def fixture(:user) do
-    {:ok, user} = Accounts.create_user(@create_attrs)
     user
   end
 
@@ -31,19 +31,19 @@ defmodule CoverflexWeb.UserControllerTest do
     end
 
     test "creates a new user when do not exist", %{conn: conn} do
-      conn = get(conn, Routes.user_path(conn, :show, "alanturing"))
+      conn = get(conn, Routes.user_path(conn, :show, "adalovelace"))
 
       assert %{
                "user" => %{
                  "id" => _some_id,
-                 "user_id" => "alanturing"
+                 "user_id" => "adalovelace"
                }
              } = json_response(conn, 201)["data"]
     end
   end
 
   defp create_user(_) do
-    user = fixture(:user)
+    user = user_fixture()
     %{user: user}
   end
 end

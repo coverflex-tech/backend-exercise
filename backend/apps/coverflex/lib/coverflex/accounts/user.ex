@@ -15,5 +15,6 @@ defmodule Coverflex.Accounts.User do
     user
     |> cast(attrs, [:user_id])
     |> validate_required([:user_id])
+    |> unique_constraint([:user_id], name: :user_id_unique_index)
   end
 end
