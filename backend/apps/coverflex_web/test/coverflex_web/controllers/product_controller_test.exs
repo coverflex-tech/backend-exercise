@@ -23,9 +23,11 @@ defmodule CoverflexWeb.ProductControllerTest do
     test "lists all products", %{conn: conn, product: %{id: id, name: name, price: price}} do
       conn = get(conn, Routes.product_path(conn, :index))
 
-      assert [
-               %{"id" => ^id, "name" => ^name, "price" => ^price}
-             ] = json_response(conn, 200)["data"]
+      assert %{
+               "products" => [
+                 %{"id" => ^id, "name" => ^name, "price" => ^price}
+               ]
+             } = json_response(conn, 200)
     end
   end
 
