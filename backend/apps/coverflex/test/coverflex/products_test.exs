@@ -39,6 +39,23 @@ defmodule Coverflex.ProductsTest do
       assert {:error, %Ecto.Changeset{}} = Products.create_product(@invalid_attrs)
     end
 
+    test "create_product/1 with negative price" do
+      {:error, changeset} =
+        @valid_attrs
+        |> put_in([:price], -42)
+        |> Products.create_product()
+
+      assert changeset.errors == [
+               price: {
+                 "is invalid",
+                 [
+                   {:constraint, :check},
+                   {:constraint_name, "price_must_be_greater_than_or_equal_zero"}
+                 ]
+               }
+             ]
+    end
+
     test "update_product/2 with valid data updates the product" do
       product = product_fixture()
       assert {:ok, %Product{} = product} = Products.update_product(product, @update_attrs)

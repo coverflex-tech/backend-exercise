@@ -6,6 +6,7 @@ defmodule Coverflex.Accounts.User do
   @foreign_key_type :binary_id
   schema "users" do
     field(:user_id, :string)
+    has_many(:orders, Coverflex.Orders.Order)
 
     timestamps()
   end

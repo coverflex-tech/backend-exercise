@@ -9,5 +9,7 @@ defmodule Coverflex.Repo.Migrations.CreateProducts do
 
       timestamps()
     end
+
+    create(constraint(:products, :price_must_be_greater_than_or_equal_zero, check: "price >= 0"))
   end
 end
