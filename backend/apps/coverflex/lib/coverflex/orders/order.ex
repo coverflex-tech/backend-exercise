@@ -7,6 +7,7 @@ defmodule Coverflex.Orders.Order do
   schema "orders" do
     field(:total, :integer, default: 0)
     belongs_to(:user, Coverflex.Accounts.User)
+    has_many(:order_items, Coverflex.Orders.OrderItem)
 
     timestamps()
   end

@@ -7,6 +7,7 @@ defmodule Coverflex.Products.Product do
   schema "products" do
     field(:name, :string)
     field(:price, :integer)
+    has_many(:order_items, Coverflex.Orders.OrderItem)
 
     timestamps()
   end
