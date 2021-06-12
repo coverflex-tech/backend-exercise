@@ -11,6 +11,6 @@ defmodule CoverflexWeb.OrderView do
   end
 
   def render("order.json", %{order: order}) do
-    %{id: order.id, total: order.total}
+    %{order: %{id: order.id, total: order.total}}
   end
 end

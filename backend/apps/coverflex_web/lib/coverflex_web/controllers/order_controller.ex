@@ -11,8 +11,8 @@ defmodule CoverflexWeb.OrderController do
   #    render(conn, "index.json", orders: orders)
   #  end
 
-  def create(conn, %{"order" => order_params, "user" => %{"user_id" => user_id}}) do
-    with {:ok, %Order{} = order} <- Orders.create_order(order_params, user_id) do
+  def create(conn, %{"order" => %{"user_id" => user_id}}) do
+    with {:ok, %Order{} = order} <- Orders.create_order(user_id) do
       conn
       |> put_status(:created)
       |> render("show.json", order: order)
