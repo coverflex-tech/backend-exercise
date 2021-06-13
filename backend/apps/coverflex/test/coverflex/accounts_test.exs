@@ -74,6 +74,19 @@ defmodule Coverflex.AccountsTest do
       {:error, changeset} = Accounts.create_user(@valid_attrs)
       assert %{user_id: ["has already been taken"]} = errors_on(changeset)
     end
+
+    test "create_user_with_account/1 with valid data" do
+      {:ok, user} = Accounts.create_user_with_account(@valid_attrs)
+
+      assert user.account.id
+    end
+
+    test "create_user_with_account/1 with invalid data" do
+      assert {:error, :user, changeset, _operations_executed} =
+               Accounts.create_user_with_account(@invalid_attrs)
+
+      assert %{user_id: ["can't be blank"]} = errors_on(changeset)
+    end
   end
 
   describe "user_accounts" do

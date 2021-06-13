@@ -7,6 +7,7 @@ defmodule Coverflex.Accounts do
   alias Coverflex.Repo
 
   alias Coverflex.Accounts.User
+  alias Ecto.Multi
 
   @doc """
   Returns the list of users.
@@ -210,5 +211,25 @@ defmodule Coverflex.Accounts do
   """
   def change_user_account(%UserAccount{} = user_account, attrs \\ %{}) do
     UserAccount.changeset(user_account, attrs)
+  end
+
+  def create_user_with_account(attrs \\ %{}) do
+    attrs = put_in(attrs, [:balance], 0)
+
+    multi =
+      Multi.new()
+      |> Multi.insert(:user, %User{} |> User.changeset(attrs))
+      |> Multi.insert(:user_account, fn %{user: %User{id: user_id}} ->
+        attrs = put_in(attrs, [:user_id], user_id)
+        %UserAccount{} |> UserAccount.changeset(attrs)
+      end)
+
+    case Repo.transaction(multi) do
+      {:ok, %{user: user}} ->
+        {:ok, Repo.preload(user, [:account])}
+
+      error ->
+        error
+    end
   end
 end

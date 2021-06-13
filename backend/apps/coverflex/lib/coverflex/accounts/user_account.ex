@@ -15,7 +15,7 @@ defmodule Coverflex.Accounts.UserAccount do
   @doc false
   def changeset(user_account, attrs) do
     user_account
-    |> cast(attrs, [:balance])
+    |> cast(attrs, [:balance, :user_id])
     |> validate_required([:balance])
     |> check_constraint(:balance,
       name: :balance_must_be_greater_than_or_equal_zero,
