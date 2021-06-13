@@ -2,7 +2,7 @@ defmodule Coverflex.OrdersTest do
   use Coverflex.DataCase
   #  doctest Coverflex.Orders
 
-  alias Coverflex.{Orders, Accounts}
+  alias Coverflex.Accounts.User
 
   def user_fixture(attrs \\ %{}, opts \\ []) do
     attrs =
@@ -46,13 +46,13 @@ defmodule Coverflex.OrdersTest do
     @invalid_attrs %{total: nil}
 
     test "list_orders/0 returns all orders" do
-      order = order_fixture()
-      assert Orders.list_orders() == [order]
+      %Order{id: order_id, user_id: user_id} = order_fixture()
+      assert [%Order{id: ^order_id, user_id: ^user_id}] = Orders.list_orders()
     end
 
     test "get_order!/1 returns the order with given id" do
-      order = order_fixture()
-      assert Orders.get_order!(order.id) == order
+      %Order{id: order_id, user_id: user_id} = order_fixture()
+      assert %Order{id: ^order_id, user_id: ^user_id} = Orders.get_order!(order_id)
     end
 
     test "create_order/1 with user schema creates a order" do
@@ -63,10 +63,10 @@ defmodule Coverflex.OrdersTest do
     end
 
     test "create_order/1 with user id creates a order" do
-      user = user_fixture()
-      assert {:ok, %Order{} = order} = Orders.create_order(user.id)
+      %User{id: user_id} = user_fixture()
+      assert {:ok, %Order{} = order} = Orders.create_order(user_id)
       assert order.total == 0
-      assert order.user == user
+      assert order.user.id == user_id
     end
 
     test "create_order/1 with non existent user" do
@@ -82,9 +82,9 @@ defmodule Coverflex.OrdersTest do
     end
 
     test "update_order/2 with invalid data returns error changeset" do
-      order = order_fixture()
+      %Order{id: order_id, user_id: user_id, total: total} = order = order_fixture()
       assert {:error, %Ecto.Changeset{}} = Orders.update_order(order, @invalid_attrs)
-      assert order == Orders.get_order!(order.id)
+      assert %Order{id: ^order_id, user_id: ^user_id, total: ^total} = Orders.get_order!(order.id)
     end
 
     test "delete_order/1 deletes the order" do
@@ -106,13 +106,16 @@ defmodule Coverflex.OrdersTest do
     @update_attrs %{}
 
     test "list_order_items/0 returns all order_items" do
-      order_item = order_item_fixture()
-      assert Orders.list_order_items() == [order_item]
+      %OrderItem{id: order_item_id, order_id: order_id} = order_item_fixture()
+
+      assert [%OrderItem{id: ^order_item_id, order_id: ^order_id}] = Orders.list_order_items()
     end
 
     test "get_order_item!/1 returns the order_item with given id" do
-      order_item = order_item_fixture()
-      assert Orders.get_order_item!(order_item.id) == order_item
+      %OrderItem{id: order_item_id, order_id: order_id} = order_item_fixture()
+
+      assert %OrderItem{id: ^order_item_id, order_id: ^order_id} =
+               Orders.get_order_item!(order_item_id)
     end
 
     test "create_order_item/1 with valid data creates a order_item" do
