@@ -13,7 +13,7 @@ defmodule Coverflex.Orders.Order do
   end
 
   @doc false
-  def changeset(order, attrs) do
+  def changeset(order, attrs \\ %{}) do
     order |> cast(attrs, [])
   end
 
