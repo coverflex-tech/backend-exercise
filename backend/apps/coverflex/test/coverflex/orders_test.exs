@@ -4,13 +4,22 @@ defmodule Coverflex.OrdersTest do
 
   alias Coverflex.{Orders, Accounts}
 
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
+  def user_fixture(attrs \\ %{}, opts \\ []) do
+    attrs =
       attrs
       |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
-      |> Accounts.create_user()
 
-    user
+    case(Keyword.get(opts, :with_account, false)) do
+      true ->
+        {:ok, user} = attrs |> Accounts.create_user_with_account()
+
+        user
+
+      false ->
+        {:ok, user} = attrs |> Accounts.create_user()
+
+        user
+    end
   end
 
   def order_fixture() do
