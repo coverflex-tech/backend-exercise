@@ -2,6 +2,7 @@ defmodule Coverflex.OrdersTest do
   use Coverflex.DataCase
   #  doctest Coverflex.Orders
 
+  alias Coverflex.{Orders, Accounts, Products}
   alias Coverflex.Accounts.User
 
   def user_fixture(attrs \\ %{}, opts \\ []) do
@@ -37,6 +38,18 @@ defmodule Coverflex.OrdersTest do
       |> Orders.create_order_item(order)
 
     order_item
+  end
+
+  def product_fixture(attrs \\ %{}) do
+    {:ok, product} =
+      attrs
+      |> Enum.into(%{
+        name: "product#{System.unique_integer([:positive])}",
+        price: System.unique_integer([:positive])
+      })
+      |> Products.create_product()
+
+    product
   end
 
   describe "orders" do
@@ -149,6 +162,15 @@ defmodule Coverflex.OrdersTest do
     test "change_order_item/1 returns a order_item changeset" do
       order_item = order_item_fixture()
       assert %Ecto.Changeset{} = Orders.change_order_item(order_item)
+    end
+
+    test "buy_products/2 validate if user without enough balance receives an error" do
+      product = product_fixture()
+      user = user_fixture(%{}, with_account: true)
+      products = [product.id]
+      {:error, :check_balance, message, _data} = Orders.buy_products(user.user_id, products)
+
+      assert message == "you do not have enough balance to buy the selected products"
     end
   end
 end

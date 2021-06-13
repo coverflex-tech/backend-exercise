@@ -8,7 +8,10 @@ defmodule Coverflex.Orders do
 
   alias Coverflex.Orders.Order
   alias Coverflex.Accounts.User
+  alias Coverflex.Accounts.UserAccount
   alias Coverflex.Accounts
+  alias Coverflex.Products.Product
+  alias Ecto.Multi
 
   @doc """
   Returns the list of orders.
@@ -43,6 +46,21 @@ defmodule Coverflex.Orders do
   """
   def get_order!(id), do: Repo.get!(Order, id) |> Repo.preload([:user])
 
+  def buy_products(user_id, products) when is_binary(user_id) and is_list(products) do
+    # Validate if user has enough balance to buy products
+    # Validate if any product was previously bought
+    # Update the order amount
+    # Update the user balance
+    buy_products_multi =
+      Multi.new()
+      |> Coverflex.Orders.Business.validate_if_user_has_enough_balance_to_buy_products(
+        user_id,
+        products
+      )
+
+    Repo.transaction(buy_products_multi)
+  end
+
   def create_order(user_id) when is_binary(user_id) do
     user = Accounts.get_user!(user_id)
     create_order(user)
@@ -61,7 +79,7 @@ defmodule Coverflex.Orders do
   """
   def create_order(%User{} = user) do
     %Order{}
-    |> Order.changeset(%{})
+    |> Order.changeset()
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
