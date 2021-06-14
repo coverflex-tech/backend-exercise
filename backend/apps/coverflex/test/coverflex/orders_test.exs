@@ -187,5 +187,16 @@ defmodule Coverflex.OrdersTest do
 
       assert message == "at least one of your selected products was already purchased"
     end
+
+    test "buy_products/2 update order total" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
+      assert order.total == total_products_price
+    end
   end
 end
