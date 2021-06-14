@@ -4,8 +4,8 @@ defmodule Coverflex.Repo.Migrations.CreateOrders do
   def change do
     create table(:orders, primary_key: false) do
       add(:id, :binary_id, primary_key: true)
-      add(:total, :integer)
-      add(:user_id, references(:users, on_delete: :nothing, type: :uuid))
+      add(:total, :integer, default: 0)
+      add(:user_id, references(:users, on_delete: :nothing, type: :uuid), null: false)
 
       timestamps()
     end

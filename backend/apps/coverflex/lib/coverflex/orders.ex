@@ -176,10 +176,11 @@ defmodule Coverflex.Orders do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_order_item(attrs \\ %{}, order) do
+  def create_order_item(attrs \\ %{}, order, product) do
     %OrderItem{}
     |> OrderItem.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:order, order)
+    |> Ecto.Changeset.put_assoc(:product, product)
     |> Repo.insert()
   end
 

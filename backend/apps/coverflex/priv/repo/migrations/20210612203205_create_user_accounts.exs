@@ -5,7 +5,7 @@ defmodule Coverflex.Repo.Migrations.CreateUserAccounts do
     create table(:user_accounts, primary_key: false) do
       add(:id, :binary_id, primary_key: true)
       add(:balance, :integer, default: 0)
-      add(:user_id, references(:users, on_delete: :nothing, type: :uuid))
+      add(:user_id, references(:users, on_delete: :nothing, type: :uuid), null: false)
 
       timestamps()
     end

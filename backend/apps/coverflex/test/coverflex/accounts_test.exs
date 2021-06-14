@@ -3,21 +3,21 @@ defmodule Coverflex.AccountsTest do
 
   alias Coverflex.Accounts
 
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
+      |> Accounts.create_user()
+
+    user
+  end
+
   describe "users" do
     alias Coverflex.Accounts.User
 
     @valid_attrs %{user_id: "some user_id"}
     @update_attrs %{user_id: "some updated user_id"}
     @invalid_attrs %{user_id: nil}
-
-    def user_fixture(attrs \\ %{}) do
-      {:ok, user} =
-        attrs
-        |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
-        |> Accounts.create_user()
-
-      user
-    end
 
     test "list_users/0 returns all users" do
       user = user_fixture()
@@ -97,35 +97,43 @@ defmodule Coverflex.AccountsTest do
     @invalid_attrs %{balance: nil}
 
     def user_account_fixture(attrs \\ %{}) do
+      attrs = Map.put_new(attrs, :balance, 0)
+      user = user_fixture()
+
       {:ok, user_account} =
         attrs
-        |> Enum.into(@valid_attrs)
-        |> Accounts.create_user_account()
+        |> Accounts.create_user_account(user)
 
       user_account
     end
 
     test "list_user_accounts/0 returns all user_accounts" do
       user_account = user_account_fixture()
-      assert Accounts.list_user_accounts() == [user_account]
+      assert Accounts.list_user_accounts() |> Repo.preload([:user]) == [user_account]
     end
 
     test "get_user_account!/1 returns the user_account with given id" do
       user_account = user_account_fixture()
-      assert Accounts.get_user_account!(user_account.id) == user_account
+      assert Accounts.get_user_account!(user_account.id) |> Repo.preload([:user]) == user_account
     end
 
     test "create_user_account/1 with valid data creates a user_account" do
-      assert {:ok, %UserAccount{} = user_account} = Accounts.create_user_account(@valid_attrs)
+      user = user_fixture()
+
+      assert {:ok, %UserAccount{} = user_account} =
+               Accounts.create_user_account(@valid_attrs, user)
+
       assert user_account.balance == 42
     end
 
     test "create_user_account/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_account(@invalid_attrs)
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_user_account(@invalid_attrs, user)
     end
 
     test "create_user_account/1 with balance less than zero" do
-      {:error, changeset} = Accounts.create_user_account(%{balance: -42})
+      user = user_fixture()
+      {:error, changeset} = Accounts.create_user_account(%{balance: -42}, user)
       assert %{balance: ["balance must be greater than or equal zero"]} = errors_on(changeset)
     end
 
@@ -144,7 +152,7 @@ defmodule Coverflex.AccountsTest do
       assert {:error, %Ecto.Changeset{}} =
                Accounts.update_user_account(user_account, @invalid_attrs)
 
-      assert user_account == Accounts.get_user_account!(user_account.id)
+      assert user_account == Accounts.get_user_account!(user_account.id) |> Repo.preload([:user])
     end
 
     test "delete_user_account/1 deletes the user_account" do

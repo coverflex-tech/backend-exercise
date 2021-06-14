@@ -21,7 +21,7 @@ defmodule Coverflex.ProductsTest do
 
     test "list_products/0 returns all products" do
       product = product_fixture()
-      assert Products.list_products() == [product]
+      assert product in Products.list_products()
     end
 
     test "get_product!/1 returns the product with given id" do
