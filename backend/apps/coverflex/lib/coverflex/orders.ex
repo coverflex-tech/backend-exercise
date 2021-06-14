@@ -47,16 +47,20 @@ defmodule Coverflex.Orders do
   def get_order!(id), do: Repo.get!(Order, id) |> Repo.preload([:user])
 
   def buy_products(user_id, products) when is_binary(user_id) and is_list(products) do
-    # Validate if user has enough balance to buy products
-    # Validate if any product was previously bought
-    # Update the order amount
-    # Update the user balance
+    # [x] Validate if user has enough balance to buy products
+    # [x] Validate if any product was previously bought
+    # [ ] Update the order amount
+    # [ ] Update the user balance
     buy_products_multi =
       Multi.new()
       |> Coverflex.Orders.Business.validate_if_user_has_enough_balance_to_buy_products(
         user_id,
         products
       )
+      |> Coverflex.Orders.Business.populate_products_previously_purchased()
+      |> Coverflex.Orders.Business.validate_if_user_already_purchased_any_product_previously()
+      |> Coverflex.Orders.Business.create_order()
+      |> Coverflex.Orders.Business.create_products_for_order()
 
     Repo.transaction(buy_products_multi)
   end

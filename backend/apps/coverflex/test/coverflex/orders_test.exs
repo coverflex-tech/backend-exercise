@@ -4,6 +4,8 @@ defmodule Coverflex.OrdersTest do
 
   alias Coverflex.{Orders, Accounts, Products}
   alias Coverflex.Accounts.User
+  alias Coverflex.Orders.OrderItem
+  alias Coverflex.Orders.Order
 
   def user_fixture(attrs \\ %{}, opts \\ []) do
     attrs =
@@ -129,6 +131,7 @@ defmodule Coverflex.OrdersTest do
                Orders.get_order_item!(order_item_id)
     end
 
+    @tag :wip
     test "create_order_item/1 with valid data creates a order_item" do
       product = product_fixture()
       order = order_fixture()
@@ -170,6 +173,19 @@ defmodule Coverflex.OrdersTest do
       {:error, :check_balance, message, _data} = Orders.buy_products(user.user_id, products)
 
       assert message == "you do not have enough balance to buy the selected products"
+    end
+
+    test "buy_products/2 validate if user cannot buy the same product more than one time" do
+      product = product_fixture()
+      user = user_fixture(%{balance: 5000}, with_account: true)
+      products = [product.id]
+
+      Orders.buy_products(user.user_id, products)
+
+      {:error, :at_least_one_product_was_previously_purchased?, message, _data} =
+        Orders.buy_products(user.user_id, products)
+
+      assert message == "at least one of your selected products was already purchased"
     end
   end
 end
