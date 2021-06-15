@@ -62,7 +62,9 @@ defmodule Coverflex.OrdersTest do
     @invalid_attrs %{total: nil}
 
     test "list_orders/0 returns all orders" do
-      assert length(Orders.list_orders()) == 2
+      assert length(Orders.list_orders()) == 0
+      order_fixture()
+      assert length(Orders.list_orders()) == 1
     end
 
     test "get_order!/1 returns the order with given id" do
@@ -121,7 +123,9 @@ defmodule Coverflex.OrdersTest do
     @update_attrs %{}
 
     test "list_order_items/0 returns all order_items" do
-      assert length(Orders.list_order_items()) == 2
+      assert length(Orders.list_order_items()) == 0
+      order_item_fixture()
+      assert length(Orders.list_order_items()) == 1
     end
 
     test "get_order_item!/1 returns the order_item with given id" do

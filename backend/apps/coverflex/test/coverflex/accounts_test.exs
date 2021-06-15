@@ -20,11 +20,9 @@ defmodule Coverflex.AccountsTest do
     @invalid_attrs %{user_id: nil}
 
     test "list_users/0 returns all users" do
-      user = user_fixture()
-      users = Accounts.list_users()
-
-      assert length(users) == 4
-      assert(user in users)
+      assert length(Accounts.list_users()) == 0
+      user_fixture()
+      assert length(Accounts.list_users()) == 1
     end
 
     test "get_user!/1 returns the user with given id" do
