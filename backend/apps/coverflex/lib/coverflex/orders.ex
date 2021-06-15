@@ -6,11 +6,9 @@ defmodule Coverflex.Orders do
   import Ecto.Query, warn: false
   alias Coverflex.Repo
 
-  alias Coverflex.Orders.Order
+  alias Coverflex.Orders.{Order, Business}
   alias Coverflex.Accounts.User
-  alias Coverflex.Accounts.UserAccount
   alias Coverflex.Accounts
-  alias Coverflex.Products.Product
   alias Ecto.Multi
 
   @doc """
@@ -53,15 +51,15 @@ defmodule Coverflex.Orders do
     # [X] Update the user balance
     buy_products_multi =
       Multi.new()
-      |> Coverflex.Orders.Business.validate_if_user_has_enough_balance_to_buy_products(
+      |> Business.validate_if_user_has_enough_balance_to_buy_products(
         user_id,
         products
       )
-      |> Coverflex.Orders.Business.populate_products_previously_purchased()
-      |> Coverflex.Orders.Business.validate_if_user_already_purchased_any_product_previously()
-      |> Coverflex.Orders.Business.create_order()
-      |> Coverflex.Orders.Business.create_products_for_order()
-      |> Coverflex.Orders.Business.update_user_account_balance()
+      |> Business.populate_products_previously_purchased()
+      |> Business.validate_if_user_already_purchased_any_product_previously()
+      |> Business.create_order()
+      |> Business.create_products_for_order()
+      |> Business.update_user_account_balance()
 
     Repo.transaction(buy_products_multi)
   end
