@@ -57,19 +57,19 @@ defmodule Coverflex.Orders.Business do
 
   def create_products_for_order(multi) do
     multi
-    |> Multi.insert(
-      :order_items,
-      fn %{order: order, products: products} ->
-        # TODO: Use map to create changesets https://hexdocs.pm/ecto/Ecto.Multi.html#insert_all/5-example
-        product = hd(products)
-
-        OrderItem.changeset(%OrderItem{}, %{
-          price: product.price
-        })
-        |> Ecto.Changeset.put_assoc(:product, product)
-        |> Ecto.Changeset.put_assoc(:order, order)
-      end
-    )
+    |> Ecto.Multi.merge(fn %{order: order, products: products} ->
+      Enum.reduce(products, Multi.new(), fn product, multi ->
+        multi
+        |> Multi.insert(
+          {:product, product.id},
+          OrderItem.changeset(%OrderItem{}, %{
+            price: product.price
+          })
+          |> Ecto.Changeset.put_assoc(:product, product)
+          |> Ecto.Changeset.put_assoc(:order, order)
+        )
+      end)
+    end)
   end
 
   def populate_products_previously_purchased(multi) do

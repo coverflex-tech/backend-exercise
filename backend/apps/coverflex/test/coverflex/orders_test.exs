@@ -202,5 +202,17 @@ defmodule Coverflex.OrdersTest do
       {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
       assert order.total == total_products_price
     end
+
+    test "buy_products/2 create one OrderItem for each product" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
+      order = order |> Repo.preload([:order_items])
+      assert length(order.order_items) == 2
+    end
   end
 end
