@@ -22,4 +22,15 @@ defmodule Coverflex.Accounts.UserAccount do
       message: "balance must be greater than or equal zero"
     )
   end
+
+  @doc false
+  def update_changeset(user_account, attrs) do
+    user_account
+    |> cast(attrs, [:balance])
+    |> validate_required([:balance])
+    |> check_constraint(:balance,
+      name: :balance_must_be_greater_than_or_equal_zero,
+      message: "balance must be greater than or equal zero"
+    )
+  end
 end

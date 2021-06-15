@@ -214,5 +214,17 @@ defmodule Coverflex.OrdersTest do
       order = order |> Repo.preload([:order_items])
       assert length(order.order_items) == 2
     end
+
+    test "buy_products/2 update the user balance?" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      assert {:ok, _} = Orders.buy_products(user.user_id, products)
+      user = Accounts.get_user!(user.id) |> Repo.preload([:account])
+      assert user.account.balance == 0
+    end
   end
 end

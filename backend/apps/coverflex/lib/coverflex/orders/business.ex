@@ -1,7 +1,7 @@
 import Ecto.Query, warn: false
 
 alias Coverflex.Products.Product
-alias Coverflex.Accounts.User
+alias Coverflex.Accounts.{User, UserAccount}
 alias Coverflex.Orders.{Order, OrderItem}
 alias Ecto.Multi
 alias Coverflex.Repo
@@ -103,6 +103,18 @@ defmodule Coverflex.Orders.Business do
           0 -> {:ok, false}
           _ -> {:error, "at least one of your selected products was already purchased"}
         end
+      end
+    )
+  end
+
+  def update_user_account_balance(multi) do
+    multi
+    |> Multi.update(
+      :updated_account,
+      fn %{products_price: products_price, user: user} ->
+        UserAccount.update_changeset(user.account, %{
+          balance: user.account.balance - products_price
+        })
       end
     )
   end
