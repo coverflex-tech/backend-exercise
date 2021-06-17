@@ -234,5 +234,15 @@ defmodule Coverflex.OrdersTest do
       assert {:error, :user, {:not_found, "invalid user id"}, _changes} =
                Orders.buy_products("invalid user id", products)
     end
+
+    test "buy_products/2 with an nonexistent product returns error?" do
+      product1 = product_fixture()
+      invalid_product = "1979f1ef-ed8e-4bd3-9a6a-753901b3a9d4"
+      products = [product1.id, invalid_product]
+      user = user_fixture(%{balance: product1.price}, with_account: true)
+
+      assert {:error, :products, {:not_found, [^invalid_product]}, _changes} =
+               Orders.buy_products(user.user_id, products)
+    end
   end
 end

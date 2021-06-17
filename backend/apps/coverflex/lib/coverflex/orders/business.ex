@@ -21,9 +21,22 @@ defmodule Coverflex.Orders.Business do
     |> Multi.run(
       :products,
       fn _repo, _ ->
-        products = from(p in Product, where: p.id in ^products) |> Repo.all()
+        products_from_database = from(p in Product, where: p.id in ^products) |> Repo.all()
 
-        {:ok, products}
+        case length(products_from_database) == length(products) do
+          true ->
+            {:ok, products_from_database}
+
+          false ->
+            products_from_database_id = for product <- products_from_database, do: product.id
+
+            products_not_found =
+              Enum.filter(products, fn product_id ->
+                product_id not in products_from_database_id
+              end)
+
+            {:error, {:not_found, products_not_found}}
+        end
       end
     )
     |> Multi.run(
