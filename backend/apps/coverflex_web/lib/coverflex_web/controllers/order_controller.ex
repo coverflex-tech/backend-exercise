@@ -17,10 +17,15 @@ defmodule CoverflexWeb.OrderController do
         |> put_status(:created)
         |> render("show.json", order: order)
 
-      {:error, :user, {:not_found, _} = changeset, _} ->
+      {:error, :user, {:not_found, _}, _changes} ->
         conn
         |> put_status(:not_found)
         |> render("404.json", [{:not_found, :user}])
+
+      {:error, :products, {:not_found, _}, _changes} ->
+        conn
+        |> put_status(:not_found)
+        |> render("404.json", [{:not_found, :products}])
     end
   end
 

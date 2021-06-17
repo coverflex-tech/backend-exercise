@@ -17,6 +17,7 @@ defmodule CoverflexWeb.OrderView do
   def render("404.json", %{not_found: model}) do
     case model do
       :user -> %{"error" => :user_not_found}
+      :products -> %{"error" => :products_not_found}
     end
   end
 end
