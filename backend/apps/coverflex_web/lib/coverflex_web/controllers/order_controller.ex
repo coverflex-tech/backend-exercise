@@ -2,7 +2,6 @@ defmodule CoverflexWeb.OrderController do
   use CoverflexWeb, :controller
 
   alias Coverflex.Orders
-  alias Coverflex.Orders.Order
 
   action_fallback(CoverflexWeb.FallbackController)
 
@@ -17,6 +16,11 @@ defmodule CoverflexWeb.OrderController do
         conn
         |> put_status(:created)
         |> render("show.json", order: order)
+
+      {:error, :user, {:not_found, _} = changeset, _} ->
+        conn
+        |> put_status(:not_found)
+        |> render("404.json", [{:not_found, :user}])
     end
   end
 

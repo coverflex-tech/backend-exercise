@@ -26,6 +26,16 @@ defmodule CoverflexWeb.OrderControllerTest do
       assert length(Orders.list_orders()) == 1
     end
 
+    test "returns 404 when user not exist", %{conn: conn} do
+      product1 = Fixtures.product_fixture()
+      product2 = Fixtures.product_fixture()
+
+      payload = %{"user_id" => "invalid user id", "items" => [product1.id, product2.id]}
+      conn = post(conn, Routes.order_path(conn, :create), order: payload)
+
+      assert %{"error" => "user_not_found"} = json_response(conn, 404)
+    end
+
     #    test "renders errors when data is invalid", %{conn: conn, user: user} do
     #      conn = post(conn, Routes.order_path(conn, :create), order: %{"user_id" => user.id})
     #
