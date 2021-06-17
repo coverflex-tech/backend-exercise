@@ -13,11 +13,12 @@ defmodule CoverflexWeb.OrderControllerTest do
       assert length(Orders.list_orders()) == 0
       product1 = Fixtures.product_fixture()
       product2 = Fixtures.product_fixture()
+      products = [product1.id, product2.id]
       balance = product1.price + product2.price
 
       user = Fixtures.user_fixture(%{balance: balance}, with_account: true)
 
-      payload = %{"user_id" => user.user_id, "items" => [product1.id, product2.id]}
+      payload = %{"user_id" => user.user_id, "items" => products}
       conn = post(conn, Routes.order_path(conn, :create), order: payload)
 
       total_expected = product1.price + product2.price
@@ -29,8 +30,9 @@ defmodule CoverflexWeb.OrderControllerTest do
     test "returns 404 when user not exist", %{conn: conn} do
       product1 = Fixtures.product_fixture()
       product2 = Fixtures.product_fixture()
+      products = [product1.id, product2.id]
 
-      payload = %{"user_id" => "invalid user id", "items" => [product1.id, product2.id]}
+      payload = %{"user_id" => "invalid user id", "items" => products}
       conn = post(conn, Routes.order_path(conn, :create), order: payload)
 
       assert %{"error" => "user_not_found"} = json_response(conn, 404)
