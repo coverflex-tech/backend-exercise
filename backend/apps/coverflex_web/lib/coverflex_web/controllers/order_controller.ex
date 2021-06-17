@@ -31,6 +31,11 @@ defmodule CoverflexWeb.OrderController do
         conn
         |> put_status(:bad_request)
         |> render("400.json", [{:error, :products_already_purchased}])
+
+      {:error, :sufficient_balance?, false, _changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> render("400.json", [{:error, :insufficient_balance}])
     end
   end
 

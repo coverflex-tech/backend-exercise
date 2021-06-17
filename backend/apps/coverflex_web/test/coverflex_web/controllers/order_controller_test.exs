@@ -60,6 +60,17 @@ defmodule CoverflexWeb.OrderControllerTest do
       assert %{"error" => "products_already_purchased"} = json_response(conn, 400)
     end
 
+    test "returns 400 when balance is insufficient", %{conn: conn} do
+      product1 = Fixtures.product_fixture()
+      products = [product1.id]
+      user = Fixtures.user_fixture(%{balance: 0}, with_account: true)
+
+      payload = %{"user_id" => user.user_id, "items" => products}
+      conn = post(conn, Routes.order_path(conn, :create), order: payload)
+
+      assert %{"error" => "insufficient_balance"} = json_response(conn, 400)
+    end
+
     #    test "renders errors when data is invalid", %{conn: conn, user: user} do
     #      conn = post(conn, Routes.order_path(conn, :create), order: %{"user_id" => user.id})
     #
