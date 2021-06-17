@@ -20,4 +20,8 @@ defmodule CoverflexWeb.OrderView do
       :products -> %{"error" => :products_not_found}
     end
   end
+
+  def render("400.json", %{error: reason}) do
+    %{"error" => reason}
+  end
 end

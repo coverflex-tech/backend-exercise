@@ -48,6 +48,18 @@ defmodule CoverflexWeb.OrderControllerTest do
       assert %{"error" => "products_not_found"} = json_response(conn, 404)
     end
 
+    test "returns 400 when try to buy the same product twice", %{conn: conn} do
+      product1 = Fixtures.product_fixture()
+      products = [product1.id]
+      user = Fixtures.user_fixture(%{balance: product1.price * 2}, with_account: true)
+
+      payload = %{"user_id" => user.user_id, "items" => products}
+      post(conn, Routes.order_path(conn, :create), order: payload)
+      conn = post(conn, Routes.order_path(conn, :create), order: payload)
+
+      assert %{"error" => "products_already_purchased"} = json_response(conn, 400)
+    end
+
     #    test "renders errors when data is invalid", %{conn: conn, user: user} do
     #      conn = post(conn, Routes.order_path(conn, :create), order: %{"user_id" => user.id})
     #

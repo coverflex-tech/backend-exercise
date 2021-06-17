@@ -26,6 +26,11 @@ defmodule CoverflexWeb.OrderController do
         conn
         |> put_status(:not_found)
         |> render("404.json", [{:not_found, :products}])
+
+      {:error, :products_already_purchased, _products, _changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> render("400.json", [{:error, :products_already_purchased}])
     end
   end
 
