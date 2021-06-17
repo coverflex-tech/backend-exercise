@@ -49,11 +49,14 @@ defmodule Coverflex.Orders.Business do
       end
     )
     |> Multi.run(
-      :check_balance,
+      :sufficient_balance?,
       fn _repo, %{products_price: products_price, user: user} ->
         case user.account.balance >= products_price do
-          true -> {:ok, :ok}
-          false -> {:error, "you do not have enough balance to buy the selected products"}
+          true ->
+            {:ok, true}
+
+          false ->
+            {:error, false}
         end
       end
     )

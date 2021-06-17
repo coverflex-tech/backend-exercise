@@ -173,9 +173,9 @@ defmodule Coverflex.OrdersTest do
       product = product_fixture()
       user = user_fixture(%{}, with_account: true)
       products = [product.id]
-      {:error, :check_balance, message, _data} = Orders.buy_products(user.user_id, products)
 
-      assert message == "you do not have enough balance to buy the selected products"
+      assert {:error, :sufficient_balance?, false, _data} =
+               Orders.buy_products(user.user_id, products)
     end
 
     test "buy_products/2 validate if user cannot buy the same product more than one time" do
