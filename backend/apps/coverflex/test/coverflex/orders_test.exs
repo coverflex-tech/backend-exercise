@@ -4,8 +4,7 @@ defmodule Coverflex.OrdersTest do
 
   alias Coverflex.{Orders, Accounts, Products}
   alias Coverflex.Accounts.User
-  alias Coverflex.Orders.OrderItem
-  alias Coverflex.Orders.Order
+  alias Coverflex.Orders.{Order, OrderItem}
 
   def user_fixture(attrs \\ %{}, opts \\ []) do
     attrs =
@@ -225,6 +224,15 @@ defmodule Coverflex.OrdersTest do
       assert {:ok, _} = Orders.buy_products(user.user_id, products)
       user = Accounts.get_user!(user.id) |> Repo.preload([:account])
       assert user.account.balance == 0
+    end
+
+    test "buy_products/2 with an nonexistent user returns error?" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      products = [product1.id, product2.id]
+
+      assert {:error, :user, {:not_found, "invalid user id"}, _changes} =
+               Orders.buy_products("invalid user id", products)
     end
   end
 end

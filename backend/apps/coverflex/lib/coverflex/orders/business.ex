@@ -12,8 +12,10 @@ defmodule Coverflex.Orders.Business do
     |> Multi.run(
       :user,
       fn _repo, _ ->
-        user = Repo.get_by(User, user_id: user_id) |> Repo.preload([:account])
-        {:ok, user}
+        case Repo.get_by(User, user_id: user_id) |> Repo.preload([:account]) do
+          nil -> {:error, {:not_found, user_id}}
+          user -> {:ok, user}
+        end
       end
     )
     |> Multi.run(
