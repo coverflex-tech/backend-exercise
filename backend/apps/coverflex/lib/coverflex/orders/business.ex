@@ -115,11 +115,11 @@ defmodule Coverflex.Orders.Business do
   def validate_if_user_already_purchased_any_product_previously(multi) do
     multi
     |> Multi.run(
-      :at_least_one_product_was_previously_purchased?,
+      :products_already_purchased,
       fn _repo, %{products_previously_purchased: products_previously_purchased} ->
         case length(products_previously_purchased) do
           0 -> {:ok, false}
-          _ -> {:error, "at least one of your selected products was already purchased"}
+          _ -> {:error, products_previously_purchased}
         end
       end
     )

@@ -180,15 +180,15 @@ defmodule Coverflex.OrdersTest do
 
     test "buy_products/2 validate if user cannot buy the same product more than one time" do
       product = product_fixture()
-      user = user_fixture(%{balance: 5000}, with_account: true)
+      user = user_fixture(%{balance: product.price * 2}, with_account: true)
       products = [product.id]
 
       Orders.buy_products(user.user_id, products)
 
-      {:error, :at_least_one_product_was_previously_purchased?, message, _data} =
+      {:error, :products_already_purchased, products_already_purchased, _data} =
         Orders.buy_products(user.user_id, products)
 
-      assert message == "at least one of your selected products was already purchased"
+      assert [^product] = products_already_purchased
     end
 
     test "buy_products/2 update order total" do
