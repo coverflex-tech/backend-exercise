@@ -11,11 +11,12 @@ defmodule CoverflexWeb.OrderController do
   #    render(conn, "index.json", orders: orders)
   #  end
 
-  def create(conn, %{"order" => %{"user_id" => user_id}}) do
-    with {:ok, %Order{} = order} <- Orders.create_order(user_id) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", order: order)
+  def create(conn, %{"order" => %{"user_id" => user_id, "items" => products}}) do
+    case Orders.buy_products(user_id, products) do
+      {:ok, %{order: order}} ->
+        conn
+        |> put_status(:created)
+        |> render("show.json", order: order)
     end
   end
 

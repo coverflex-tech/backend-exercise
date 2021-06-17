@@ -9,14 +9,21 @@ defmodule CoverflexWeb.OrderControllerTest do
   end
 
   describe "create order" do
-    setup [:create_user]
+    test "renders order when data is valid", %{conn: conn} do
+      assert length(Orders.list_orders()) == 0
+      product1 = Fixtures.product_fixture()
+      product2 = Fixtures.product_fixture()
+      balance = product1.price + product2.price
 
-    test "renders order when data is valid", %{conn: conn, user: user} do
-      conn = post(conn, Routes.order_path(conn, :create), order: %{"user_id" => user.id})
+      user = Fixtures.user_fixture(%{balance: balance}, with_account: true)
 
-      assert %{"order" => %{"id" => id, "total" => 0}} = json_response(conn, 201)["data"]
+      payload = %{"user_id" => user.user_id, "items" => [product1.id, product2.id]}
+      conn = post(conn, Routes.order_path(conn, :create), order: payload)
 
-      assert Orders.get_order!(id)
+      total_expected = product1.price + product2.price
+
+      assert %{"order" => %{"total" => ^total_expected}} = json_response(conn, 201)["data"]
+      assert length(Orders.list_orders()) == 1
     end
 
     #    test "renders errors when data is invalid", %{conn: conn, user: user} do
@@ -24,10 +31,5 @@ defmodule CoverflexWeb.OrderControllerTest do
     #
     #      assert json_response(conn, 422)["errors"] != %{}
     #    end
-  end
-
-  defp create_user(_) do
-    user = Fixtures.user_fixture()
-    %{user: user}
   end
 end
