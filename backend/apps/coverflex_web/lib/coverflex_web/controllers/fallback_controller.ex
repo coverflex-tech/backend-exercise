@@ -21,4 +21,28 @@ defmodule CoverflexWeb.FallbackController do
     |> put_view(CoverflexWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, :user, {:not_found, _}, _changes}) do
+    conn
+    |> put_status(:not_found)
+    |> render("404.json", [{:not_found, :user}])
+  end
+
+  def call(conn, {:error, :products, {:not_found, _}, _changes}) do
+    conn
+    |> put_status(:not_found)
+    |> render("404.json", [{:not_found, :products}])
+  end
+
+  def call(conn, {:error, :products_already_purchased, _products, _changeset}) do
+    conn
+    |> put_status(:bad_request)
+    |> render("400.json", [{:error, :products_already_purchased}])
+  end
+
+  def call(conn, {:error, :sufficient_balance?, false, _changeset}) do
+    conn
+    |> put_status(:bad_request)
+    |> render("400.json", [{:error, :insufficient_balance}])
+  end
 end
