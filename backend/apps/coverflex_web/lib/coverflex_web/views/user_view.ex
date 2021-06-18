@@ -11,6 +11,27 @@ defmodule CoverflexWeb.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{user: %{id: user.id, user_id: user.user_id}}
+    user_data = %{
+      user: %{
+        id: user.id,
+        user_id: user.user_id,
+        data: %{balance: user.account.balance, product_ids: []}
+      }
+    }
+
+    case user.orders do
+      nil ->
+        user_data
+
+      %Ecto.Association.NotLoaded{} ->
+        user_data
+
+      orders ->
+        products =
+          Enum.reduce(orders, [], fn order, acc -> [order.order_items | acc] end)
+          |> Enum.flat_map(fn order_item -> order_item end)
+
+        put_in(user_data, [:user, :data, :product_ids], products)
+    end
   end
 end
