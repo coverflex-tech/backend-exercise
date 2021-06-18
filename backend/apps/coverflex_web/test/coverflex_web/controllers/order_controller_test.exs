@@ -23,7 +23,19 @@ defmodule CoverflexWeb.OrderControllerTest do
 
       total_expected = product1.price + product2.price
 
-      assert %{"order" => %{"total" => ^total_expected}} = json_response(conn, 201)["data"]
+      products_expected = [
+        %{"id" => product1.id, "name" => product1.name, "price" => product1.price},
+        %{"id" => product2.id, "name" => product2.name, "price" => product2.price}
+      ]
+
+      # {"order": {"order_id": "123", "data": {"items": [...], "total": 500}}}
+      assert %{
+               "order" => %{
+                 "order_id" => _order_id,
+                 "data" => %{"items" => ^products_expected, "total" => ^total_expected}
+               }
+             } = json_response(conn, 201)
+
       assert length(Orders.list_orders()) == 1
     end
 

@@ -9,13 +9,13 @@ defmodule CoverflexWeb.OrderController do
   #    orders = Orders.list_orders()
   #    render(conn, "index.json", orders: orders)
   #  end
-
   def create(conn, %{"order" => %{"user_id" => user_id, "items" => products}}) do
+    # TODO: Usar fallback para os errors: https://hexdocs.pm/phoenix/Phoenix.Controller.html#action_fallback/1
     case Orders.buy_products(user_id, products) do
-      {:ok, %{order: order}} ->
+      {:ok, %{order: order, products: products}} ->
         conn
         |> put_status(:created)
-        |> render("show.json", order: order)
+        |> render("show.json", %{order: order, products: products})
 
       {:error, :user, {:not_found, _}, _changes} ->
         conn
