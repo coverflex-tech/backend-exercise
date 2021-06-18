@@ -7,21 +7,20 @@ defmodule CoverflexWeb.ProductControllerTest do
   end
 
   describe "index" do
-    setup [:create_product]
+    test "lists all products", %{conn: conn} do
+      product1 = Fixtures.product_fixture()
+      product2 = Fixtures.product_fixture()
 
-    test "lists all products", %{conn: conn, product: %{id: id, name: name, price: price}} do
+      expected_products = [
+        %{"id" => product1.id, "name" => product1.name, "price" => product1.price},
+        %{"id" => product2.id, "name" => product2.name, "price" => product2.price}
+      ]
+
       conn = get(conn, Routes.product_path(conn, :index))
 
       assert %{
-               "products" => [
-                 %{"id" => ^id, "name" => ^name, "price" => ^price}
-               ]
+               "products" => ^expected_products
              } = json_response(conn, 200)
     end
-  end
-
-  defp create_product(_) do
-    product = Fixtures.product_fixture()
-    %{product: product}
   end
 end
