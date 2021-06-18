@@ -44,6 +44,9 @@ defmodule Coverflex.Orders do
   """
   def get_order!(id), do: Repo.get!(Order, id) |> Repo.preload([:user])
 
+  @doc """
+  Orchestrate the business logic to buy one or more products
+  """
   def buy_products(user_id, products) when is_binary(user_id) and is_list(products) do
     # [x] Validate if user has enough balance to buy products
     # [x] Validate if any product was previously bought
