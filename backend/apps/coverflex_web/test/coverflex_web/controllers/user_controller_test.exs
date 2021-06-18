@@ -18,7 +18,7 @@ defmodule CoverflexWeb.UserControllerTest do
                  "id" => ^id,
                  "user_id" => ^user_id
                }
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)
     end
 
     test "creates a new user when do not exist", %{conn: conn} do
@@ -29,7 +29,7 @@ defmodule CoverflexWeb.UserControllerTest do
                  "id" => _some_id,
                  "user_id" => "adalovelace"
                }
-             } = json_response(conn, 201)["data"]
+             } = json_response(conn, 201)
     end
   end
 
