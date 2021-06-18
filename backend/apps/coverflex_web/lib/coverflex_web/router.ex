@@ -12,6 +12,10 @@ defmodule CoverflexWeb.Router do
     post("/orders", OrderController, :create)
   end
 
+  scope "/", CoverflexWeb do
+    get("/", PageController, :index)
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put
