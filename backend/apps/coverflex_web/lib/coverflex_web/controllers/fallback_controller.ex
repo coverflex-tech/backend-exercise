@@ -22,16 +22,10 @@ defmodule CoverflexWeb.FallbackController do
     |> render(:"404")
   end
 
-  def call(conn, {:error, :user, {:not_found, _}, _changes}) do
+  def call(conn, {:error, schema, {:not_found, _}, _changes}) do
     conn
     |> put_status(:not_found)
-    |> render("404.json", [{:not_found, :user}])
-  end
-
-  def call(conn, {:error, :products, {:not_found, _}, _changes}) do
-    conn
-    |> put_status(:not_found)
-    |> render("404.json", [{:not_found, :products}])
+    |> render("404.json", [{:not_found, schema}])
   end
 
   def call(conn, {:error, :products_already_purchased, _products, _changeset}) do
