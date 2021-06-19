@@ -17,7 +17,9 @@ defmodule Coverflex.Orders.Order do
 
   @doc false
   def changeset(order, attrs \\ %{}) do
-    order |> cast(attrs, [:total])
+    order
+    |> cast(attrs, [:total])
+    |> check_constraint(:total, name: :total_must_be_greater_than_or_equal_zero)
   end
 
   @doc false

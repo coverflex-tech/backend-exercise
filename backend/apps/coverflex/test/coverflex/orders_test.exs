@@ -103,6 +103,27 @@ defmodule Coverflex.OrdersTest do
       assert %Order{id: ^order_id, user_id: ^user_id, total: ^total} = Orders.get_order!(order.id)
     end
 
+    test "changeset check the constraint to avoid total less than 0" do
+      user = user_fixture()
+
+      changeset =
+        %Order{total: -1}
+        |> Order.changeset()
+        |> Ecto.Changeset.put_assoc(:user, user)
+
+      assert {:error, %Ecto.Changeset{} = changeset} = Repo.insert(changeset)
+
+      assert changeset.errors == [
+               total: {
+                 "is invalid",
+                 [
+                   {:constraint, :check},
+                   {:constraint_name, "total_must_be_greater_than_or_equal_zero"}
+                 ]
+               }
+             ]
+    end
+
     test "delete_order/1 deletes the order" do
       order = order_fixture()
       assert {:ok, %Order{}} = Orders.delete_order(order)
@@ -141,22 +162,11 @@ defmodule Coverflex.OrdersTest do
       assert {:ok, %OrderItem{}} = Orders.create_order_item(@valid_attrs, order, product)
     end
 
-    #    test "create_order_item/1 with invalid data returns error changeset" do
-    #      assert {:error, %Ecto.Changeset{}} = Orders.create_order_item(@invalid_attrs)
-    #    end
-
     test "update_order_item/2 with valid data updates the order_item" do
       order_item = order_item_fixture()
 
       assert {:ok, %OrderItem{}} = Orders.update_order_item(order_item, @update_attrs)
     end
-
-    #    test "update_order_item/2 with invalid data returns error changeset" do
-    #      order_item = order_item_fixture()
-    #      IO.inspect(order_item, label: "Order item")
-    #      assert {:error, %Ecto.Changeset{}} = Orders.update_order_item(order_item, @invalid_attrs)
-    #      assert order_item == Orders.get_order_item!(order_item.id)
-    #    end
 
     test "delete_order_item/1 deletes the order_item" do
       order_item = order_item_fixture()
