@@ -1,0 +1,242 @@
+defmodule Coverflex.OrdersTest do
+  use Coverflex.DataCase
+  #  doctest Coverflex.Orders
+
+  alias Coverflex.{Orders, Accounts, Products}
+  alias Coverflex.Accounts.User
+  alias Coverflex.Orders.{Order, OrderItem}
+  alias Coverflex.TestHelper.Fixtures
+
+  def order_item_fixture(attrs \\ %{}) do
+    order = Fixtures.order_fixture()
+    product = product_fixture()
+
+    {:ok, order_item} =
+      attrs
+      |> Enum.into(%{price: product.price})
+      |> Orders.create_order_item(order, product)
+
+    order_item
+  end
+
+  def product_fixture(attrs \\ %{}) do
+    {:ok, product} =
+      attrs
+      |> Enum.into(%{
+        name: "product#{System.unique_integer([:positive])}",
+        price: System.unique_integer([:positive])
+      })
+      |> Products.create_product()
+
+    product
+  end
+
+  describe "orders" do
+    alias Coverflex.Orders.Order
+
+    @update_attrs %{total: 43}
+    @invalid_attrs %{total: nil}
+
+    test "list_orders/0 returns all orders" do
+      assert length(Orders.list_orders()) == 0
+      Fixtures.order_fixture()
+      assert length(Orders.list_orders()) == 1
+    end
+
+    test "get_order!/1 returns the order with given id" do
+      %Order{id: order_id, user_id: user_id} = Fixtures.order_fixture()
+      assert %Order{id: ^order_id, user_id: ^user_id} = Orders.get_order!(order_id)
+    end
+
+    test "create_order/1 with user schema creates a order" do
+      user = Fixtures.user_fixture()
+      assert {:ok, %Order{} = order} = Orders.create_order(user)
+      assert order.total == 0
+      assert order.user == user
+    end
+
+    test "create_order/1 with user id creates a order" do
+      %User{id: user_id} = Fixtures.user_fixture()
+      assert {:ok, %Order{} = order} = Orders.create_order(user_id)
+      assert order.total == 0
+      assert order.user.id == user_id
+    end
+
+    test "create_order/1 with non existent user" do
+      assert_raise Ecto.NoResultsError, fn ->
+        Orders.create_order("31ae098b-9354-4d1f-882c-8f609a7a5c7c")
+      end
+    end
+
+    test "update_order/2 with valid data updates the order" do
+      order = Fixtures.order_fixture()
+      assert {:ok, %Order{} = order} = Orders.update_order(order, @update_attrs)
+      assert order.total == 43
+    end
+
+    test "update_order/2 with invalid data returns error changeset" do
+      %Order{id: order_id, user_id: user_id, total: total} = order = Fixtures.order_fixture()
+      assert {:error, %Ecto.Changeset{}} = Orders.update_order(order, @invalid_attrs)
+      assert %Order{id: ^order_id, user_id: ^user_id, total: ^total} = Orders.get_order!(order.id)
+    end
+
+    test "changeset check the constraint to avoid total less than 0" do
+      user = Fixtures.user_fixture()
+
+      changeset =
+        %Order{total: -1}
+        |> Order.changeset()
+        |> Ecto.Changeset.put_assoc(:user, user)
+
+      assert {:error, %Ecto.Changeset{} = changeset} = Repo.insert(changeset)
+
+      assert changeset.errors == [
+               total: {
+                 "is invalid",
+                 [
+                   {:constraint, :check},
+                   {:constraint_name, "total_must_be_greater_than_or_equal_zero"}
+                 ]
+               }
+             ]
+    end
+
+    test "delete_order/1 deletes the order" do
+      order = Fixtures.order_fixture()
+      assert {:ok, %Order{}} = Orders.delete_order(order)
+      assert_raise Ecto.NoResultsError, fn -> Orders.get_order!(order.id) end
+    end
+
+    test "change_order/1 returns a order changeset" do
+      order = Fixtures.order_fixture()
+      assert %Ecto.Changeset{} = Orders.change_order(order)
+    end
+  end
+
+  describe "order_items" do
+    alias Coverflex.Orders.OrderItem
+
+    @valid_attrs %{price: System.unique_integer([:positive])}
+    @update_attrs %{}
+
+    test "list_order_items/0 returns all order_items" do
+      assert length(Orders.list_order_items()) == 0
+      order_item_fixture()
+      assert length(Orders.list_order_items()) == 1
+    end
+
+    test "get_order_item!/1 returns the order_item with given id" do
+      %OrderItem{id: order_item_id, order_id: order_id} = order_item_fixture()
+
+      assert %OrderItem{id: ^order_item_id, order_id: ^order_id} =
+               Orders.get_order_item!(order_item_id)
+    end
+
+    test "create_order_item/1 with valid data creates a order_item" do
+      product = product_fixture()
+      order = Fixtures.order_fixture()
+      assert {:ok, %OrderItem{}} = Orders.create_order_item(@valid_attrs, order, product)
+    end
+
+    test "update_order_item/2 with valid data updates the order_item" do
+      order_item = order_item_fixture()
+
+      assert {:ok, %OrderItem{}} = Orders.update_order_item(order_item, @update_attrs)
+    end
+
+    test "delete_order_item/1 deletes the order_item" do
+      order_item = order_item_fixture()
+      assert {:ok, %OrderItem{}} = Orders.delete_order_item(order_item)
+      assert_raise Ecto.NoResultsError, fn -> Orders.get_order_item!(order_item.id) end
+    end
+
+    test "change_order_item/1 returns a order_item changeset" do
+      order_item = order_item_fixture()
+      assert %Ecto.Changeset{} = Orders.change_order_item(order_item)
+    end
+
+    test "buy_products/2 validate if user without enough balance receives an error" do
+      product = product_fixture()
+      user = Fixtures.user_fixture(%{}, with_account: true)
+      products = [product.id]
+
+      assert {:error, :sufficient_balance?, false, _data} =
+               Orders.buy_products(user.user_id, products)
+    end
+
+    test "buy_products/2 validate if user cannot buy the same product more than one time" do
+      product = product_fixture()
+      user = Fixtures.user_fixture(%{balance: product.price * 2}, with_account: true)
+      products = [product.id]
+
+      Orders.buy_products(user.user_id, products)
+
+      {:error, :products_already_purchased, products_already_purchased, _data} =
+        Orders.buy_products(user.user_id, products)
+
+      assert [^product] = products_already_purchased
+    end
+
+    test "buy_products/2 update order total" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
+      assert order.total == total_products_price
+    end
+
+    test "buy_products/2 create one OrderItem for each product" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
+      order = order |> Repo.preload([:order_items])
+      assert length(order.order_items) == 2
+    end
+
+    test "buy_products/2 update the user balance?" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      total_products_price = product1.price + product2.price
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
+      products = [product1.id, product2.id]
+
+      assert {:ok, _} = Orders.buy_products(user.user_id, products)
+      user = Accounts.get_user!(user.id) |> Repo.preload([:account])
+      assert user.account.balance == 0
+    end
+
+    test "buy_products/2 with an nonexistent user returns error?" do
+      product1 = product_fixture()
+      product2 = product_fixture()
+      products = [product1.id, product2.id]
+
+      assert {:error, :user, {:not_found, "invalid user id"}, _changes} =
+               Orders.buy_products("invalid user id", products)
+    end
+
+    test "buy_products/2 with an nonexistent product returns error?" do
+      product1 = product_fixture()
+      invalid_product = "1979f1ef-ed8e-4bd3-9a6a-753901b3a9d4"
+      products = [product1.id, invalid_product]
+      user = Fixtures.user_fixture(%{balance: product1.price}, with_account: true)
+
+      assert {:error, :products, {:not_found, [^invalid_product]}, _changes} =
+               Orders.buy_products(user.user_id, products)
+    end
+
+    test "buy_products/2 validate if product id is an uuid" do
+      user = Fixtures.user_fixture(%{}, with_account: true)
+      products = ["invalid product id"]
+
+      assert {:error, :invalid_product_ids, ^products, _data} =
+               Orders.buy_products(user.user_id, products)
+    end
+  end
+end

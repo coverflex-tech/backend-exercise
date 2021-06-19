@@ -1,0 +1,31 @@
+@startuml
+!include <archimate/Archimate>
+
+actor App
+
+package "coverflex_umbrella" {
+  package "HTTP layer" {
+    Application_Service(CoverflexWebApp, "coverflex_web")
+  }
+
+  package "Business layer" {
+    Application_Service(CoverflexApp, "coverflex")
+  }
+
+  package "Data layer" {
+    database "Postgres" as database
+  }
+}
+
+Rel_Flow(CoverflexWebApp, CoverflexApp, Uses the business logic and/or higher level functions that abstracts the database)
+Rel_Flow(CoverflexApp, database)
+
+App -> CoverflexWebApp
+
+note right of [CoverflexApp]
+  The lower layers
+  should never depend
+  on the higher layers.
+end note
+
+@enduml

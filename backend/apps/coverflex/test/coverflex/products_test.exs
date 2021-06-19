@@ -1,0 +1,75 @@
+defmodule Coverflex.ProductsTest do
+  use Coverflex.DataCase
+
+  alias Coverflex.Products
+  alias Coverflex.TestHelper.Fixtures
+
+  describe "products" do
+    alias Coverflex.Products.Product
+
+    @valid_attrs %{name: "some name", price: 42}
+    @update_attrs %{name: "some updated name", price: 43}
+    @invalid_attrs %{name: nil, price: nil}
+
+    test "list_products/0 returns all products" do
+      product = Fixtures.product_fixture()
+      assert product in Products.list_products()
+    end
+
+    test "get_product!/1 returns the product with given id" do
+      product = Fixtures.product_fixture()
+      assert Products.get_product!(product.id) == product
+    end
+
+    test "create_product/1 with valid data creates a product" do
+      assert {:ok, %Product{} = product} = Products.create_product(@valid_attrs)
+      assert product.name == "some name"
+      assert product.price == 42
+    end
+
+    test "create_product/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Products.create_product(@invalid_attrs)
+    end
+
+    test "create_product/1 with negative price" do
+      {:error, changeset} =
+        @valid_attrs
+        |> put_in([:price], -42)
+        |> Products.create_product()
+
+      assert changeset.errors == [
+               price: {
+                 "is invalid",
+                 [
+                   {:constraint, :check},
+                   {:constraint_name, "price_must_be_greater_than_or_equal_zero"}
+                 ]
+               }
+             ]
+    end
+
+    test "update_product/2 with valid data updates the product" do
+      product = Fixtures.product_fixture()
+      assert {:ok, %Product{} = product} = Products.update_product(product, @update_attrs)
+      assert product.name == "some updated name"
+      assert product.price == 43
+    end
+
+    test "update_product/2 with invalid data returns error changeset" do
+      product = Fixtures.product_fixture()
+      assert {:error, %Ecto.Changeset{}} = Products.update_product(product, @invalid_attrs)
+      assert product == Products.get_product!(product.id)
+    end
+
+    test "delete_product/1 deletes the product" do
+      product = Fixtures.product_fixture()
+      assert {:ok, %Product{}} = Products.delete_product(product)
+      assert_raise Ecto.NoResultsError, fn -> Products.get_product!(product.id) end
+    end
+
+    test "change_product/1 returns a product changeset" do
+      product = Fixtures.product_fixture()
+      assert %Ecto.Changeset{} = Products.change_product(product)
+    end
+  end
+end
