@@ -50,7 +50,7 @@ defmodule Coverflex.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(attrs) do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -160,7 +160,7 @@ defmodule Coverflex.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user_account(attrs \\ %{}, user) do
+  def create_user_account(attrs, user) do
     %UserAccount{}
     |> UserAccount.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
@@ -214,7 +214,7 @@ defmodule Coverflex.Accounts do
     UserAccount.changeset(user_account, attrs)
   end
 
-  def create_user_with_account(attrs \\ %{}) do
+  def create_user_with_account(attrs) do
     attrs = Map.put_new(attrs, :balance, 0)
 
     multi =

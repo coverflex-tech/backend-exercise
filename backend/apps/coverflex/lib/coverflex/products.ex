@@ -49,7 +49,7 @@ defmodule Coverflex.Products do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_product(attrs \\ %{}) do
+  def create_product(attrs) do
     %Product{}
     |> Product.changeset(attrs)
     |> Repo.insert()
