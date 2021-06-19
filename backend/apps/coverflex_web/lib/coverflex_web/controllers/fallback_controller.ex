@@ -39,4 +39,10 @@ defmodule CoverflexWeb.FallbackController do
     |> put_status(:bad_request)
     |> render("400.json", [{:error, :insufficient_balance}])
   end
+
+  def call(conn, {:error, :invalid_product_ids, _product_ids, _changeset}) do
+    conn
+    |> put_status(:bad_request)
+    |> render("400.json", [{:error, :invalid_product_ids}])
+  end
 end
