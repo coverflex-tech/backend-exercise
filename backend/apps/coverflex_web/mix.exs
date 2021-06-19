@@ -14,7 +14,20 @@ defmodule CoverflexWeb.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [
+        ignore_modules: [
+          CoverflexWeb.Router,
+          CoverflexWeb,
+          CoverflexWeb.Application,
+          CoverflexWeb.ChangesetView,
+          CoverflexWeb.ChannelCase,
+          CoverflexWeb.ErrorHelpers,
+          CoverflexWeb.Gettext,
+          CoverflexWeb.Telemetry,
+          CoverflexWeb.UserSocket
+        ]
+      ]
     ]
   end
 
