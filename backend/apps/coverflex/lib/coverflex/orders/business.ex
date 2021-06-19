@@ -7,6 +7,22 @@ alias Ecto.Multi
 alias Coverflex.Repo
 
 defmodule Coverflex.Orders.Business do
+  def validate_if_product_id_is_uuid(multi, products) do
+    multi
+    |> Multi.run(
+      :invalid_product_ids,
+      fn _repo, %{} ->
+        invalid_product_ids =
+          Enum.filter(products, fn product -> :error == Ecto.UUID.dump(product) end)
+
+        case(length(invalid_product_ids)) do
+          0 -> {:ok, true}
+          _ -> {:error, invalid_product_ids}
+        end
+      end
+    )
+  end
+
   def validate_if_user_has_enough_balance_to_buy_products(multi, user_id, products) do
     multi
     |> Multi.run(

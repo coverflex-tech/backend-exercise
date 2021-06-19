@@ -253,5 +253,13 @@ defmodule Coverflex.OrdersTest do
       assert {:error, :products, {:not_found, [^invalid_product]}, _changes} =
                Orders.buy_products(user.user_id, products)
     end
+
+    test "buy_products/2 validate if product id is an uuid" do
+      user = user_fixture(%{}, with_account: true)
+      products = ["invalid product id"]
+
+      assert {:error, :invalid_product_ids, ^products, _data} =
+               Orders.buy_products(user.user_id, products)
+    end
   end
 end

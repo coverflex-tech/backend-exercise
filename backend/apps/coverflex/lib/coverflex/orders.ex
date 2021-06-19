@@ -54,6 +54,7 @@ defmodule Coverflex.Orders do
     # [X] Update the user balance
     buy_products_multi =
       Multi.new()
+      |> Business.validate_if_product_id_is_uuid(products)
       |> Business.validate_if_user_has_enough_balance_to_buy_products(
         user_id,
         products
