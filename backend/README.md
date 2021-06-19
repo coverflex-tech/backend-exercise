@@ -25,6 +25,18 @@ To avoid the user to see a not found page when try to access the index(/) we red
 You can run the tests with the default Elixir mix command `mix test` or with the test watch `mix test.watch` that will
 execute all the tests when a file change detected.
 
+## Running
+
+Execute the commands bellow to put the system in running state.
+
+> All your requests must be made to the base URL http://localhost:4000/
+
+```shell
+docker run -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 postgres
+mix ecto.create && mix ecto.migrate
+mix phx.server
+```
+
 ## Examples
 
 * List products
