@@ -155,7 +155,6 @@ defmodule Coverflex.OrdersTest do
                Orders.get_order_item!(order_item_id)
     end
 
-    @tag :wip
     test "create_order_item/1 with valid data creates a order_item" do
       product = product_fixture()
       order = order_fixture()
