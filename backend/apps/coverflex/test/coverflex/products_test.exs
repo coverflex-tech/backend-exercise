@@ -2,6 +2,7 @@ defmodule Coverflex.ProductsTest do
   use Coverflex.DataCase
 
   alias Coverflex.Products
+  alias Coverflex.TestHelper.Fixtures
 
   describe "products" do
     alias Coverflex.Products.Product
@@ -10,22 +11,13 @@ defmodule Coverflex.ProductsTest do
     @update_attrs %{name: "some updated name", price: 43}
     @invalid_attrs %{name: nil, price: nil}
 
-    def product_fixture(attrs \\ %{}) do
-      {:ok, product} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Products.create_product()
-
-      product
-    end
-
     test "list_products/0 returns all products" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert product in Products.list_products()
     end
 
     test "get_product!/1 returns the product with given id" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert Products.get_product!(product.id) == product
     end
 
@@ -57,26 +49,26 @@ defmodule Coverflex.ProductsTest do
     end
 
     test "update_product/2 with valid data updates the product" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert {:ok, %Product{} = product} = Products.update_product(product, @update_attrs)
       assert product.name == "some updated name"
       assert product.price == 43
     end
 
     test "update_product/2 with invalid data returns error changeset" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert {:error, %Ecto.Changeset{}} = Products.update_product(product, @invalid_attrs)
       assert product == Products.get_product!(product.id)
     end
 
     test "delete_product/1 deletes the product" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert {:ok, %Product{}} = Products.delete_product(product)
       assert_raise Ecto.NoResultsError, fn -> Products.get_product!(product.id) end
     end
 
     test "change_product/1 returns a product changeset" do
-      product = product_fixture()
+      product = Fixtures.product_fixture()
       assert %Ecto.Changeset{} = Products.change_product(product)
     end
   end

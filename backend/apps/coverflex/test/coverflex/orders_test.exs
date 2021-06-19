@@ -5,33 +5,10 @@ defmodule Coverflex.OrdersTest do
   alias Coverflex.{Orders, Accounts, Products}
   alias Coverflex.Accounts.User
   alias Coverflex.Orders.{Order, OrderItem}
-
-  def user_fixture(attrs \\ %{}, opts \\ []) do
-    attrs =
-      attrs
-      |> Enum.into(%{user_id: "user#{System.unique_integer([:positive])}"})
-
-    case(Keyword.get(opts, :with_account, false)) do
-      true ->
-        {:ok, user} = attrs |> Accounts.create_user_with_account()
-
-        user
-
-      false ->
-        {:ok, user} = attrs |> Accounts.create_user()
-
-        user
-    end
-  end
-
-  def order_fixture() do
-    {:ok, order} = user_fixture() |> Orders.create_order()
-
-    order
-  end
+  alias Coverflex.TestHelper.Fixtures
 
   def order_item_fixture(attrs \\ %{}) do
-    order = order_fixture()
+    order = Fixtures.order_fixture()
     product = product_fixture()
 
     {:ok, order_item} =
@@ -62,24 +39,24 @@ defmodule Coverflex.OrdersTest do
 
     test "list_orders/0 returns all orders" do
       assert length(Orders.list_orders()) == 0
-      order_fixture()
+      Fixtures.order_fixture()
       assert length(Orders.list_orders()) == 1
     end
 
     test "get_order!/1 returns the order with given id" do
-      %Order{id: order_id, user_id: user_id} = order_fixture()
+      %Order{id: order_id, user_id: user_id} = Fixtures.order_fixture()
       assert %Order{id: ^order_id, user_id: ^user_id} = Orders.get_order!(order_id)
     end
 
     test "create_order/1 with user schema creates a order" do
-      user = user_fixture()
+      user = Fixtures.user_fixture()
       assert {:ok, %Order{} = order} = Orders.create_order(user)
       assert order.total == 0
       assert order.user == user
     end
 
     test "create_order/1 with user id creates a order" do
-      %User{id: user_id} = user_fixture()
+      %User{id: user_id} = Fixtures.user_fixture()
       assert {:ok, %Order{} = order} = Orders.create_order(user_id)
       assert order.total == 0
       assert order.user.id == user_id
@@ -92,19 +69,19 @@ defmodule Coverflex.OrdersTest do
     end
 
     test "update_order/2 with valid data updates the order" do
-      order = order_fixture()
+      order = Fixtures.order_fixture()
       assert {:ok, %Order{} = order} = Orders.update_order(order, @update_attrs)
       assert order.total == 43
     end
 
     test "update_order/2 with invalid data returns error changeset" do
-      %Order{id: order_id, user_id: user_id, total: total} = order = order_fixture()
+      %Order{id: order_id, user_id: user_id, total: total} = order = Fixtures.order_fixture()
       assert {:error, %Ecto.Changeset{}} = Orders.update_order(order, @invalid_attrs)
       assert %Order{id: ^order_id, user_id: ^user_id, total: ^total} = Orders.get_order!(order.id)
     end
 
     test "changeset check the constraint to avoid total less than 0" do
-      user = user_fixture()
+      user = Fixtures.user_fixture()
 
       changeset =
         %Order{total: -1}
@@ -125,13 +102,13 @@ defmodule Coverflex.OrdersTest do
     end
 
     test "delete_order/1 deletes the order" do
-      order = order_fixture()
+      order = Fixtures.order_fixture()
       assert {:ok, %Order{}} = Orders.delete_order(order)
       assert_raise Ecto.NoResultsError, fn -> Orders.get_order!(order.id) end
     end
 
     test "change_order/1 returns a order changeset" do
-      order = order_fixture()
+      order = Fixtures.order_fixture()
       assert %Ecto.Changeset{} = Orders.change_order(order)
     end
   end
@@ -157,7 +134,7 @@ defmodule Coverflex.OrdersTest do
 
     test "create_order_item/1 with valid data creates a order_item" do
       product = product_fixture()
-      order = order_fixture()
+      order = Fixtures.order_fixture()
       assert {:ok, %OrderItem{}} = Orders.create_order_item(@valid_attrs, order, product)
     end
 
@@ -180,7 +157,7 @@ defmodule Coverflex.OrdersTest do
 
     test "buy_products/2 validate if user without enough balance receives an error" do
       product = product_fixture()
-      user = user_fixture(%{}, with_account: true)
+      user = Fixtures.user_fixture(%{}, with_account: true)
       products = [product.id]
 
       assert {:error, :sufficient_balance?, false, _data} =
@@ -189,7 +166,7 @@ defmodule Coverflex.OrdersTest do
 
     test "buy_products/2 validate if user cannot buy the same product more than one time" do
       product = product_fixture()
-      user = user_fixture(%{balance: product.price * 2}, with_account: true)
+      user = Fixtures.user_fixture(%{balance: product.price * 2}, with_account: true)
       products = [product.id]
 
       Orders.buy_products(user.user_id, products)
@@ -204,7 +181,7 @@ defmodule Coverflex.OrdersTest do
       product1 = product_fixture()
       product2 = product_fixture()
       total_products_price = product1.price + product2.price
-      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
       products = [product1.id, product2.id]
 
       {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
@@ -215,7 +192,7 @@ defmodule Coverflex.OrdersTest do
       product1 = product_fixture()
       product2 = product_fixture()
       total_products_price = product1.price + product2.price
-      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
       products = [product1.id, product2.id]
 
       {:ok, %{order: order}} = Orders.buy_products(user.user_id, products)
@@ -227,7 +204,7 @@ defmodule Coverflex.OrdersTest do
       product1 = product_fixture()
       product2 = product_fixture()
       total_products_price = product1.price + product2.price
-      user = user_fixture(%{balance: total_products_price}, with_account: true)
+      user = Fixtures.user_fixture(%{balance: total_products_price}, with_account: true)
       products = [product1.id, product2.id]
 
       assert {:ok, _} = Orders.buy_products(user.user_id, products)
@@ -248,14 +225,14 @@ defmodule Coverflex.OrdersTest do
       product1 = product_fixture()
       invalid_product = "1979f1ef-ed8e-4bd3-9a6a-753901b3a9d4"
       products = [product1.id, invalid_product]
-      user = user_fixture(%{balance: product1.price}, with_account: true)
+      user = Fixtures.user_fixture(%{balance: product1.price}, with_account: true)
 
       assert {:error, :products, {:not_found, [^invalid_product]}, _changes} =
                Orders.buy_products(user.user_id, products)
     end
 
     test "buy_products/2 validate if product id is an uuid" do
-      user = user_fixture(%{}, with_account: true)
+      user = Fixtures.user_fixture(%{}, with_account: true)
       products = ["invalid product id"]
 
       assert {:error, :invalid_product_ids, ^products, _data} =
