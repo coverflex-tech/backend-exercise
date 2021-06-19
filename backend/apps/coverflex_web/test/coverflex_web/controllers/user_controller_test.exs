@@ -32,7 +32,11 @@ defmodule CoverflexWeb.UserControllerTest do
       assert %{
                "user" => %{
                  "id" => _some_id,
-                 "user_id" => "adalovelace"
+                 "user_id" => "adalovelace",
+                 "data" => %{
+                   "balance" => 500,
+                   "product_ids" => []
+                 }
                }
              } = json_response(conn, 201)
     end

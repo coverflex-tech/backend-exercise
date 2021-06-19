@@ -8,11 +8,13 @@ defmodule CoverflexWeb.UserController do
   alias Coverflex.Orders.OrderItem
 
   action_fallback(CoverflexWeb.FallbackController)
+  @new_user_balance 500
 
   def show(conn, %{"user_id" => user_id}) do
     case Accounts.get_user_by(:user_id, user_id) do
       nil ->
-        {:ok, user} = Accounts.create_user_with_account(%{user_id: user_id})
+        {:ok, user} =
+          Accounts.create_user_with_account(%{user_id: user_id, balance: @new_user_balance})
 
         conn
         |> put_status(201)
