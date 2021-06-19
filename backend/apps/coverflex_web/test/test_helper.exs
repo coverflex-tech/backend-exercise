@@ -3,7 +3,7 @@ alias Coverflex.{Products, Accounts}
 ExUnit.start()
 Ecto.Adapters.SQL.Sandbox.mode(Coverflex.Repo, :manual)
 
-defmodule TestHelper.Fixtures do
+defmodule TestHelper.CoverflexWeb.Fixtures do
   def user_fixture(attrs \\ %{}, opts \\ []) do
     attrs =
       attrs

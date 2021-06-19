@@ -1,7 +1,7 @@
 defmodule CoverflexWeb.UserControllerTest do
   use CoverflexWeb.ConnCase
 
-  alias TestHelper.Fixtures
+  alias TestHelper.CoverflexWeb.Fixtures
   alias Coverflex.Orders
 
   setup %{conn: conn} do
@@ -9,9 +9,8 @@ defmodule CoverflexWeb.UserControllerTest do
   end
 
   describe "get user" do
-    setup [:create_user]
-
-    test "already created user", %{conn: conn, user: %{user_id: user_id, id: id}} do
+    test "already created user", %{conn: conn} do
+      %{id: id, user_id: user_id} = Fixtures.user_fixture(%{}, with_account: true)
       conn = get(conn, Routes.user_path(conn, :show, user_id))
 
       assert %{
@@ -63,10 +62,5 @@ defmodule CoverflexWeb.UserControllerTest do
                }
              } = json_response(conn, 200)
     end
-  end
-
-  defp create_user(attrs) do
-    user = Fixtures.user_fixture(attrs, with_account: true)
-    %{user: user}
   end
 end

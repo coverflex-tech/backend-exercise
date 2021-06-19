@@ -2,7 +2,7 @@ defmodule CoverflexWeb.OrderControllerTest do
   use CoverflexWeb.ConnCase
 
   alias Coverflex.Orders
-  alias TestHelper.Fixtures
+  alias TestHelper.CoverflexWeb.Fixtures
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
