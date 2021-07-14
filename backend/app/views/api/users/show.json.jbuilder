@@ -3,6 +3,6 @@ json.user do
 
   json.data do
     json.balance @user.balance
-    json.product_ids "list product names as an array here"
+    json.product_ids @product_names
   end
 end
