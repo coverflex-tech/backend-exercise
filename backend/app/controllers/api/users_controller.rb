@@ -5,6 +5,7 @@ class Api::UsersController < Api::BaseController
     unless @user
       @user = User.create(username: "#{params[:id]}", email: "#{params[:id]}@gmail.com", password: "123456")
     end
+    @product_names = @user.products.map { |product| product.name.downcase }
   end
 
   private
