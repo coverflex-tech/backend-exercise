@@ -26,17 +26,24 @@ class Api::OrdersController < Api::BaseController
     return insufficient_balance if @user.balance < total
 
     # subtract the total from the users balance
-    total.round(2)
-    @order = Order.create(user: @user, total: total)
+    # create order and order products instances
+    create_orders(products, total)
 
-    # create order products
-    create_orders(products)
+    # list product names in order for the json view
     @product_names = @order.products.map { |product| product.name }
   end
 
   private
 
-  def create_orders(products)
+  def subtract_order_price(total)
+    total.round(2)
+    @user.balance -= total
+    @user.save
+  end
+
+  def create_orders(products, total)
+    subtract_order_price(total)
+    @order = Order.create(user: @user, total: total)
     products.each do |product|
       product_instance = find_product(product)
       OrderProduct.create(product: product_instance, order: @order)
