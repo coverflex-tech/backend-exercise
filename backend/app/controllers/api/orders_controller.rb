@@ -8,20 +8,46 @@ class Api::OrdersController < Api::BaseController
     # check user exists
     return user_not_found if @user.nil?
 
+    products = @body["items"]
+    total = 0
     # find the products in the database and throw an error if they dont exist
+    products.each do |product|
+      product_instance = find_product(product)
+      return products_not_found if product_instance.nil?
 
-    # check if the user already has the products and throw an error if they have
+      # check if the user already has the products and throw an error if they have
+      return products_already_purchased if @user.products.include?(product_instance)
+
+      # add the product price to the total order price
+      total += product_instance.price
+    end
 
     # calculate the order total and check if the user has sufficient balance
+    return insufficient_balance if @user.balance < total
 
     # subtract the total from the users balance
+    total.round(2)
+    @order = Order.create(user: @user, total: total)
 
     # create order products
-    # @order = Order.new ....
+    create_orders(products)
+    @product_names = @order.products.map { |product| product.name }
   end
 
   private
 
+  def create_orders(products)
+    products.each do |product|
+      product_instance = find_product(product)
+      OrderProduct.create(product: product_instance, order: @order)
+    end
+  end
+
+  def find_product(product)
+    Product.where(name: product.capitalize).first
+  end
+
+  # used for testing
   def show_data
     render json: { data: "#{@body["user_id"]}" }
   end
