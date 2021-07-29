@@ -1,84 +1,63 @@
 class Api::OrdersController < Api::BaseController
   require 'json'
 
+  before_action :set_data, only: [:create]
   before_action :set_user, only: [:create]
+  before_action :set_products, only: [:create]
 
   def create
-    # find the user based on the username
-    # check user exists
-    return user_not_found if @user.nil?
+    # check products exist and check if already purchased then calculate total
+    validate_products(@products)
+    @total = calculate_order_total(@products)
 
-    products = @body["items"]
-    total = 0
-    # find the products in the database and throw an error if they dont exist
-    products.each do |product|
-      product_instance = find_product(product)
-      return products_not_found if product_instance.nil?
+    # check if the user has insufficient balance and throw an error if true
+    return insufficient_balance unless @user.afford?(@total)
 
-      # check if the user already has the products and throw an error if they have
-      return products_already_purchased if @user.products.include?(product_instance)
-
-      # add the product price to the total order price
-      total += product_instance.price
-    end
-
-    # calculate the order total and check if the user has sufficient balance
-    return insufficient_balance if @user.balance < total
-
-    # subtract the total from the users balance
-    # create order and order products instances
-    create_orders(products, total)
-
-    # list product names in order for the json view
-    @product_names = @order.products.map { |product| product.name }
+    # create the order
+    @order = PlaceOrder.call(user: @user, products: @products, total: @total)
+    @product_names = @order.products.map(&:name)
   end
 
   private
 
-  def subtract_order_price(total)
-    total.round(2)
-    @user.balance -= total
-    @user.save
+  def validate_products(products)
+    return products_not_found unless @products.map(&:name).sort == @product_names.sort
+    return products_already_purchased if (@user.products & products).any?
   end
 
-  def create_orders(products, total)
-    subtract_order_price(total)
-    @order = Order.create(user: @user, total: total)
-    products.each do |product|
-      product_instance = find_product(product)
-      OrderProduct.create(product: product_instance, order: @order)
-    end
+  def calculate_order_total(products)
+    products.map(&:price).sum
   end
 
-  def find_product(product)
-    Product.where(name: product.capitalize).first
-  end
-
-  # used for testing
-  def show_data
-    render json: { data: "#{@body["user_id"]}" }
+  def set_data
+    # request_body = JSON.parse(request.raw_post)
+    @body = params["order"]
   end
 
   def set_user
-    request_body = JSON.parse(request.raw_post)
-    @body = request_body["order"]
-    @user = User.where(username: "#{@body["user_id"]}").first
-    # authorize @user
+    @user = User.where(username: @body['user_id'].to_s).first
+    return user_not_found if @user.nil?
+  end
+
+  # fetch products from the database using 1 query
+  def set_products
+    @product_names = @body["items"].map(&:capitalize)
+    @products = Product.where(name: @product_names)
   end
 
   def products_not_found
-    render json: { error: "products_not_found" }, status: 400
+    return render json: { error: "products_not_found" }, status: 400
   end
 
   def products_already_purchased
-    render json: { error: "products_already_purchased" }, status: 400
+    return render json: { error: "products_already_purchased" }, status: 400
   end
 
   def insufficient_balance
-    render json: { error: "insufficient_balance" }, status: 400
+    return render json: { error: "insufficient_balance" }, status: 400
   end
 
   def user_not_found
-    render json: { error: "user_not_found" }, status: 400
+    return render json: { error: "user_not_found" }, status: 400
   end
 end

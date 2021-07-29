@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_143849) do
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.float "total"
+    t.integer "total"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_orders_on_user_id"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_143849) do
 
   create_table "products", force: :cascade do |t|
     t.string "name", default: "", null: false
-    t.float "price", default: 0.0, null: false
+    t.integer "price", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name"], name: "index_products_on_name", unique: true
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_143849) do
     t.string "email", null: false
     t.string "username", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.float "balance", default: 0.0
+    t.integer "balance", default: 0
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
