@@ -9,9 +9,9 @@
 p "Deleting everything"
 Product.destroy_all
 
-p "Creating products..."
+p "Creating 10 products..."
 product_names = %w(Netflix Dental Masterclass Sushiclass Spotify Newshoes Cinemaclub Surfclass Gym Ubereats)
 product_names.each do |product_name|
-  Product.create(name: product_name, price: rand(10.00..200.00).round(2))
+  Product.create(name: product_name, price: rand(10_00..200_00))
 end
 p "Created products!"

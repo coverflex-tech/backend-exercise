@@ -19,7 +19,3 @@ class Api::BaseController < ActionController::API
     render json: { error: exception.message }, status: :not_found
   end
 end
-
-# output 400 {"error": "products_not_found"}
-# output 400 {"error": "products_already_purchased"}
-# output 400 {"error": "insufficient_balance"}

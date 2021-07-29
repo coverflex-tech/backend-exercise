@@ -10,4 +10,8 @@ class User < ApplicationRecord
   def products
     self.order_products.map { |order_product| order_product.product }
   end
+
+  def afford?(amount)
+    self.balance > amount
+  end
 end
