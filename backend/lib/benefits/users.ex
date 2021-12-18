@@ -4,8 +4,8 @@ defmodule Benefits.Users do
   """
 
   import Ecto.Query, warn: false
-  alias Benefits.Repo
 
+  alias Benefits.Repo
   alias Benefits.Users.User
 
   @doc """
@@ -40,21 +40,5 @@ defmodule Benefits.Users do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
-  end
-
-  @doc """
-  Deletes a user.
-
-  ## Examples
-
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
   end
 end
