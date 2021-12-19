@@ -19,9 +19,13 @@ defmodule Benefits.UsersTest do
       assert {:error, %Ecto.Changeset{}} = Users.create_user(%{username: nil, balance: nil})
     end
 
-    test "get_user!/1 returns the user with given id" do
+    test "get_user/1 returns the user with given id" do
       user = user_fixture()
-      assert Users.get_user!(user.id) == user
+      assert Users.get_user(user.username) == user
+    end
+
+    test "get_user/1 returns nil if the user doesn't exist" do
+      assert Users.get_user("Invalid user") == nil
     end
   end
 end
