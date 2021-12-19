@@ -46,5 +46,6 @@ defmodule BenefitsWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug CORSPlug, origin: ["http://localhost:3000"]
   plug BenefitsWeb.Router
 end
