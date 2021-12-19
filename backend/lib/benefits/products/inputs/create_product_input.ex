@@ -14,7 +14,7 @@ defmodule Benefits.Products.Inputs.CreateProductInput do
   @primary_key false
   embedded_schema do
     field :name, :string
-    field :price, :integer
+    field :price, :float
   end
 
   def changeset(module \\ %__MODULE__{}, params) do

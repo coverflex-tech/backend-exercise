@@ -1,6 +1,6 @@
 defmodule BenefitsWeb.OrderView do
   use BenefitsWeb, :view
-  alias BenefitsWeb.{OrderView, UserView, ProductView}
+  alias BenefitsWeb.{OrderView, ProductView}
 
   def render("index.json", %{orders: orders}) do
     %{orders: render_many(orders, OrderView, "order.json")}
@@ -12,9 +12,8 @@ defmodule BenefitsWeb.OrderView do
 
   def render("order.json", %{order: order}) do
     %{
-      id: order.id,
-      user: render_one(order.user, UserView, "user.json"),
-      items: render_many(order.items, ProductView, "product.json"),
+      order_id: order.id,
+      items: render_many(order.items, ProductView, "product.json")
     }
   end
 

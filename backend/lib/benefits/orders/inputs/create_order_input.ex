@@ -14,7 +14,7 @@ defmodule Benefits.Orders.Inputs.CreateOrderInput do
   @primary_key false
   embedded_schema do
     field :username, :string
-    field :items, {:array, :string}
+    field :items, {:array, :integer}
   end
 
   def changeset(module \\ %__MODULE__{}, params) do

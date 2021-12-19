@@ -9,12 +9,11 @@ defmodule Benefits.Products.Product do
   schema "products" do
     field :name, :string
     field :price, :float
-    belongs_to :order, Order
+    many_to_many :orders, Order, join_through: "orders_products"
 
     timestamps()
   end
 
-  @doc false
   def changeset(user, attrs) do
     user
     |> cast(attrs, @required)

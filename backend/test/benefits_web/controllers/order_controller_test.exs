@@ -3,16 +3,14 @@ defmodule BenefitsWeb.OrderControllerTest do
   import Benefits.UsersFixtures
   import Benefits.ProductsFixtures
 
-  alias Benefits.Orders
-
   setup %{conn: conn} do
     user = user_fixture(balance: 100)
 
     items =
-      Enum.map(1..10, fn i ->
-        product = product_fixture(name: "Product #{i}", price: 5)
+      Enum.map(1..10, fn _ ->
+        product = product_fixture()
 
-        product.name
+        product.id
       end)
 
     {:ok, conn: put_req_header(conn, "accept", "application/json"), user: user, items: items}
@@ -26,9 +24,7 @@ defmodule BenefitsWeb.OrderControllerTest do
       body = json_response(conn, 201)["order"]
 
       assert length(body["items"]) == 10
-      assert List.first(body["items"])["name"] == List.first(items)
-      assert body["user"]["username"] == user.username
-      assert body["user"]["balance"] == 50
+      assert List.first(body["items"])["id"] == List.first(items)
     end
 
     test "fails when params are invalid", %{conn: conn} do
@@ -42,7 +38,7 @@ defmodule BenefitsWeb.OrderControllerTest do
     end
 
     test "fails when products don't exist", %{conn: conn, user: user} do
-      input = %{username: user.username, items: ["Invalid", "Products"]}
+      input = %{username: user.username, items: [1000, 2000]}
       conn = post(conn, Routes.order_path(conn, :create, input))
 
       assert %{"error" => "products_not_found"} = json_response(conn, 422)
@@ -67,23 +63,6 @@ defmodule BenefitsWeb.OrderControllerTest do
       conn = post(conn, Routes.order_path(conn, :create, input))
 
       assert %{"error" => "insufficient_balance"} = json_response(conn, 422)
-    end
-  end
-
-  describe "list orders" do
-    test "renders a list of orders", %{conn: conn, user: user, items: items} do
-      Orders.create_order(user.username, items)
-
-      conn = get(conn, Routes.order_path(conn, :index))
-      body = json_response(conn, 200)["orders"]
-
-      assert length(body) == 1
-
-      first_order = List.first(body)
-
-      assert List.first(first_order["items"])["name"] == List.first(items)
-      assert first_order["user"]["username"] == user.username
-      assert first_order["user"]["balance"] == 50
     end
   end
 end

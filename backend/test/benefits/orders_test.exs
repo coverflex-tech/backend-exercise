@@ -7,44 +7,55 @@ defmodule Benefits.OrdersTest do
   alias Benefits.Orders
   alias Benefits.Orders.Order
 
+  setup do
+    user = user_fixture()
+
+    items =
+      Enum.map(1..10, fn _ ->
+        product = product_fixture()
+
+        product.id
+      end)
+
+    {:ok, user: user, items: items}
+  end
+
   describe "orders" do
-    test "create_order/2 with valid data creates an order" do
-      user = user_fixture()
-      product = product_fixture()
-
-      assert {:ok, %Order{} = order} = Orders.create_order(user.username, [product.name])
-      assert order.user.username == user.username
-      assert order.user.balance == 0
-      assert List.first(order.items).name == product.name
+    test "create_order/2 with valid data creates an order", %{
+      user: user,
+      items: items
+    } do
+      assert {:ok, %Order{} = order} = Orders.create_order(user.username, items)
+      assert List.first(order.items).id == List.first(items)
     end
 
-    test "create_order/2 fails if user not found" do
-      product = product_fixture()
-
-      assert {:error, :user_not_found} = Orders.create_order("Invalid user", [product.name])
+    test "create_order/2 fails if user not found", %{items: items} do
+      assert {:error, :user_not_found} = Orders.create_order("Invalid user", items)
     end
 
-    test "create_order/2 fails if one of the products in the list doesn't exist" do
-      user = user_fixture()
-
-      assert {:error, :products_not_found} = Orders.create_order(user.username, [user.username, "invalid products"])
+    test "create_order/2 fails if one of the products in the list doesn't exist", %{
+      user: user
+    } do
+      assert {:error, :products_not_found} = Orders.create_order(user.username, [1000])
     end
 
-    test "create_order/2 fails if one of the products has already been purchased" do
-      user = user_fixture()
-      product = product_fixture()
-      product2 = product_fixture(name: "Another Product")
+    test "create_order/2 fails if one of the products has already been purchased", %{
+      user: user,
+      items: items
+    } do
+      new_product = product_fixture()
 
-      Orders.create_order(user.username, [product.name])
+      Orders.create_order(user.username, items)
 
-      assert {:error, :products_already_purchased} = Orders.create_order(user.username, [product.name, product2.name])
+      assert {:error, :products_already_purchased} =
+               Orders.create_order(user.username, [new_product.id | items])
     end
 
     test "create_order/2 fails if user doesn't have enough balance" do
       user = user_fixture(balance: 1)
       product = product_fixture()
 
-      assert {:error, :insufficient_balance} = Orders.create_order(user.username, [product.name])
+      assert {:error, :insufficient_balance} = Orders.create_order(user.username, [product.id])
     end
   end
 end

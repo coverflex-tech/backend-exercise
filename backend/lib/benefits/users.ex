@@ -22,7 +22,10 @@ defmodule Benefits.Users do
       nil
 
   """
-  def get_user(username), do: Repo.get_by(User, username: username)
+  def get_user(username) do
+    Repo.get_by(User, username: username)
+    |> Repo.preload([:orders])
+  end
 
   @doc """
   Creates a user.

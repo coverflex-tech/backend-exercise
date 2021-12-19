@@ -20,8 +20,11 @@ defmodule Benefits.UsersTest do
     end
 
     test "get_user/1 returns the user with given id" do
-      user = user_fixture()
-      assert Users.get_user(user.username) == user
+      user_fixture = user_fixture()
+      user = Users.get_user(user_fixture.username)
+
+      assert user.balance == user_fixture.balance
+      assert user.username == user_fixture.username
     end
 
     test "get_user/1 returns nil if the user doesn't exist" do

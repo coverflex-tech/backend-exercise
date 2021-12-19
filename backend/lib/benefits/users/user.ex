@@ -2,11 +2,14 @@ defmodule Benefits.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Benefits.Orders.Order
+
   @required [:username, :balance]
 
   schema "users" do
     field :username, :string
     field :balance, :float
+    has_many :orders, Order
 
     timestamps()
   end
