@@ -3,12 +3,12 @@ defmodule Benefits.Repo.Migrations.CreateUsers do
 
   def change do
     create table :users do
-      add :user_id, :string
+      add :username, :string
       add :balance, :float
 
       timestamps()
     end
 
-    create unique_index(:users, [:user_id])
+    create unique_index :users, [:username]
   end
 end

@@ -2,10 +2,10 @@ defmodule Benefits.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @required [:user_id, :balance]
+  @required [:username, :balance]
 
   schema "users" do
-    field :user_id, :string
+    field :username, :string
     field :balance, :float
 
     timestamps()
@@ -16,6 +16,6 @@ defmodule Benefits.Users.User do
     user
     |> cast(attrs, @required)
     |> validate_required(@required)
-    |> unique_constraint(:user_id)
+    |> unique_constraint(:username)
   end
 end

@@ -5,9 +5,9 @@ defmodule Benefits.UsersFixtures do
   """
 
   @doc """
-  Generate a unique User user_id.
+  Generate a unique User username.
   """
-  def unique_user_id, do: "User #{System.unique_integer([:positive])}"
+  def unique_username, do: "User #{System.unique_integer([:positive])}"
 
   @doc """
   Generate a user.
@@ -17,7 +17,7 @@ defmodule Benefits.UsersFixtures do
       attrs
       |> Enum.into(%{
         balance: 120.5,
-        user_id: unique_user_id()
+        username: unique_username()
       })
       |> Benefits.Users.create_user()
 

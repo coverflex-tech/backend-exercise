@@ -8,5 +8,7 @@ defmodule Benefits.Repo.Migrations.CreateProducts do
 
       timestamps()
     end
+
+    create unique_index :products, [:name]
   end
 end

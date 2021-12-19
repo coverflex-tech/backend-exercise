@@ -8,15 +8,15 @@ defmodule Benefits.UsersTest do
 
   describe "users" do
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{balance: 120.5, user_id: "User"}
+      valid_attrs = %{balance: 120.5, username: "User"}
 
       assert {:ok, %User{} = user} = Users.create_user(valid_attrs)
       assert user.balance == 120.5
-      assert user.user_id == "User"
+      assert user.username == "User"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Users.create_user(%{user_id: nil, balance: nil})
+      assert {:error, %Ecto.Changeset{}} = Users.create_user(%{username: nil, balance: nil})
     end
 
     test "get_user!/1 returns the user with given id" do
