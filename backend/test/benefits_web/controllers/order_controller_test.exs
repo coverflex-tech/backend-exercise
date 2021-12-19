@@ -19,7 +19,7 @@ defmodule BenefitsWeb.OrderControllerTest do
   describe "create order" do
     test "creates a new order when data is valid", %{conn: conn, user: user, items: items} do
       input = %{username: user.username, items: items}
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       body = json_response(conn, 201)["order"]
 
@@ -29,7 +29,7 @@ defmodule BenefitsWeb.OrderControllerTest do
 
     test "fails when params are invalid", %{conn: conn} do
       input = %{invalid: "params"}
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       assert %{
                "username" => ["can't be blank"],
@@ -39,7 +39,7 @@ defmodule BenefitsWeb.OrderControllerTest do
 
     test "fails when products don't exist", %{conn: conn, user: user} do
       input = %{username: user.username, items: [1000, 2000]}
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       assert %{"error" => "products_not_found"} = json_response(conn, 422)
     end
@@ -48,10 +48,10 @@ defmodule BenefitsWeb.OrderControllerTest do
       input = %{username: user.username, items: items}
 
       # Placing the first valid order
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       # Trying to order unavailable products
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       assert %{"error" => "products_already_purchased"} = json_response(conn, 422)
     end
@@ -60,7 +60,7 @@ defmodule BenefitsWeb.OrderControllerTest do
       user = user_fixture(balance: 1)
       input = %{username: user.username, items: items}
 
-      conn = post(conn, Routes.order_path(conn, :create, input))
+      conn = post(conn, Routes.order_path(conn, :create, %{"order" => input}))
 
       assert %{"error" => "insufficient_balance"} = json_response(conn, 422)
     end

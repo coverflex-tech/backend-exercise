@@ -6,7 +6,7 @@ defmodule BenefitsWeb.OrderController do
 
   action_fallback BenefitsWeb.FallbackController
 
-  def create(conn, params) do
+  def create(conn, %{"order" => params}) do
     with %{valid?: true, changes: input} <- CreateOrderInput.changeset(params),
          {:ok, order} <- Orders.create_order(input.username, input.items) do
       conn
