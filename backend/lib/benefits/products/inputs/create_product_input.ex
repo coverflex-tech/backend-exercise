@@ -1,6 +1,6 @@
 defmodule Benefits.Products.Inputs.CreateProductInput do
   @moduledoc """
-  Input for creating products
+  Input for creating products.
   """
 
   use Ecto.Schema

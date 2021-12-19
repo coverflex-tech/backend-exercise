@@ -23,7 +23,8 @@ defmodule Benefits.Users do
 
   """
   def get_user(username) do
-    Repo.get_by(User, username: username)
+    User
+    |> Repo.get_by(username: username)
     |> Repo.preload([:orders])
   end
 

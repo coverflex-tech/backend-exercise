@@ -11,7 +11,7 @@ defmodule Benefits.Orders do
   alias Benefits.Users.User
 
   @doc """
-  Creates an order by recieving the username and the product names.
+  Creates an order by recieving the username and the product ids.
 
   ## Examples
 
@@ -80,20 +80,4 @@ defmodule Benefits.Orders do
 
     !Enum.any?(user_order_ids, &(&1 in product_ids))
   end
-
-  @doc """
-  Gets an order's info.
-
-  Raises `Ecto.NoResultsError` if the Order does not exist.
-
-  ## Examples
-
-      iex> get_order!(123)
-      %Order{}
-
-      iex> get_order!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_order!(id), do: Repo.get!(Order, id)
 end

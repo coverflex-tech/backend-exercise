@@ -16,7 +16,7 @@ defmodule BenefitsWeb.Router do
 
     scope "/api/v1" do
       get "/users/:username", UserController, :show_or_create 
-      resources "/orders", OrderController, only: [:index, :create]
+      resources "/orders", OrderController, only: [:create]
       resources "/products", ProductController, only: [:index, :create]
     end
   end

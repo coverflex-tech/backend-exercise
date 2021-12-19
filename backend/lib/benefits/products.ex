@@ -1,6 +1,6 @@
 defmodule Benefits.Products do
   @moduledoc """
-  The Users context.
+  The Products context.
   """
 
   import Ecto.Query, warn: false
@@ -27,7 +27,7 @@ defmodule Benefits.Products do
   ## Examples
 
       iex> create_product(%{field: value})
-      {:ok, %User{}}
+      {:ok, %Product{}}
 
       iex> create_product(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
