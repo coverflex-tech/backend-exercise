@@ -11,6 +11,19 @@ defmodule Benefits.Orders do
   alias Benefits.Users.User
 
   @doc """
+  Returns the list of orders.
+
+  ## Examples
+
+      iex> list_orders()
+      [%Order{}, ...]
+
+  """
+  def list_orders do
+    Repo.all(Order)
+  end
+
+  @doc """
   Creates an order by recieving the username and the product names.
 
   ## Examples
@@ -28,8 +41,8 @@ defmodule Benefits.Orders do
              :user_not_found
              | :products_not_found
              | :products_already_purchased
-             | :insuficient_balance}
-  def create_order(_, []), do: {:error, :no_products}
+             | :insufficient_balance}
+  def create_order(_, []), do: {:error, :products_not_found}
 
   def create_order(username, product_names) do
     list_products_query =
@@ -57,7 +70,7 @@ defmodule Benefits.Orders do
         {:user_exists?, false} -> Repo.rollback(:user_not_found)
         {:products_exist?, false} -> Repo.rollback(:products_not_found)
         {:products_available?, false} -> Repo.rollback(:products_already_purchased)
-        {:user_has_balance?, false} -> Repo.rollback(:insuficient_balance)
+        {:user_has_balance?, false} -> Repo.rollback(:insufficient_balance)
       end
     end)
   end

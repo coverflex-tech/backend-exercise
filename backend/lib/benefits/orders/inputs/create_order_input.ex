@@ -1,20 +1,20 @@
-defmodule Benefits.Products.Inputs.CreateProductInput do
+defmodule Benefits.Orders.Inputs.CreateOrderInput do
   @moduledoc """
-  Input for creating products
+  Input for creating orders
   """
 
   use Ecto.Schema
   import Ecto.Changeset
 
   @required [
-    :name,
-    :price
+    :username,
+    :items
   ]
 
   @primary_key false
   embedded_schema do
-    field :name, :string
-    field :price, :integer
+    field :username, :string
+    field :items, {:array, :string}
   end
 
   def changeset(module \\ %__MODULE__{}, params) do

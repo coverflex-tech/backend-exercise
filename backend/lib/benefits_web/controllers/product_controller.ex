@@ -12,8 +12,8 @@ defmodule BenefitsWeb.ProductController do
   end
 
   def create(conn, params) do
-    with %{valid?: true, changes: changes} <- CreateProductInput.changeset(params),
-         {:ok, product} <- Products.create_product(changes) do
+    with %{valid?: true, changes: input} <- CreateProductInput.changeset(params),
+         {:ok, product} <- Products.create_product(input) do
       conn
       |> put_status(:created)
       |> render("show.json", product: product)

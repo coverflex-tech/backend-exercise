@@ -13,4 +13,8 @@ defmodule BenefitsWeb.UserView do
       balance: user.balance
     }
   end
+
+  def render("not_found.json", _) do
+    %{error: "user_not_found"}
+  end
 end
