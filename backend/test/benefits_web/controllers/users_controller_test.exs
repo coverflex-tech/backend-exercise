@@ -6,7 +6,7 @@ defmodule BenefitsWeb.UserControllerTest do
   end
 
   describe "show or create user" do
-    test "creates a bew user when data is valid", %{conn: conn} do
+    test "creates a new user when data is valid", %{conn: conn} do
       username = "User name"
 
       conn = get(conn, Routes.user_path(conn, :show_or_create, username))
