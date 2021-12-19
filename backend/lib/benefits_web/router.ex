@@ -1,6 +1,6 @@
 defmodule BenefitsWeb.Router do
   use BenefitsWeb, :router
-  alias BenefitsWeb.UserController
+  alias BenefitsWeb.{UserController, ProductController}
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -16,6 +16,8 @@ defmodule BenefitsWeb.Router do
 
     scope "/api/v1" do
       get "/users/:username", UserController, :show_or_create 
+
+      resources "/products", ProductController, only: [:index, :create]
     end
   end
 
