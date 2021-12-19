@@ -1,7 +1,7 @@
 defmodule BenefitsWeb.FallbackController do
   use BenefitsWeb, :controller
 
-  def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
+  def call(conn, %Ecto.Changeset{valid?: false} = changeset) do
     conn
     |> put_status(:unprocessable_entity)
     |> put_view(BenefitsWeb.ChangesetView)
