@@ -15,7 +15,7 @@ defmodule BenefitsWeb.ProductControllerTest do
       %{
         "name" => name,
         "price" => price
-      } = json_response(conn, 201)["data"]
+      } = json_response(conn, 201)["product"]
 
       assert input.name == name
       assert input.price == price
@@ -39,7 +39,7 @@ defmodule BenefitsWeb.ProductControllerTest do
       end)
 
       conn = get(conn, Routes.product_path(conn, :index))
-      products = json_response(conn, 200)["data"]
+      products = json_response(conn, 200)["products"]
 
       assert length(products) == 10
     end

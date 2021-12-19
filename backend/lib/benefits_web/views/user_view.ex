@@ -3,7 +3,7 @@ defmodule BenefitsWeb.UserView do
   alias BenefitsWeb.UserView
 
   def render("show.json", %{user: user}) do
-    %{data: render_one(user, UserView, "user.json")}
+    %{user: render_one(user, UserView, "user.json")}
   end
 
   def render("user.json", %{user: user}) do

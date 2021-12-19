@@ -14,7 +14,7 @@ defmodule BenefitsWeb.UserControllerTest do
       assert %{
                "balance" => 500.0,
                "username" => ^username
-             } = json_response(conn, 201)["data"]
+             } = json_response(conn, 201)["user"]
     end
 
     test "renders user when data is valid", %{conn: conn} do
@@ -29,7 +29,7 @@ defmodule BenefitsWeb.UserControllerTest do
       assert %{
                "balance" => 500.0,
                "username" => ^username
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)["user"]
     end
   end
 end

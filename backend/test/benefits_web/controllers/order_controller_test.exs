@@ -23,7 +23,7 @@ defmodule BenefitsWeb.OrderControllerTest do
       input = %{username: user.username, items: items}
       conn = post(conn, Routes.order_path(conn, :create, input))
 
-      body = json_response(conn, 201)["data"]
+      body = json_response(conn, 201)["order"]
 
       assert length(body["items"]) == 10
       assert List.first(body["items"])["name"] == List.first(items)
@@ -75,7 +75,7 @@ defmodule BenefitsWeb.OrderControllerTest do
       Orders.create_order(user.username, items)
 
       conn = get(conn, Routes.order_path(conn, :index))
-      body = json_response(conn, 200)["data"]
+      body = json_response(conn, 200)["orders"]
 
       assert length(body) == 1
 
