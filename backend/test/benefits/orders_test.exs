@@ -44,7 +44,7 @@ defmodule Benefits.OrdersTest do
       user = user_fixture(balance: 1)
       product = product_fixture()
 
-      assert {:error, :insuficient_balance} = Orders.create_order(user.username, [product.name])
+      assert {:error, :insufficient_balance} = Orders.create_order(user.username, [product.name])
     end
   end
 end
