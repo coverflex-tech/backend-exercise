@@ -8,6 +8,7 @@ defmodule Coverflex.Benefits.OrderModel do
   alias Coverflex.Benefits.User, as: DBUser
   alias Coverflex.Benefits.Vallet
   alias Coverflex.Benefits.Order, as: DBOrder
+  alias Coverflex.Benefits.UserProduct
   alias Coverflex.Benefits.OrderProduct
   alias Coverflex.Benefits.ProductModel
     
@@ -29,7 +30,9 @@ defmodule Coverflex.Benefits.OrderModel do
         Enum.reduce(products, 0, &(&1.price + &2)) > vallet.balance ->
           {:error, :insufficient_balance}
         true ->
-          place_order(user, products, vallet)
+          {:ok, order} = place_order(user, products, vallet)
+          :ok = add_products(user, products)
+          {:ok, order}
       end
     end
   end
@@ -57,6 +60,12 @@ defmodule Coverflex.Benefits.OrderModel do
                  user_id: user.user_id, 
                  items: Enum.map(products, &(&1.product_id)),
                  total: total}}
+  end
+  
+  defp add_products(user, products) do
+    Enum.each(products, fn product ->
+      Repo.insert! %UserProduct{user_id: user.id, product_id: product.id}
+    end)
   end
 
 end
