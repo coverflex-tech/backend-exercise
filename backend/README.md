@@ -12,10 +12,10 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Setup PostgreSQL
 
-psql postgres
-postgres=# CREATE ROLE benefitsphoenix WITH LOGIN PASSWORD 'passWJKN64$';
-postgres=# ALTER ROLE benefitsphoenix CREATEDB;
-postgres=# exit
+    psql postgres
+    postgres=# CREATE ROLE benefitsphoenix WITH LOGIN PASSWORD 'passWJKN64$';
+    postgres=# ALTER ROLE benefitsphoenix CREATEDB;
+    postgres=# exit
 
 ## Generated with
 
