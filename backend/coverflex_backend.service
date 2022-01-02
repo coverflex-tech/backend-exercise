@@ -1,0 +1,15 @@
+[Unit]
+Description=Coverflex Benefits backend service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=bitnami
+ExecStart=/usr/bin/mix phx.server
+WorkingDirectory=/home/bitnami/backend-exercise/backend
+
+[Install]
+WantedBy=multi-user.target

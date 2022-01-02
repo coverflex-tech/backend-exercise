@@ -1,0 +1,15 @@
+[Unit]
+Description=Coverflex Benefits frontend service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=bitnami
+ExecStart=/opt/bitnami/node/bin/npm start
+WorkingDirectory=/home/bitnami/backend-exercise/frontend
+
+[Install]
+WantedBy=multi-user.target
