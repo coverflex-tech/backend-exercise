@@ -27,7 +27,7 @@ defmodule Coverflex.Benefits.OrderModel do
       cond do
         Enum.count(products) != Enum.count(items) -> 
           {:error, :products_not_found}
-        Enum.reduce(products, 0, &(&1.price + &2)) > vallet.balance ->
+        ProductModel.total(products) > vallet.balance ->
           {:error, :insufficient_balance}
         true ->
           {:ok, order} = place_order(user, products, vallet)
@@ -49,7 +49,7 @@ defmodule Coverflex.Benefits.OrderModel do
   end
   
   defp place_order(user, products, vallet) do
-    total = Enum.reduce(products, 0, &(&1.price + &2))
+    total = ProductModel.total(products)
     {:ok, order} = Repo.insert %DBOrder{user_id: user.id, total: total}
     Enum.each(products, fn product ->
       Repo.insert! %OrderProduct{order_id: order.id,

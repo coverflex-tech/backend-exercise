@@ -34,5 +34,9 @@ defmodule Coverflex.Benefits.ProductModel do
                 |> Enum.map(&%Product{id: &1.product_id, name: &1.name, price: &1.price})
     end
   end
+  
+  def total(products) do
+    Enum.reduce(products, 0, &(&1.price + &2))
+  end
 
 end
