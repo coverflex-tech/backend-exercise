@@ -2,10 +2,12 @@ defmodule BackendWeb.Router do
   use BackendWeb, :router
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/api", BackendWeb do
-    pipe_through :api
+    pipe_through(:api)
+
+    resources("/users", UserController, except: [:new, :edit])
   end
 end
