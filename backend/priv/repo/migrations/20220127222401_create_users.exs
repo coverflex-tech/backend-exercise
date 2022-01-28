@@ -8,5 +8,7 @@ defmodule Backend.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
+
+    create(unique_index(:users, [:user_id]))
   end
 end

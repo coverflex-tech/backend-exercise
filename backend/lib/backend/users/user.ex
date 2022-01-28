@@ -15,6 +15,6 @@ defmodule Backend.Users.User do
     user
     |> cast(attrs, [:user_id, :balance])
     |> validate_required([:user_id, :balance])
-    |> unique_constraint(:user_id, name: :users_pkey)
+    |> unique_constraint(:user_id)
   end
 end
