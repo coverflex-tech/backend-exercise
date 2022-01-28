@@ -37,7 +37,6 @@ defmodule Backend.UsersTest do
       update_attrs = %{balance: 50100, user_id: "some-updated-username"}
 
       assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
-      IO.inspect(user)
       assert user.balance == 50100
       assert user.user_id == "some-updated-username"
     end
