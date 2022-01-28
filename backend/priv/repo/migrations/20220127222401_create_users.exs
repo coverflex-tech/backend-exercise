@@ -3,7 +3,7 @@ defmodule Backend.Repo.Migrations.CreateUsers do
 
   def change do
     create table(:users, primary_key: false) do
-      add(:user_id, :string)
+      add(:user_id, :string, primary_key: true)
       add(:balance, :integer)
 
       timestamps()
