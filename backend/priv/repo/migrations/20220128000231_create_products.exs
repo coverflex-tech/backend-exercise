@@ -3,7 +3,7 @@ defmodule Backend.Repo.Migrations.CreateProducts do
 
   def change do
     create table(:products, primary_key: false) do
-      add(:id, :string)
+      add(:id, :string, primary_key: true)
       add(:name, :string)
       add(:price, :integer)
 
