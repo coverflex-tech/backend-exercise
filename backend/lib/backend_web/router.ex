@@ -5,8 +5,12 @@ defmodule BenefitsWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", BenefitsWeb do
+  scope "/", BenefitsWeb do
     pipe_through :api
+
+    resources "/users", UserController, only: [:show]
+    resources "/products", ProductController, only: [:index]
+    resources "/orders", OrderController, only: [:create]
   end
 
   # Enables LiveDashboard only for development
