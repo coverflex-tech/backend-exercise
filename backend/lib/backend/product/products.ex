@@ -15,9 +15,6 @@ defmodule Benefits.Products do
   ### Examples
 
     iex> Benefits.Products.list("product_a")
-    {:error, "not_allowed"}
-
-    iex> Benefits.Products.list("product_a")
     [%Product{id: "product_a"}]
 
     iex> Benefits.Products.get_by_id()
@@ -34,7 +31,7 @@ defmodule Benefits.Products do
   @doc """
   Sums all the prices from all the `products`
 
-  Returns `{:ok, <float>}` or `{:ok, 0.0}` or `{:error, "not_allowed"}`
+  Returns `{:ok, <float>}` or `{:ok, 0.0}`
 
   ### Examples
 
@@ -43,9 +40,6 @@ defmodule Benefits.Products do
 
     iex> Benefits.Products.sum_products_prices([%Product{price: 1.2}, %Product{price: 1.23}])
     {:ok, 2.43}
-
-    iex> Benefits.Products.sum_products_prices("not_valid")
-    {:error, "not_allowed"}
 
   """
   def sum_products_prices(products)

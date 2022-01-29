@@ -10,6 +10,7 @@ defmodule Benefits.Order do
 
   schema "orders" do
     field(:total, :float, default: 0.00)
+
     belongs_to(:user, User)
     many_to_many(:products, Product, join_through: "orders_products", on_replace: :delete)
 
