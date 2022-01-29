@@ -6,6 +6,4 @@ defmodule BenefitsWeb.FallbackController do
     |> put_status(:bad_request)
     |> json(%{error: error})
   end
-
-  def call(conn, _), do: conn |> put_status(:internal_server_error)
 end

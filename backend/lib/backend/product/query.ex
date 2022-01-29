@@ -8,10 +8,6 @@ defmodule Benefits.Products.Query do
   """
   import Ecto.Query, warn: false
 
-  alias Benefits.Product
-
-  def base, do: Product
-
   @doc """
   Filters the products by given `products_identifiers`.
 
@@ -23,7 +19,7 @@ defmodule Benefits.Products.Query do
     query
 
   """
-  def filter_by_products_identifiers(query \\ base(), products_identifiers)
+  def filter_by_products_identifiers(query, products_identifiers)
   def filter_by_products_identifiers(query, []), do: query
 
   def filter_by_products_identifiers(query, products_identifiers),

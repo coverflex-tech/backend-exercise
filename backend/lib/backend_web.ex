@@ -63,7 +63,6 @@ defmodule BenefitsWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import BenefitsWeb.ErrorHelpers
       import BenefitsWeb.Gettext
       alias BenefitsWeb.Router.Helpers, as: Routes
     end

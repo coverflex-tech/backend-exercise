@@ -8,10 +8,6 @@ defmodule Benefits.Users.Query do
   """
   import Ecto.Query, warn: false
 
-  alias Benefits.User
-
-  def base, do: User
-
   @doc """
   Preloads `projects` in `User` schema.
 
@@ -23,5 +19,5 @@ defmodule Benefits.Users.Query do
     query
 
   """
-  def preload_products(query \\ base()), do: query |> preload(:products)
+  def preload_products(query), do: query |> preload(:products)
 end

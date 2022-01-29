@@ -10,7 +10,7 @@ defmodule Benefits.Products do
   @doc """
   Lists all products with optional `products_identifiers`
 
-  Returns `[%Product{}, ...]` or `{:error, "not_allowed"}`
+  Returns `[%Product{}, ...]`
 
   ### Examples
 
@@ -24,12 +24,7 @@ defmodule Benefits.Products do
     [%Product{}, ...]
 
   """
-  def list(products_identifiers \\ [])
-
-  def list(products_identifiers) when not is_list(products_identifiers),
-    do: {:error, "not_allowed"}
-
-  def list(products_identifiers) do
+  def list(products_identifiers \\ []) do
     {:ok,
      Product
      |> Query.filter_by_products_identifiers(products_identifiers)
@@ -54,7 +49,6 @@ defmodule Benefits.Products do
 
   """
   def sum_products_prices(products)
-  def sum_products_prices(products) when not is_list(products), do: {:error, "not_allowed"}
   def sum_products_prices([]), do: {:ok, 0.0}
   def sum_products_prices(products), do: {:ok, products |> Enum.map(& &1.price) |> Enum.sum()}
 end
