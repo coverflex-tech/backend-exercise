@@ -3,9 +3,9 @@ defmodule Benefits.Products do
   The `Products` context.
   It provides direct actions with `Product` schema and `products` table
   """
-  alias Benefits.Repo
   alias Benefits.Product
   alias Benefits.Products.Query
+  alias Benefits.Repo
 
   @doc """
   Lists all products with optional `products_identifiers`

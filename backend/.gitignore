@@ -27,3 +27,6 @@ backend-*.tar
 
 # Ignore ASDF .tool-versions file
 .tool-versions
+
+# Ignore VSCode ElixirLS files
+.elixir_ls

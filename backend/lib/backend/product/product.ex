@@ -5,8 +5,8 @@ defmodule Benefits.Product do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Benefits.User
   alias Benefits.Order
+  alias Benefits.User
 
   schema "products" do
     field(:identifier, :string)
