@@ -38,6 +38,20 @@ defmodule Backend.Products do
   def get_product!(id), do: Repo.get!(Product, id)
 
   @doc """
+  Gets a list of products from an id list.
+
+  ## Examples
+
+      iex> get_products(id_list)
+      [%Product{}, ...]
+
+  """
+  def get_products(ids) do
+    from(p in Product, where: p.id in ^ids)
+    |> Repo.all()
+  end
+
+  @doc """
   Creates a product.
 
   ## Examples
