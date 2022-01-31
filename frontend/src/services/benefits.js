@@ -1,17 +1,43 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: ''
+  baseURL: '/api'
 });
 
+const createUser = username => {
+  return instance
+    .post(`/users`, {
+      user: {
+        user_id: username,
+        balance: 250.00
+      }
+    })
+    .then(response => {
+      const { data } = response;
+      return {
+        user_id: data.user.user_id,
+        ...data.user.data
+      };
+    });
+};
+
 export const getUser = username => {
-  return instance.get(`/users/${username}`).then(response => {
-    const { data } = response;
-    return {
-      user_id: data.user.user_id,
-      ...data.user.data
-    };
-  });
+  return instance.get(`/users/${username}`)
+    .then(response => {
+      console.log(response)
+      const { data } = response;
+      return {
+        user_id: data.user.user_id,
+        ...data.user.data
+      };
+    })
+    .catch(error => {
+      if (error.response.status === 404) {
+        return createUser(username);
+      } else {
+        throw error;
+      }
+    });
 };
 
 export const getProducts = () => {
