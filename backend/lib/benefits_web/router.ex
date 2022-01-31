@@ -8,8 +8,11 @@ defmodule BenefitsWeb.Router do
   scope "/api", BenefitsWeb do
     pipe_through :api
 
+    # Users
     get "/users/:user_id", UserController, :show
     post "/users", UserController, :create
+    # Products
+    get "/products", ProductController, :index
   end
 
   # Enables LiveDashboard only for development
