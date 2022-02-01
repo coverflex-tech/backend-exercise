@@ -38,7 +38,7 @@ defmodule Backend.Products do
   def get_product!(id), do: Repo.get!(Product, id)
 
   @doc """
-  Gets a list of products from an id list.
+  Gets a list of products from an id list only if all ids supplied exist.
 
   ## Examples
 
@@ -47,8 +47,14 @@ defmodule Backend.Products do
 
   """
   def get_products(ids) do
-    from(p in Product, where: p.id in ^ids)
-    |> Repo.all()
+    products =
+      from(p in Product, where: p.id in ^ids)
+      |> Repo.all()
+
+    cond do
+      length(products) < length(ids) -> {:ok, []}
+      length(products) === length(ids) -> {:ok, products}
+    end
   end
 
   @doc """
