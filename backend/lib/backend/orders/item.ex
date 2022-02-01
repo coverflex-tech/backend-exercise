@@ -4,9 +4,10 @@ defmodule Backend.Orders.Item do
 
   alias Backend.Orders.Order
 
+  @allowed_fields [:order_id, :user_id, :product_id, :price]
+
   schema "items" do
     field(:price, :integer)
-    # field(:order_id, :id)
     field(:user_id, :string)
     field(:product_id, :string)
 
