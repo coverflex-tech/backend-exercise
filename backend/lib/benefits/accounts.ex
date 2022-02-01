@@ -1,6 +1,7 @@
 defmodule Benefits.Accounts do
   @moduledoc """
   The Accounts context.
+  This context only holds the User model.
   """
 
   import Ecto.Query, warn: false
@@ -22,13 +23,15 @@ defmodule Benefits.Accounts do
       nil
 
   """
+  @spec get_user(String.t()) :: User.t() | nil
   def get_user(user_id) do
     Repo.get_by(User, user_id: user_id)
     |> Repo.preload(:products)
   end
 
   @doc """
-  Creates a user.
+  Creates an user.
+  If creation was successful, it preloads the products field.
 
   ## Examples
 
@@ -39,6 +42,7 @@ defmodule Benefits.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_user(map()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
   def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)

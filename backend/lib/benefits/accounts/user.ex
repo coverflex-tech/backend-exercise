@@ -1,4 +1,8 @@
 defmodule Benefits.Accounts.User do
+  @moduledoc """
+  User struct and schema to persist in the data store.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
