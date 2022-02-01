@@ -21,5 +21,11 @@ defmodule Backend.OrdersTest do
       products = [product_fixture(%{price: 300}), product_fixture(%{price: 300})]
       assert {:error, "insufficient_balance"} = Orders.create_order(user, products)
     end
+
+    test "create_order/2 should create order with one product" do
+      user = user_fixture(%{balance: 700})
+      products = [product_fixture(%{price: 300})]
+      assert {:ok, {%Order{}, [%Item{}]}} = Orders.create_order(user, products)
+    end
   end
 end
