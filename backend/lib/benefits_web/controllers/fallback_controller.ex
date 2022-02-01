@@ -4,6 +4,7 @@ defmodule BenefitsWeb.FallbackController do
 
   See `Phoenix.Controller.action_fallback/1` for more details.
   """
+
   use BenefitsWeb, :controller
 
   # This clause handles errors returned by Ecto's insert/update/delete.

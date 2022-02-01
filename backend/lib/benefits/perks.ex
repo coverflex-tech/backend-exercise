@@ -97,7 +97,6 @@ defmodule Benefits.Perks do
   defp create_order_transaction(products_identifiers, user_id) do
     Multi.new()
     # put the :identifiers field in the multi
-    #|> Multi.put(:identifiers, Enum.uniq(products_identifiers))
     |> Multi.run(:identifiers, fn _repo, _changes ->
       if is_list(products_identifiers) do
         {:ok, Enum.uniq(products_identifiers)}
