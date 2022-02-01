@@ -10,10 +10,10 @@ _user5 = Accounts.create_user(%{"user_id" => "user5", "balance" => "0.00"})
 1..100
 |> Enum.each(fn num ->
   price = Enum.random(20..100)
-  Perks.create_product(
-    %{
-      "identifier" => "product#{num}",
-      "name" => "Product#{num}",
-      "price" => price}
-    )
+
+  Perks.create_product(%{
+    "identifier" => "product#{num}",
+    "name" => "Product#{num}",
+    "price" => price
+  })
 end)

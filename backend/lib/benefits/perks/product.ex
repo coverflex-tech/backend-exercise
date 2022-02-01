@@ -11,7 +11,7 @@ defmodule Benefits.Perks.Product do
   end
 
   @doc false
-  def changeset(product, attrs) do
+  def changeset(%__MODULE__{} = product, attrs) do
     product
     |> cast(attrs, [:identifier, :name, :price])
     |> validate_required([:identifier, :name, :price])

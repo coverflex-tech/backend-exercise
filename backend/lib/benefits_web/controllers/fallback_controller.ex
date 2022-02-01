@@ -21,4 +21,11 @@ defmodule BenefitsWeb.FallbackController do
     |> put_view(BenefitsWeb.ErrorView)
     |> render(:"404")
   end
+
+  # Clause used mainly by order_controller for bad requests
+  def call(conn, {:error, message}) do
+    conn
+    |> put_status(:bad_request)
+    |> json(%{error: message})
+  end
 end

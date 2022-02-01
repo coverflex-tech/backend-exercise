@@ -13,6 +13,8 @@ defmodule BenefitsWeb.Router do
     post "/users", UserController, :create
     # Products
     get "/products", ProductController, :index
+    # Orders
+    post "/orders", OrderController, :create
   end
 
   # Enables LiveDashboard only for development
