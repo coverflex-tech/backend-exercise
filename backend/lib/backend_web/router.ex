@@ -10,5 +10,6 @@ defmodule BackendWeb.Router do
 
     resources("/users", UserController, except: [:new, :edit])
     resources("/products", ProductController, except: [:new, :edit])
+    post("/orders", OrderController, :create)
   end
 end
