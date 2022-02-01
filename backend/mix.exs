@@ -22,7 +22,24 @@ defmodule Benefits.MixProject do
       compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+
+      # Docs
+      name: "Benefits",
+      source_url: "https://github.com/joaop21/benefits-management",
+      docs: [
+        main: "Benefits", # The main page in the docs
+        extras: ["README.md"]
+      ],
+
+      # Coveralls
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -50,6 +67,8 @@ defmodule Benefits.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.4"},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:excoveralls, "~> 0.10", only: :test},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.9"},
       {:phoenix_ecto, "~> 4.1"},
