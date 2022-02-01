@@ -18,7 +18,14 @@ defmodule Backend.ProductsTest do
     test "get_products/1 returns products by ids list" do
       products = [product_fixture(), product_fixture()]
       ids = products |> Enum.map(fn it -> it.id end)
-      assert Products.get_products(ids) == products
+      assert {:ok, products_fetched} = Products.get_products(ids)
+      assert products_fetched == products
+    end
+
+    test "get_products/1 returns empty list if any id supplied doesn't have product" do
+      product = product_fixture()
+      ids = [product.id, "non-existent-id"]
+      assert {:ok, []} = Products.get_products(ids)
     end
 
     test "get_product!/1 returns the product with given id" do
