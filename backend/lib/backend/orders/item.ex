@@ -19,8 +19,11 @@ defmodule Backend.Orders.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> cast(attrs, [:price])
-    |> validate_required([:price])
-    |> unique_constraint([:user_id, name: :items_user_id_product_id_index])
+    |> cast(attrs, @allowed_fields)
+    |> validate_required(@allowed_fields)
+    |> foreign_key_constraint(:order_id)
+    |> foreign_key_constraint(:user_id)
+    |> foreign_key_constraint(:product_id)
+    |> unique_constraint(:user_id, name: :items_user_id_product_id_index)
   end
 end

@@ -14,7 +14,7 @@ defmodule Backend.Orders.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:total])
-    |> validate_required([:total])
+    |> cast(attrs, [:user_id, :total])
+    |> validate_required([:user_id, :total])
   end
 end
