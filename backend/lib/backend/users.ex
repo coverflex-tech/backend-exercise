@@ -53,7 +53,7 @@ defmodule Backend.Users do
   """
   def get_user(id) do
     case Repo.get(User, id) do
-      nil -> {:error, "User not found"}
+      nil -> {:error, "user_not_found"}
       user -> {:ok, user}
     end
   end
