@@ -21,4 +21,11 @@ defmodule BackendWeb.FallbackController do
     |> put_view(BackendWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, message}) when is_binary(message) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(BackendWeb.BadRequestView)
+    |> render("bad_request.json", message: message)
+  end
 end
