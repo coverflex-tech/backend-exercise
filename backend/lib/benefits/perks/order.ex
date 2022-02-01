@@ -1,4 +1,8 @@
 defmodule Benefits.Perks.Order do
+  @moduledoc """
+  Orderr struct and schema to persist in the data store.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

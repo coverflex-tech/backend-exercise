@@ -1,4 +1,8 @@
 defmodule Benefits.Perks.Product do
+  @moduledoc """
+  Product struct and schema to persist in the data store.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

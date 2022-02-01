@@ -47,11 +47,9 @@ defmodule Benefits.Accounts do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
-    |> (&(
-      case &1 do
-        {:ok, user} -> {:ok, Repo.preload(user, :products)}
-        error -> error
-      end
-    )).()
+    |> (&(case &1 do
+            {:ok, user} -> {:ok, Repo.preload(user, :products)}
+            error -> error
+          end)).()
   end
 end

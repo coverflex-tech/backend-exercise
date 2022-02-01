@@ -1,6 +1,8 @@
 defmodule Benefits.Perks do
   @moduledoc """
   The Perks context.
+  It has accomodates the models that are related with Benefits
+  and the functions to interact with them.
   """
 
   import Ecto.Query, warn: false
@@ -19,6 +21,7 @@ defmodule Benefits.Perks do
       [%Product{}, ...]
 
   """
+  @spec list_products() :: list(Product.t())
   def list_products do
     Repo.all(Product)
   end
@@ -35,6 +38,7 @@ defmodule Benefits.Perks do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_product(map()) :: {:ok, Product.t()} | {:error, Ecto.Changeset.t()}
   def create_product(attrs \\ %{}) do
     %Product{}
     |> Product.changeset(attrs)
@@ -42,29 +46,42 @@ defmodule Benefits.Perks do
   end
 
   @doc """
-  Creates an order.
+  Creates an order from a specific user.
+  Updates User balance.
+  Insert OrderLines.
+  This flow runs inside a transaction.
 
   ## Examples
 
-      iex> create_order(%{field: value})
-      {:ok, %Order{}}
+      iex> create_order(["product1", ...], "username"})
+      {:ok, %{}}
 
-      iex> create_order(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      iex> create_order(["product1", ...], "username"})
+      {:error, "..."}
 
   """
+  @spec create_order(list(String.t()), String.t()) :: {:ok, map()} | {:error, String.t()}
   def create_order(products_identifiers, user_id) do
     case create_order_transaction(products_identifiers, user_id) do
       {:ok, changeset} ->
-        {:ok, %{
-          order_id: changeset.order.id,
-          total: changeset.total,
-          items: changeset.identifiers
-        }}
+        {:ok,
+         %{
+           order_id: changeset.order.id,
+           total: changeset.total,
+           items: changeset.identifiers
+         }}
 
-      {:error, :products_existence, message, _changes} -> {:error, message}
+      {:error, :identifiers, message, _changes} ->
+        {:error, message}
 
-      {:error, :update_user, _changeset, _changes} -> {:error, "insufficient_balance"}
+      {:error, :products_existence, message, _changes} ->
+        {:error, message}
+
+      {:error, :user, message, _changes} ->
+        {:error, message}
+
+      {:error, :update_user, _changeset, _changes} ->
+        {:error, "insufficient_balance"}
 
       {:error, _op, changeset, _changes} ->
         {:error, Keyword.get(changeset.errors, :user_id) |> elem(0)}
@@ -80,7 +97,14 @@ defmodule Benefits.Perks do
   defp create_order_transaction(products_identifiers, user_id) do
     Multi.new()
     # put the :identifiers field in the multi
-    |> Multi.put(:identifiers, Enum.uniq(products_identifiers))
+    #|> Multi.put(:identifiers, Enum.uniq(products_identifiers))
+    |> Multi.run(:identifiers, fn _repo, _changes ->
+      if is_list(products_identifiers) do
+        {:ok, Enum.uniq(products_identifiers)}
+      else
+        {:error, "products_not_found"}
+      end
+    end)
     # fetch and attach :products field from the identifiers in the multi
     |> Multi.run(:products, fn repo, %{identifiers: identifiers} ->
       {:ok, fetch_products_by_identifiers(repo, identifiers)}
