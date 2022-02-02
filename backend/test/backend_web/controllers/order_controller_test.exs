@@ -3,17 +3,6 @@ defmodule BackendWeb.OrderControllerTest do
 
   import Backend.{ProductsFixtures, UsersFixtures}
 
-  alias Backend.Users.User
-
-  @create_attrs %{
-    balance: 4200,
-    user_id: "test-user-id"
-  }
-  @update_attrs %{
-    balance: 4300
-  }
-  @invalid_attrs %{balance: nil, user_id: nil}
-
   setup %{conn: conn} do
     user = user_fixture(%{user_id: "user-order-test-#{Enum.random(1..1000)}", balance: 600})
     products = [product_fixture(%{price: 300}), product_fixture(%{price: 300})]
@@ -34,7 +23,7 @@ defmodule BackendWeb.OrderControllerTest do
     } do
       conn = post(conn, Routes.order_path(conn, :create), order_struct(user, products_ids))
 
-      assert %{"order_id" => id, "data" => %{"items" => _, "total" => _}} =
+      assert %{"order_id" => _id, "data" => %{"items" => _, "total" => _}} =
                json_response(conn, 200)["order"]
     end
 
@@ -45,7 +34,7 @@ defmodule BackendWeb.OrderControllerTest do
     } do
       conn = post(conn, Routes.order_path(conn, :create), order_struct(user, products_ids))
 
-      assert %{"order_id" => id, "data" => %{"items" => _, "total" => _}} =
+      assert %{"order_id" => _id, "data" => %{"items" => _, "total" => _}} =
                json_response(conn, 200)["order"]
 
       conn = post(conn, Routes.order_path(conn, :create), order_struct(user, products_ids))

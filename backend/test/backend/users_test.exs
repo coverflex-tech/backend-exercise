@@ -21,10 +21,10 @@ defmodule Backend.UsersTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{balance: 50000, user_id: "test-user-id"}
+      valid_attrs = %{balance: 50_000, user_id: "test-user-id"}
 
       assert {:ok, %User{} = user} = Users.create_user(valid_attrs)
-      assert user.balance == 50000
+      assert user.balance == 50_000
       assert user.user_id == "test-user-id"
     end
 
@@ -34,10 +34,10 @@ defmodule Backend.UsersTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{balance: 50100, user_id: "some-updated-username"}
+      update_attrs = %{balance: 50_100, user_id: "some-updated-username"}
 
       assert {:ok, %User{} = user} = Users.update_user(user, update_attrs)
-      assert user.balance == 50100
+      assert user.balance == 50_100
       assert user.user_id == "some-updated-username"
     end
 

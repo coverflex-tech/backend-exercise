@@ -31,7 +31,7 @@ defmodule BackendWeb.UserControllerTest do
       conn = get(conn, Routes.user_path(conn, :show, user_id))
 
       assert %{
-               "user_id" => user_id,
+               "user_id" => _user_id,
                "data" => %{"balance" => 0.0, "products_ids" => []}
              } = json_response(conn, 200)["user"]
     end

@@ -12,7 +12,7 @@ defmodule Backend.UsersFixtures do
       attrs
       |> Enum.into(%{
         user_id: "test-user-id",
-        balance: 50000
+        balance: 50_000
       })
       |> Backend.Users.create_user()
 
