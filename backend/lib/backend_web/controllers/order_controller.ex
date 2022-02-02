@@ -1,16 +1,15 @@
 defmodule BackendWeb.OrderController do
   use BackendWeb, :controller
 
-  alias Backend.{Orders, Orders.Order, Products, Users}
+  alias Backend.OrderService
 
   action_fallback(BackendWeb.FallbackController)
 
   def create(conn, %{"order" => order_params}) do
     with {:ok, products_ids} <- get_uniq_product_ids(order_params),
          {:ok, user_id} <- get_user_id(order_params),
-         {:ok, user} <- Users.get_user(user_id),
-         {:ok, products} <- Products.get_products(products_ids),
-         {:ok, {order, items}} <- Orders.create_order(user, products) do
+         {:ok, %{create_order: {order, items}}} <-
+           OrderService.create_order(user_id, products_ids) do
       conn
       |> put_status(:ok)
       |> render("show.json", order: order, items: items)
