@@ -59,6 +59,32 @@ defmodule Backend.Users do
   end
 
   @doc """
+  Gets a single user and lock row util transaction finishes.
+
+  Returns {:error, "User not found"} if the User does not exist.
+
+  ## Examples
+
+      iex> get_user_for_update(123)
+      {:ok, %User{}
+
+      iex> get_user_for_update(456)
+      {:error, "User not found"}
+
+  """
+  def get_user_for_update(id) do
+    user =
+      User
+      |> lock("FOR NO KEY UPDATE")
+      |> Repo.get(id)
+
+    case user do
+      nil -> {:error, "user_not_found"}
+      user_found -> {:ok, user_found}
+    end
+  end
+
+  @doc """
   Creates a user.
 
   ## Examples
