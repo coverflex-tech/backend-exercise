@@ -12,7 +12,7 @@ defmodule BackendWeb.OrderController do
          {:ok, products} <- Products.get_products(products_ids),
          {:ok, {order, items}} <- Orders.create_order(user, products) do
       conn
-      |> put_status(:created)
+      |> put_status(:ok)
       |> render("show.json", order: order, items: items)
     end
   end
