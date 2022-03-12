@@ -1,18 +1,13 @@
 defmodule Benefits do
-  @moduledoc """
-  Documentation for `Benefits`.
-  """
+  @moduledoc false
 
-  @doc """
-  Hello world.
+  import Ecto.Query
 
-  ## Examples
+  alias Benefits.{Repo, User}
 
-      iex> Benefits.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def get_or_create_user(username) when is_binary(username) do
+    %{username: username}
+    |> User.changeset()
+    |> Repo.insert(on_conflict: :nothing, conflict_target: :username, returning: true)
   end
 end
