@@ -2,13 +2,17 @@ defmodule Benefits.Factory do
   @moduledoc """
   Factories to be used in tests
   """
-  
-  alias Benefits.{Repo, User}
+
+  alias Benefits.{Repo, User, Wallet}
 
   def build(:user) do
     %User{
       username: "John Doe"
     }
+  end
+
+  def build(:wallet) do
+    %Wallet{user_id: build(:user).id, amount: Money.new(5000)}
   end
 
   # Convenience API

@@ -24,7 +24,7 @@ defmodule BenefitsTest do
 
       refute Repo.get_by(User, username: username)
 
-      assert {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username)
+      assert {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username) |> IO.inspect()
       assert %User{username: ^username} = Repo.get_by(User, username: username)
     end
   end
