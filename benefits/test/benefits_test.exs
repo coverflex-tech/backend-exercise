@@ -4,23 +4,28 @@ defmodule BenefitsTest do
   alias Benefits.User
 
   describe "get_or_create_user/1" do
-    test "gets an existing user" do
-      username = "John Doe"
-      existing_user = insert!(:user, username: username)
-      assert [%User{username: "John Doe"}] = Repo.all(User)
+    setup do
+      existing_user = insert!(:user)
+      insert!(:wallet, user_id: existing_user.id, amount: Money.new(5000))
 
-      {:ok, %User{username: ^username}} = Benefits.get_or_create_user(existing_user.username)
+      {:ok, existing_user: existing_user}
+    end
 
-      assert [%User{username: ^username}] = Repo.all(User)
+    test "gets an existing user", ctx do
+      username = ctx.existing_user.username
+
+      {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username)
+
+      assert %User{username: ^username} = Repo.get_by(User, username: username)
     end
 
     test "creates a new user if none is found by the given username" do
-      assert Repo.all(User) == []
+      username = "Jane Doe"
 
-      username = "John Doe"
-      {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username)
+      refute Repo.get_by(User, username: username)
 
-      assert [%User{username: ^username}] = Repo.all(User)
+      assert {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username)
+      assert %User{username: ^username} = Repo.get_by(User, username: username)
     end
   end
 end
