@@ -24,8 +24,21 @@ defmodule BenefitsTest do
 
       refute Repo.get_by(User, username: username)
 
-      assert {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username) |> IO.inspect()
+      assert {:ok, %User{username: ^username}} = Benefits.get_or_create_user(username)
+
       assert %User{username: ^username} = Repo.get_by(User, username: username)
+    end
+
+    test "returns the ids of the products already bought", ctx do
+      order = insert!(:order, user_id: ctx.existing_user.id)
+
+      {:ok, %User{bought_products_ids: product_ids}} =
+        Benefits.get_or_create_user(ctx.existing_user.username)
+
+      expected_product_ids = MapSet.new(order.products, & &1.id)
+      returned_product_ids = MapSet.new(product_ids || [])
+
+      assert MapSet.equal?(expected_product_ids, returned_product_ids)
     end
   end
 end
