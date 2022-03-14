@@ -8,7 +8,12 @@ defmodule Benefits.MixProject do
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      elixirc_paths: elixirc_paths(Mix.env())
+      elixirc_paths: elixirc_paths(Mix.env()),
+      aliases: aliases(),
+      preferred_cli_env: [
+        "benefits.test_setup": :test,
+        "benefits.test_reset": :test
+      ]
     ]
   end
 
@@ -25,10 +30,32 @@ defmodule Benefits.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:money, "~> 1.9"}
+      {:money, "~> 1.9"},
+      {:phoenix, "~> 1.6.6"},
+      {:plug_cowboy, "~> 2.5"},
+      {:jason, "~> 1.2"}
     ]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
+
+  defp aliases do
+    [
+      "benefits.reset": [
+        "ecto.drop --quiet",
+        "benefits.setup"
+      ],
+      "benefits.setup": [
+        "ecto.create --quiet",
+        "ecto.migrate --quiet"
+      ],
+      "benefits.test_setup": [
+        "benefits.setup"
+      ],
+      "benefits.test_reset": [
+        "benefits.reset"
+      ]
+    ]
+  end
 end
