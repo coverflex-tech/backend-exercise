@@ -8,7 +8,8 @@ defmodule Benefits.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {Benefits.Repo, []}
+      {Benefits.Repo, []},
+      {BenefitsAPI.Endpoint, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
