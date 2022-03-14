@@ -5,8 +5,6 @@ defmodule Benefits.Product do
 
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-
   schema "products" do
     field(:name, :string)
     field(:price, Money.Ecto.Amount.Type)

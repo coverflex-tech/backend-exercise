@@ -7,10 +7,8 @@ defmodule Benefits.Wallet do
 
   alias Benefits.User
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-
   schema "wallets" do
-    belongs_to(:user, User, type: Ecto.UUID)
+    belongs_to(:user, User)
 
     field(:amount, Money.Ecto.Amount.Type)
 

@@ -7,11 +7,9 @@ defmodule Benefits.Order do
 
   alias Benefits.{Product, User}
 
-  @primary_key {:id, :binary_id, autogenerate: true}
-
   schema "orders" do
     many_to_many(:products, Product, join_through: "order_products")
-    belongs_to(:user, User, type: Ecto.UUID)
+    belongs_to(:user, User)
 
     field(:price, Money.Ecto.Amount.Type)
 

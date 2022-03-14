@@ -5,11 +5,11 @@ defmodule Benefits.OrderProducts do
 
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: true}
+  @primary_key {:id, :binary_id, autogenerate: false}
 
   schema "order_products" do
-    field(:order_id, Ecto.UUID)
-    field(:product_id, Ecto.UUID)
+    field(:order_id, :integer)
+    field(:product_id, :integer)
   end
 
   @doc false

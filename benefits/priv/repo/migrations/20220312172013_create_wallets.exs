@@ -2,10 +2,9 @@ defmodule Benefits.Repo.Migrations.CreateWallets do
   use Ecto.Migration
 
   def change do
-    create table("wallets", primary_key: false) do
-      add(:id, :uuid, primary_key: true)
+    create table("wallets") do
       add(:amount, :integer)
-      add(:user_id, references(:users, type: :uuid))
+      add(:user_id, references(:users))
 
       timestamps()
     end
