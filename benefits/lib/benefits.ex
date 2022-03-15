@@ -3,7 +3,7 @@ defmodule Benefits do
 
   import Ecto.Query
 
-  alias Benefits.{Repo, User, Wallet, Order, OrderProducts}
+  alias Benefits.{Wallet, User, Repo, Product, OrderProducts, Order}
 
   def get_or_create_user(username) when is_binary(username) do
     Repo.transaction(fn ->
@@ -24,6 +24,10 @@ defmodule Benefits do
 
       Map.put(user, :wallet, wallet)
     end)
+  end
+
+  def list_products do
+    {:ok, Repo.all(Product)}
   end
 
   def list_bought_products_ids(user_id) do

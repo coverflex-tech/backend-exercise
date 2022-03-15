@@ -49,4 +49,23 @@ defmodule BenefitsTest do
       assert MapSet.equal?(expected_product_ids, returned_product_ids)
     end
   end
+
+  describe "list_products/1" do
+    setup do
+      products =
+        for _i <- 1..10 do
+          insert!(:product)
+        end
+
+      {:ok, products: products}
+    end
+
+    test "list all products", ctx do
+      assert {:ok, products} = Benefits.list_products()
+
+      assert products
+             |> MapSet.new()
+             |> MapSet.equal?(MapSet.new(ctx.products))
+    end
+  end
 end

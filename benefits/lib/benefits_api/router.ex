@@ -9,5 +9,6 @@ defmodule BenefitsAPI.Router do
     pipe_through(:api)
 
     get("/users/:user_id", UsersController, :show)
+    get("/products", ProductsController, :index)
   end
 end

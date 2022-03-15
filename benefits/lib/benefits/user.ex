@@ -4,9 +4,8 @@ defmodule Benefits.User do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
 
-  alias Benefits.{Order, OrderProducts, Repo, Wallet}
+  alias Benefits.Wallet
 
   schema "users" do
     field(:username, :string)
