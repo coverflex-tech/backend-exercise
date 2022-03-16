@@ -1,6 +1,4 @@
 defmodule Benefits.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
@@ -8,20 +6,11 @@ defmodule Benefits.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       Benefits.Repo,
-      # Start the Telemetry supervisor
       BenefitsWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Benefits.PubSub},
-      # Start the Endpoint (http/https)
       BenefitsWeb.Endpoint
-      # Start a worker by calling: Benefits.Worker.start_link(arg)
-      # {Benefits.Worker, arg}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Benefits.Supervisor]
     Supervisor.start_link(children, opts)
   end

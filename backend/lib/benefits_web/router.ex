@@ -7,5 +7,7 @@ defmodule BenefitsWeb.Router do
 
   scope "/api", BenefitsWeb do
     pipe_through :api
+
+    get("/users/:user_id", UsersController, :get)
   end
 end
