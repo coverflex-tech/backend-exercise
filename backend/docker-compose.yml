@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  benefits_postgres:
+    container_name: benefits_postgres
+    image: postgres:13
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - 5432:5432
