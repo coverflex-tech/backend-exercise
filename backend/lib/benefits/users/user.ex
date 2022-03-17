@@ -28,5 +28,6 @@ defmodule Benefits.Users.User do
     user
     |> cast(params, @required ++ @optional)
     |> validate_required(@required)
+    |> validate_number(:balance, greater_than_or_equal_to: 0)
   end
 end

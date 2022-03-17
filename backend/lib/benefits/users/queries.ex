@@ -31,7 +31,10 @@ defmodule Benefits.Users.Queries do
 
   @doc """
   Checks if a given user has enough balance to purchase
-  a given list of products
+  a given list of products.
+
+  You should only call this function inside a transaction
+  after fetching the user with lock_for_update?: true.
   """
   @spec enough_balance?(User.t(), [Product.t()]) ::
           {:ok, integer()} | {:error, :insufficient_balance}
