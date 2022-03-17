@@ -7,7 +7,7 @@ defmodule BenefitsWeb.UsersController do
 
   use BenefitsWeb, :controller
 
-  def get(conn, params) do
+  def show(conn, params) do
     with {:ok, valid_params} <- GetUserParams.changeset(params),
          {:ok, user} <-
            Queries.get_user(valid_params) do
@@ -29,6 +29,6 @@ defmodule BenefitsWeb.UsersController do
   defp return_user(conn, user) do
     conn
     |> put_status(200)
-    |> render("user.json", %{user: user})
+    |> render("user.json", user: user)
   end
 end

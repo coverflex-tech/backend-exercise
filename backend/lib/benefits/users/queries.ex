@@ -9,7 +9,10 @@ defmodule Benefits.Users.Queries do
   import Ecto.Query
 
   @doc """
-  Retrieves an user
+  Retrieves an user.
+
+  Accepts a :lock_for_update? option that defines if
+  we should lock the row for updating the user balance.
   """
   @spec get_user(params :: %{user_id: String.t()}, opts :: Keyword.t()) ::
           {:not_found, String.t()} | {:ok, User.t()}

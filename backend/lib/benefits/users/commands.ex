@@ -8,7 +8,7 @@ defmodule Benefits.Users.Commands do
   alias Ecto.Changeset
 
   @doc """
-  Creates a user with the default balance
+  Creates an user with the default balance
   """
   @spec create_user(params :: map) :: {:ok, User.t()} | {:error, Changeset.t()}
   def create_user(params) do
