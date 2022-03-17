@@ -3,10 +3,10 @@ defmodule Benefits.Users.Queries do
   Queries the user schema.
   """
 
+  import Ecto.Query
+
   alias Benefits.Repo
   alias Benefits.Users.User
-
-  import Ecto.Query
 
   @doc """
   Retrieves an user.
@@ -33,6 +33,8 @@ defmodule Benefits.Users.Queries do
   Checks if a given user has enough balance to purchase
   a given list of products
   """
+  @spec enough_balance?(User.t(), [Product.t()]) ::
+          {:ok, integer()} | {:error, :insufficient_balance}
   def enough_balance?(%{balance: balance}, products) do
     total_price = Enum.reduce(products, 0, &(&1.price + &2))
 

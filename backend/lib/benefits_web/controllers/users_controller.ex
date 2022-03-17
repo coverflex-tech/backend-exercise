@@ -1,11 +1,10 @@
 defmodule BenefitsWeb.UsersController do
+  use BenefitsWeb, :controller
+
   alias Benefits.Users.Commands
   alias Benefits.Users.Queries
-
-  alias BenefitsWeb.Params.GetUserParams
   alias BenefitsWeb.ErrorView
-
-  use BenefitsWeb, :controller
+  alias BenefitsWeb.Params.GetUserParams
 
   def show(conn, params) do
     with {:ok, %{user_id: user_id}} <- GetUserParams.changeset(params),

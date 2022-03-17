@@ -2,12 +2,12 @@ defmodule Benefits.Orders.Queries do
   @moduledoc """
   Queries the order schema.
   """
+  import Ecto.Query
+
+  alias Benefits.Orders.Order
+  alias Benefits.Products.Product
   alias Benefits.Repo
   alias Benefits.Users.User
-  alias Benefits.Products.Product
-  alias Benefits.Orders.Order
-
-  import Ecto.Query
 
   @spec check_purchased(User.t(), [Product.t()]) ::
           :ok | {:error, :products_already_purchased}

@@ -42,8 +42,9 @@ defmodule Benefits.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
 
-      # Testing
-      {:ex_machina, "~> 2.7", only: :test}
+      # Testing and linting
+      {:ex_machina, "~> 2.7", only: :test},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

@@ -9,8 +9,6 @@ defmodule BenefitsWeb.OrdersController do
 
     with {:ok, valid_params} <- CreateOrderParams.changeset(params),
          {:ok, order} <- Commands.create_order(valid_params) do
-      IO.inspect(order, label: CONTROLLER_ORDER)
-
       conn
       |> put_status(200)
       |> render("order.json", order: order)

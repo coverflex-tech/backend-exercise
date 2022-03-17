@@ -1,4 +1,7 @@
 defmodule BenefitsWeb.Params.GetUserParams do
+  @moduledoc """
+  Input params for fetching users
+  """
   use Ecto.Schema
 
   import Ecto.Changeset
@@ -17,6 +20,6 @@ defmodule BenefitsWeb.Params.GetUserParams do
     |> maybe_apply_changes()
   end
 
-  def maybe_apply_changes(%{valid?: false} = _changeset), do: {:error, :invalid_params}
-  def maybe_apply_changes(changeset), do: {:ok, apply_changes(changeset)}
+  defp maybe_apply_changes(%{valid?: false} = _changeset), do: {:error, :invalid_params}
+  defp maybe_apply_changes(changeset), do: {:ok, apply_changes(changeset)}
 end

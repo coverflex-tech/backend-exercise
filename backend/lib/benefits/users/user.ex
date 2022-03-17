@@ -19,7 +19,7 @@ defmodule Benefits.Users.User do
   @primary_key false
   schema "users" do
     field(:username, :string, primary_key: true, autogenerate: false)
-    field(:balance, :integer, default: 20000)
+    field(:balance, :integer, default: 20_000)
 
     timestamps()
   end

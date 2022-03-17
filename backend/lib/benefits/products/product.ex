@@ -1,4 +1,7 @@
 defmodule Benefits.Products.Product do
+  @moduledoc """
+  Schema for a product
+  """
   use Ecto.Schema
 
   import Ecto.Changeset

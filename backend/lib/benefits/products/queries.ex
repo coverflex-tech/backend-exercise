@@ -3,10 +3,10 @@ defmodule Benefits.Products.Queries do
   Queries the product schema.
   """
 
+  import Ecto.Query
+
   alias Benefits.Products.Product
   alias Benefits.Repo
-
-  import Ecto.Query
 
   @spec all_products :: [Product.t()]
   def all_products, do: Repo.all(Product)
