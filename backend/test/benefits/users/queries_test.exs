@@ -18,7 +18,7 @@ defmodule Benefits.Users.QueriesTest do
       assert user.username == ctx.username
     end
 
-    test "returns {:error, :user_not_found} when no user is found", _ctx do
+    test "returns {:error, :user_not_found} when no user is found" do
       assert {:error, :user_not_found} == Queries.get_user_by_username("Murder")
     end
 
