@@ -8,6 +8,8 @@ defmodule Benefits.Repo.Migrations.AddUsersTable do
 
       timestamps()
     end
+
+    create unique_index(:users, :username)
   end
 
   def down do
