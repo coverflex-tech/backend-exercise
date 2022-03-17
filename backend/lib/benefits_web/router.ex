@@ -10,5 +10,6 @@ defmodule BenefitsWeb.Router do
 
     get("/users/:user_id", UsersController, :show)
     get("/products", ProductsController, :index)
+    post("/orders", OrdersController, :create)
   end
 end

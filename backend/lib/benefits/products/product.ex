@@ -23,4 +23,11 @@ defmodule Benefits.Products.Product do
     |> validate_required(@required_fields)
     |> validate_number(:price, greater_than: 0)
   end
+
+  def as_order_product(data, %{id: id, name: name, price: price}) do
+    data
+    |> cast(%{id: id, name: name, price: price}, [:id, :name, :price])
+    |> validate_required(@required_fields)
+    |> validate_number(:price, greater_than: 0)
+  end
 end

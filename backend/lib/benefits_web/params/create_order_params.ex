@@ -1,19 +1,22 @@
-defmodule BenefitsWeb.Params.GetUserParams do
+defmodule BenefitsWeb.Params.CreateOrderParams do
   use Ecto.Schema
 
   import Ecto.Changeset
 
   @type t() :: %__MODULE__{}
 
+  @required_fields [:items, :user_id]
+
   @primary_key false
   embedded_schema do
+    field(:items, {:array, Ecto.UUID})
     field(:user_id, :string)
   end
 
   def changeset(data \\ %__MODULE__{}, params) do
     data
-    |> cast(params, [:user_id])
-    |> validate_required(:user_id)
+    |> cast(params, @required_fields)
+    |> validate_required(@required_fields)
     |> maybe_apply_changes()
   end
 

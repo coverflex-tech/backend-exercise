@@ -5,15 +5,28 @@ defmodule Benefits.Users.Commands do
 
   alias Benefits.Repo
   alias Benefits.Users.User
-  alias Ecto.Changeset
 
   @doc """
   Creates an user with the default balance
   """
-  @spec create_user(params :: map) :: {:ok, User.t()} | {:error, Changeset.t()}
-  def create_user(params) do
-    params
+  @spec create_user!(username :: String.t()) ::
+          User.t()
+  def create_user!(username) do
+    %{username: username}
     |> User.changeset()
-    |> Repo.insert()
+    |> Repo.insert!()
+  end
+
+  @doc """
+  Decreases user balance
+  """
+  @spec decrease_user_balance!(user :: User.t(), value :: integer()) ::
+          User.t() | no_return()
+  def decrease_user_balance!(user, value) do
+    new_balance = user.balance - value
+
+    user
+    |> User.changeset(%{balance: new_balance})
+    |> Repo.update!()
   end
 end
