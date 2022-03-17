@@ -22,6 +22,16 @@ defmodule Benefits.Users.QueriesTest do
       assert {:error, :user_not_found} == Queries.get_user_by_username("Murder")
     end
 
+    test "accepts lock_for_update? option", ctx do
+      assert {:ok, user} =
+               Queries.get_user_by_username(
+                 ctx.username,
+                 lock_for_update?: true
+               )
+
+      assert user.username == ctx.username
+    end
+
     test "is case-sensitive", ctx do
       username = String.downcase(ctx.username)
       assert {:error, :user_not_found} == Queries.get_user_by_username(username)

@@ -11,7 +11,7 @@ defmodule Benefits.Orders.Queries do
 
   @spec check_purchased(User.t(), [Product.t()]) ::
           :ok | {:error, :products_already_purchased}
-  def check_purchased(%{username: username}, products) do
+  def check_purchased(%User{username: username}, products) do
     to_purchase = products |> Enum.map(& &1.id) |> MapSet.new()
 
     not_purchased? =
@@ -19,6 +19,7 @@ defmodule Benefits.Orders.Queries do
       |> where([o], o.user_id == ^username)
       |> select([o], o.products)
       |> Repo.all()
+      |> List.flatten()
       |> Enum.map(& &1.id)
       |> MapSet.new()
       |> MapSet.disjoint?(to_purchase)

@@ -27,7 +27,11 @@ defmodule Benefits.Orders.Order do
   def changeset(data \\ %__MODULE__{}, params) do
     data
     |> cast(params, @required_fields)
-    |> cast_embed(:products, required: true, with: {Product, :as_order_product, []})
+    |> cast_embed(
+      :products,
+      required: true,
+      with: {Product, :cast_as_order_product, []}
+    )
     |> validate_required(@required_fields)
   end
 end

@@ -7,8 +7,9 @@ defmodule BenefitsWeb.OrdersController do
   def create(conn, params) do
     params = Map.get(params, "order", %{})
 
-    with {:ok, valid_params} <- CreateOrderParams.changeset(params),
-         {:ok, order} <- Commands.create_order(valid_params) do
+    with {:ok, %{items: items, user_id: user_id}} <-
+           CreateOrderParams.changeset(params),
+         {:ok, order} <- Commands.create_order(%{items: items, user_id: user_id}) do
       conn
       |> put_status(200)
       |> render("order.json", order: order)
