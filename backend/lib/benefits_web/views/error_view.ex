@@ -1,11 +1,9 @@
 defmodule BenefitsWeb.ErrorView do
   use BenefitsWeb, :view
 
-  # If you want to customize a particular status code
-  # for a certain format, you may uncomment below.
-  # def render("500.json", _assigns) do
-  #   %{errors: %{detail: "Internal Server Error"}}
-  # end
+  def render("400.json", %{reason: reason}) do
+    %{reason: reason}
+  end
 
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.json" becomes

@@ -5,15 +5,23 @@ defmodule Benefits.Orders.QueriesTest do
 
   alias Benefits.Orders.Queries
 
-  describe "check_purchased/2" do
-    setup do
-      products = build_list(3, :product)
-      user = insert(:user)
-      insert(:order, user_id: user.username, products: products)
+  setup do
+    products = build_list(3, :product)
+    user = insert(:user)
+    insert(:order, user_id: user.username, products: products)
 
-      %{products: products, user: user}
+    %{products: products, user: user}
+  end
+
+  describe "get_user_purchases/1" do
+    test "returns the ids of the products purchased by an user", ctx do
+      product_ids = Enum.map(ctx.products, & &1.id)
+      purchases = Queries.get_user_purchases(ctx.user)
+      assert purchases == product_ids
     end
+  end
 
+  describe "check_purchased/2" do
     test "returns :ok if products to be purchased haven't been purchased", ctx do
       new_product = build(:product)
       assert :ok == Queries.check_purchased(ctx.user, [new_product])

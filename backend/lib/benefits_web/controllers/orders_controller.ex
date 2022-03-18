@@ -2,6 +2,7 @@ defmodule BenefitsWeb.OrdersController do
   use BenefitsWeb, :controller
 
   alias Benefits.Orders.Commands
+  alias BenefitsWeb.ErrorView
   alias BenefitsWeb.Params.CreateOrderParams
 
   def create(conn, params) do
