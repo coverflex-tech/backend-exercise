@@ -3,7 +3,10 @@ defmodule Benefits do
 
   import Ecto.Query
 
-  alias Benefits.{Wallet, User, Repo, Product, OrderProducts, Order}
+  alias Benefits.{Wallet, User, Repo}
+  alias Benefits.Orders.{CreateOrder, Order, OrderProduct, Product}
+
+  defdelegate create_order(input), to: CreateOrder, as: :perform
 
   def get_or_create_user(username) when is_binary(username) do
     Repo.transaction(fn ->
@@ -34,7 +37,7 @@ defmodule Benefits do
     product_ids =
       Order
       |> where([o], o.user_id == ^user_id)
-      |> join(:inner, [o], po in OrderProducts, on: o.id == po.order_id)
+      |> join(:inner, [o], po in OrderProduct, on: o.id == po.order_id)
       |> select([o, po], po.product_id)
       |> Repo.all()
 

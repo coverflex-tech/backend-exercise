@@ -1,4 +1,4 @@
-defmodule Benefits.Product do
+defmodule Benefits.Orders.Product do
   @moduledoc false
 
   use Ecto.Schema

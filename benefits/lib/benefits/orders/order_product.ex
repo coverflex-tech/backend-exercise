@@ -1,4 +1,4 @@
-defmodule Benefits.OrderProducts do
+defmodule Benefits.Orders.OrderProduct do
   @moduledoc false
 
   use Ecto.Schema
@@ -17,5 +17,6 @@ defmodule Benefits.OrderProducts do
     user
     |> cast(attrs, [:order_id, :product_id])
     |> validate_required([:order_id, :product_id])
+    |> unique_constraint(:product_id)
   end
 end

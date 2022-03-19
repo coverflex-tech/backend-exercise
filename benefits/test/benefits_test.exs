@@ -1,7 +1,7 @@
 defmodule BenefitsTest do
   use Benefits.DataCase, async: true
 
-  alias Benefits.User
+  alias Benefits.{Wallet, User}
 
   describe "get_or_create_user/1" do
     setup do
@@ -66,6 +66,63 @@ defmodule BenefitsTest do
       assert products
              |> MapSet.new()
              |> MapSet.equal?(MapSet.new(ctx.products))
+    end
+  end
+
+  describe "create_order/1" do
+    setup do
+      user = insert!(:user)
+      wallet = insert!(:wallet, user_id: user.id, amount: 10_000)
+      product = insert!(:product, price: wallet.amount * 2)
+
+      {:ok, product: product, user: user, wallet: wallet}
+    end
+
+    test "fails if the user's balance isn't enough", ctx do
+      input = build(:create_order_input, user_id: ctx.user.username, items: [ctx.product.id])
+
+      assert {:error, :insufficient_balance} = Benefits.create_order(input)
+    end
+
+    test "fails if there's a product already purchased" do
+      user = insert!(:user)
+      order = insert!(:order, user_id: user.id)
+      product = insert!(:product)
+      insert!(:order_product, order_id: order.id, product_id: product.id)
+
+      insert!(:wallet, user_id: user.id, amount: Money.add(product.price, Money.new(10_000)))
+
+      input = build(:create_order_input, user_id: user.username, items: [product.id])
+      assert {:error, :products_already_purchased} = Benefits.create_order(input)
+    end
+
+    test "fails if a product is not found", ctx do
+      input = build(:create_order_input, user_id: ctx.user.username, items: [12_312_321_321])
+
+      assert {:error, :products_not_found} = Benefits.create_order(input)
+    end
+
+    test "debits correctly from wallet" do
+      user = insert!(:user)
+
+      products = for i <- 1..10, do: insert!(:product, price: i * 1000)
+
+      total_price =
+        Enum.reduce(products, Money.new(0), fn product, acc ->
+          value = Money.new(product.price)
+          Money.add(value, acc)
+        end)
+
+      wallet = insert!(:wallet, user_id: user.id, amount: Money.add(total_price, Money.new(1000)))
+
+      input =
+        build(:create_order_input, user_id: user.username, items: Enum.map(products, & &1.id))
+
+      {:ok, _order} = Benefits.create_order(input)
+
+      updated_wallet = Repo.get_by(Wallet, user_id: user.id)
+
+      assert updated_wallet.amount == Money.subtract(wallet.amount, total_price)
     end
   end
 end

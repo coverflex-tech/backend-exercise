@@ -22,7 +22,10 @@ defmodule BenefitsAPI do
       use Phoenix.Controller, namespace: BenefitsAPI
 
       import Plug.Conn
+      import Benefits.Validators
+
       alias BenefitsAPI.Router.Helpers, as: Routes
+      alias BenefitsAPI.ErrorView
     end
   end
 

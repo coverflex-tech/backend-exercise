@@ -8,6 +8,5 @@ defmodule Benefits.Repo.Migrations.CreateOrderProducts do
     end
 
     create(index("order_products", [:order_id]))
-    create(index("order_products", [:product_id]))
   end
 end

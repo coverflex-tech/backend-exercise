@@ -3,11 +3,13 @@ defmodule Benefits.Factory do
   Factories to be used in tests
   """
 
-  alias Benefits.{Order, Product, Repo, User, Wallet}
+  alias Benefits.{Repo, User, Wallet}
+  alias Benefits.Orders.{Order, OrderProduct, Product}
+  alias Benefits.Orders.CreateOrderInput
 
   def build(:user) do
     %User{
-      username: "John Doe"
+      username: "John Doe #{Ecto.UUID.generate()}"
     }
   end
 
@@ -21,6 +23,14 @@ defmodule Benefits.Factory do
 
   def build(:order) do
     %Order{user_id: build(:user).id, price: Money.new(5000), products: [build(:product)]}
+  end
+
+  def build(:order_product) do
+    %OrderProduct{order_id: build(:order).id, product_id: build(:product).id}
+  end
+
+  def build(:create_order_input) do
+    %CreateOrderInput{user_id: build(:user).id, items: [build(:product).id]}
   end
 
   # Convenience API
