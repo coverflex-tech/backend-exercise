@@ -1,21 +1,68 @@
-on: push
-
+name: CI
+ 
+on: [push, pull_request]
+ 
+env:
+  MIX_ENV: test
+ 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+  build-and-test:
+    name: Build and Tests
+    runs-on: ${{ matrix.os }}
+ 
     strategy:
       matrix:
-        otp: ['24.0']
-        elixir: ['1.13.2']
+        os: [ubuntu-20.04]
+        elixir: [1.13.2]
+        otp: [24.0]
+ 
+    services:
+      postgres:
+        image: postgres:14.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: benefits_test
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+ 
     steps:
-      - uses: actions/checkout@v2
-      - uses: erlef/setup-beam@v1
-        with:
-          otp-version: ${{matrix.otp}}
-          elixir-version: ${{matrix.elixir}}
-      - working-directory: ./benefits
-      - run: mix deps.get
-      - run: mix credo --strict
-      - run: mix test --warnings-as-errors
-      
+    - name: Check Out Repository
+      uses: actions/checkout@v2
+ 
+    - name: Setup Elixir
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: ${{ matrix.elixir }}
+        otp-version: ${{ matrix.otp }}
+        experimental-otp: true
+ 
+    - name: Restore Cache
+      uses: actions/cache@v2
+      with:
+        path: | 
+          deps
+          _build
+        key: ${{ runner.os }}-mix-${{ matrix.elixir }}-${{ matrix.otp }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-${{ matrix.elixir }}-${{ matrix.otp }}
+ 
+    - name: Install Dependencies
+      working-directory: ./benefits
+      run: mix deps.get
+ 
+    - name: Setup DB
+      working-directory: ./benefits
+      run: mix ecto.setup
+ 
+    - name: Run Tests
+      working-directory: ./benefits
+      run: mix test
+ 
+    - name: Check Formatting
+      working-directory: ./benefits
+      run: mix format --check-formatted
+ 
+    - name: Review Code With Credo
+      working-directory: ./benefits
+      run: mix credo
