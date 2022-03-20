@@ -3,9 +3,9 @@ defmodule Benefits.Factory do
   Factories to be used in tests
   """
 
-  alias Benefits.{Repo, User, Wallet}
-  alias Benefits.Orders.{Order, OrderProduct, Product}
   alias Benefits.Orders.CreateOrderInput
+  alias Benefits.Orders.{Order, OrderProduct, Product}
+  alias Benefits.{Repo, User, Wallet}
 
   def build(:user) do
     %User{

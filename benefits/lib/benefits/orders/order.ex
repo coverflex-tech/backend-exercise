@@ -5,8 +5,8 @@ defmodule Benefits.Orders.Order do
 
   import Ecto.Changeset
 
-  alias Benefits.User
   alias Benefits.Orders.Product
+  alias Benefits.User
 
   schema "orders" do
     many_to_many(:products, Product, join_through: "order_products", unique: true)

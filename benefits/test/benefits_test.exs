@@ -1,7 +1,7 @@
 defmodule BenefitsTest do
   use Benefits.DataCase, async: true
 
-  alias Benefits.{Wallet, User}
+  alias Benefits.{User, Wallet}
 
   describe "get_or_create_user/1" do
     setup do
@@ -97,7 +97,9 @@ defmodule BenefitsTest do
     end
 
     test "fails if a product is not found", ctx do
-      input = build(:create_order_input, user_id: ctx.user.username, items: [12_312_321_321])
+      Repo.delete(ctx.product)
+
+      input = build(:create_order_input, user_id: ctx.user.username, items: [1])
 
       assert {:error, :products_not_found} = Benefits.create_order(input)
     end

@@ -1,6 +1,8 @@
 defmodule BenefitsAPI.OrdersControllerTest do
   use BenefitsAPI.ConnCase
 
+  alias Benefits.Repo
+
   describe "/api/orders" do
     setup do
       user = insert!(:user)
@@ -84,10 +86,12 @@ defmodule BenefitsAPI.OrdersControllerTest do
       path = Routes.orders_path(@endpoint, :create)
       insert!(:wallet, user_id: ctx.user.id, amount: ctx.total_price)
 
+      for p <- ctx.products, do: Repo.delete(p)
+
       params = %{
         "order" => %{
           "user_id" => ctx.user.username,
-          "items" => [23121]
+          "items" => [1]
         }
       }
 

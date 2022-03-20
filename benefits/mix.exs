@@ -33,7 +33,8 @@ defmodule Benefits.MixProject do
       {:money, "~> 1.9"},
       {:phoenix, "~> 1.6.6"},
       {:plug_cowboy, "~> 2.5"},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

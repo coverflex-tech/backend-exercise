@@ -24,8 +24,8 @@ defmodule BenefitsAPI do
       import Plug.Conn
       import Benefits.Validators
 
-      alias BenefitsAPI.Router.Helpers, as: Routes
       alias BenefitsAPI.ErrorView
+      alias BenefitsAPI.Router.Helpers, as: Routes
     end
   end
 
