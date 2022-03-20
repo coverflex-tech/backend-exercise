@@ -1,5 +1,5 @@
 defmodule Benefits.Orders.Product do
-  @moduledoc false
+  @moduledoc "The struct that represents a product"
 
   use Ecto.Schema
 

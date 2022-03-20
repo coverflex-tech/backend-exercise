@@ -1,5 +1,10 @@
 defmodule Benefits.Validators do
-  @moduledoc false
+  @moduledoc """
+  Helpers for validating inputs
+  
+  The functions contained by this module are often used for
+  validating data that will be used by a domain function
+  """
 
   import Ecto.Changeset
 

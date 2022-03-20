@@ -1,5 +1,5 @@
 defmodule Benefits.Orders.CreateOrder do
-  @moduledoc false
+  @moduledoc "Command for creating a new order"
 
   import Ecto.Query
 
@@ -8,6 +8,23 @@ defmodule Benefits.Orders.CreateOrder do
   alias Benefits.{Repo, User, Wallet}
   alias Benefits.Orders.{CreateOrderInput, Order, OrderProduct, Product}
 
+  @doc """
+  Creates a new order
+
+  This function fails if:
+
+  - the user doesn't exist
+  - the user doesn't have enough balance or
+  - the order contains items previously bought or
+  - one or more items doesn't point to an existing product
+  """
+  @spec perform(input :: CreateOrderInput.t()) ::
+          {:ok, Order.t()}
+          | {:error,
+             :user_not_found
+             | :products_not_found
+             | :insufficient_balance
+             | :products_already_purchased}
   def perform(%CreateOrderInput{} = input) do
     Logger.metadata(user_id: input.user_id, items: input.items)
 

@@ -1,5 +1,5 @@
 defmodule Benefits.Wallet do
-  @moduledoc false
+  @moduledoc "The struct that represents a wallet"
 
   use Ecto.Schema
 

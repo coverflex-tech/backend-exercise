@@ -1,5 +1,7 @@
 defmodule Benefits do
-  @moduledoc false
+  @moduledoc """
+  Benefits main context
+  """
 
   import Ecto.Query
 
@@ -8,6 +10,14 @@ defmodule Benefits do
 
   defdelegate create_order(input), to: CreateOrder, as: :perform
 
+  @doc """
+  Get or creates a new user
+
+  If there is no user with the given username, a new one will be
+  created, receiving a wallet. Note that the new wallet has the
+  amount set on the `config :benefits, :initial_wallet_amount`
+  """
+  @spec get_or_create_user(username :: String.t()) :: {:ok, User.t()}
   def get_or_create_user(username) when is_binary(username) do
     Repo.transaction(fn ->
       {:ok, user} =
@@ -29,10 +39,22 @@ defmodule Benefits do
     end)
   end
 
+  defp create_wallet(user_id) do
+    %{user_id: user_id, amount: initial_amount()}
+    |> Wallet.changeset()
+    |> Repo.insert(on_conflict: :nothing, conflict_target: :user_id, returning: true)
+  end
+
+  defp initial_amount, do: Application.get_env(:benefits, :initial_wallet_amount)
+
+  @doc "Lists all products"
+  @spec list_products() :: {:ok, list(Product.t())}
   def list_products do
     {:ok, Repo.all(Product)}
   end
 
+  @doc "Returns the id of all products previously purchased by a user"
+  @spec list_bought_products_ids(user_id :: String.t()) :: list(String.t())
   def list_bought_products_ids(user_id) do
     product_ids =
       Order
@@ -43,12 +65,4 @@ defmodule Benefits do
 
     {:ok, product_ids}
   end
-
-  defp create_wallet(user_id) do
-    %{user_id: user_id, amount: initial_amount()}
-    |> Wallet.changeset()
-    |> Repo.insert(on_conflict: :nothing, conflict_target: :user_id, returning: true)
-  end
-
-  defp initial_amount, do: Application.get_env(:benefits, :initial_wallet_amount)
 end

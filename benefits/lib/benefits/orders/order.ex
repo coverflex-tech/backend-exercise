@@ -1,5 +1,5 @@
 defmodule Benefits.Orders.Order do
-  @moduledoc false
+  @moduledoc "The struct that represents an order"
 
   use Ecto.Schema
 

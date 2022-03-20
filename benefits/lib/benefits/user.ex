@@ -1,5 +1,5 @@
 defmodule Benefits.User do
-  @moduledoc false
+  @moduledoc "The struct that represents a user"
 
   use Ecto.Schema
 

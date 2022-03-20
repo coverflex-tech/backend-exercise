@@ -1,11 +1,11 @@
 defmodule Benefits.Orders.OrderProduct do
-  @moduledoc false
+  @moduledoc "The struct that represents an order's product"
 
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  @primary_key {:id, :binary_id, autogenerate: false}
+  @primary_key false
 
   schema "order_products" do
     field(:order_id, :integer)
