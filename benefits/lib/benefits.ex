@@ -5,8 +5,7 @@ defmodule Benefits do
 
   import Ecto.Query
 
-  alias Benefits.Orders.{CreateOrder, Order, OrderProduct, Product}
-  alias Benefits.{Repo, User, Wallet}
+  alias Benefits.{Repo, User, Wallet, CreateOrder, Order, OrderProduct, Product}
 
   defdelegate create_order(input), to: CreateOrder, as: :perform
 

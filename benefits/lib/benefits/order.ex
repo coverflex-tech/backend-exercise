@@ -1,11 +1,11 @@
-defmodule Benefits.Orders.Order do
+defmodule Benefits.Order do
   @moduledoc "The struct that represents an order"
 
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias Benefits.Orders.Product
+  alias Benefits.Product
   alias Benefits.User
 
   schema "orders" do

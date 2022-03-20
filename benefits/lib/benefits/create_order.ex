@@ -1,12 +1,11 @@
-defmodule Benefits.Orders.CreateOrder do
+defmodule Benefits.CreateOrder do
   @moduledoc "Command for creating a new order"
 
   import Ecto.Query
 
   require Logger
 
-  alias Benefits.{Repo, User, Wallet}
-  alias Benefits.Orders.{CreateOrderInput, Order, OrderProduct, Product}
+  alias Benefits.{Repo, User, Wallet, CreateOrderInput, Order, OrderProduct, Product}
 
   @doc """
   Creates a new order

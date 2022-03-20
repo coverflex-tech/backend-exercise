@@ -6,7 +6,7 @@ defmodule BenefitsAPI.OrdersController do
   alias BenefitsAPI.OrdersView
 
   def create(conn, %{"order" => order}) do
-    with {:ok, input} <- validate(order, Benefits.Orders.CreateOrderInput),
+    with {:ok, input} <- validate(order, Benefits.CreateOrderInput),
          {:ok, order} <- Benefits.create_order(input) do
       conn
       |> put_view(OrdersView)

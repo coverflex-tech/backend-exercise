@@ -1,4 +1,4 @@
-defmodule Benefits.Orders.CreateOrderInput do
+defmodule Benefits.CreateOrderInput do
   @moduledoc "The input used for creating a new order"
 
   use Ecto.Schema
