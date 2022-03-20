@@ -53,7 +53,7 @@ jobs:
  
     - name: Setup DB
       working-directory: ./benefits
-      run: mix ecto.setup
+      run: mix benefits.test_setup
  
     - name: Run Tests
       working-directory: ./benefits
