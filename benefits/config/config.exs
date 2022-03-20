@@ -5,7 +5,7 @@ import Config
 config :benefits,
   ecto_repos: [Benefits.Repo]
 
-config :benefits, initial_wallet_amount: 5230
+config :benefits, initial_wallet_amount: 300_000
 
 config :benefits, BenefitsAPI.Endpoint,
   url: [host: "localhost"],

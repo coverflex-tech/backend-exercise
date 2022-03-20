@@ -49,7 +49,8 @@ defmodule Benefits.MixProject do
       ],
       "benefits.setup": [
         "ecto.create --quiet",
-        "ecto.migrate --quiet"
+        "ecto.migrate --quiet",
+        "run priv/repo/seeds.exs"
       ],
       "benefits.test_setup": [
         "benefits.setup"
