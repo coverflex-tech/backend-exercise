@@ -3,8 +3,6 @@ defmodule BenefitsAPI.OrdersView do
 
   use BenefitsAPI, :view
 
-  alias BenefitsAPI.ProductsView
-
   def render("order.json", %{order: order}) do
     %{
       order: %{
