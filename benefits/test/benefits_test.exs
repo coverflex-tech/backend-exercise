@@ -78,6 +78,11 @@ defmodule BenefitsTest do
       {:ok, product: product, user: user, wallet: wallet}
     end
 
+    test "fails if the user doesn't exist", ctx do
+      input = build(:create_order_input, user_id: "some username", items: [ctx.product.id])
+      {:error, :user_not_found} = Benefits.create_order(input)
+    end
+
     test "fails if the user's balance isn't enough", ctx do
       input = build(:create_order_input, user_id: ctx.user.username, items: [ctx.product.id])
 
