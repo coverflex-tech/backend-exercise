@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :backend, Backend.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "backend_dev",
+  username: System.get_env("PGUSER", "postgres"),
+  password: System.get_env("PGPASSWORD", "postgres"),
+  hostname: System.get_env("PGHOST", "localhost"),
+  database: System.get_env("PGDATABASE", "backend_dev"),
+  port: System.get_env("PGPORT", "5432") |> String.to_integer(),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
