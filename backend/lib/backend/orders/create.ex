@@ -63,12 +63,13 @@ defmodule Backend.Orders.Create do
        }) do
     order_items_id = Enum.map(order_items, & &1.product_id)
 
-    all_new? = Enum.any?(user_items, fn item -> Enum.member?(order_items_id, item.product_id) end)
+    any_already_purchased? =
+      Enum.any?(user_items, fn item -> Enum.member?(order_items_id, item.product_id) end)
 
-    if all_new? != true do
-      {:ok, order}
-    else
+    if any_already_purchased? do
       {:error, :products_already_purchased}
+    else
+      {:ok, order}
     end
   end
 
