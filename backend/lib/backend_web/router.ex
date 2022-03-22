@@ -9,5 +9,7 @@ defmodule BackendWeb.Router do
     pipe_through :api
 
     get "/users/:username", UserController, :get_or_create_user
+    get "/products", ProductController, :index
+    post "/products", ProductController, :create
   end
 end

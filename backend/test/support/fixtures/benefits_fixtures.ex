@@ -18,4 +18,20 @@ defmodule Backend.BenefitsFixtures do
 
     user
   end
+
+  @doc """
+  Generate a product.
+  """
+  def product_fixture(attrs \\ %{}) do
+    {:ok, product} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        price: 42,
+        string_id: "some string_id"
+      })
+      |> Backend.Benefits.create_product()
+
+    product
+  end
 end
