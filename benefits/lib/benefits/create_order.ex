@@ -10,6 +10,8 @@ defmodule Benefits.CreateOrder do
 
   use Ecto.Schema
 
+  @type t() :: %__MODULE__{}
+
   @primary_key false
 
   embedded_schema do
