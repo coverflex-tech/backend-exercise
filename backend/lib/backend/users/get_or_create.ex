@@ -1,4 +1,7 @@
 defmodule Backend.Users.GetOrCreate do
+  @moduledoc """
+  Module reponsible to get a User and create if dons't exists
+  """
   alias Backend.Users.Create
   alias Backend.Users.Get
   alias Backend.Users.Schemas.User

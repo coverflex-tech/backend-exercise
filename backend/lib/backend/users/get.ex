@@ -1,4 +1,7 @@
 defmodule Backend.Users.Get do
+  @moduledoc """
+  Module used to get a User givin a id
+  """
   alias Backend.Users.Schemas.User
   alias Backend.Repo
 

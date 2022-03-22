@@ -1,4 +1,7 @@
 defmodule Backend.Orders.Create do
+  @moduledoc """
+  Module to handle operation to create a Order
+  """
   alias Backend.Products
   alias Backend.Users
   alias Backend.Users.Schemas.User
@@ -6,6 +9,8 @@ defmodule Backend.Orders.Create do
 
   alias Ecto.Multi
 
+  @spec call(%{user_id: String.t(), order_items: [OrderItem.t(), ...]}) ::
+          {:ok, Order.t()} | {:error, any()}
   def call(%{user_id: user_id, order_items: items_ids}) do
     order_items =
       items_ids
@@ -18,9 +23,7 @@ defmodule Backend.Orders.Create do
       total: sum_total(order_items)
     }
 
-    if not all_items_exists?(order) do
-      {:error, :products_not_found}
-    else
+    if all_items_exists?(order) do
       Multi.new()
       |> Multi.run(:load_user, fn repo, _changes ->
         load_user(repo, user_id)
@@ -43,6 +46,8 @@ defmodule Backend.Orders.Create do
         update_user_balance(repo, user, order)
       end)
       |> run_transaction()
+    else
+      {:error, :products_not_found}
     end
   end
 

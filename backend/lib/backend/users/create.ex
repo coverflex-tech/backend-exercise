@@ -1,4 +1,7 @@
 defmodule Backend.Users.Create do
+  @moduledoc """
+  Module used to create a User
+  """
   alias Backend.Users.Schemas.User
   alias Backend.Repo
 

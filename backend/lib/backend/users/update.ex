@@ -1,4 +1,7 @@
 defmodule Backend.Users.Update do
+  @moduledoc """
+  Module to handle update to User
+  """
   alias Backend.Users.Schemas.User
   alias Backend.Repo
 
