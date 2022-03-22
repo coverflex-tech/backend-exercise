@@ -9,6 +9,6 @@ defmodule Backend.Repo.Migrations.CreateUsers do
       timestamps()
     end
 
-    create index(:users, [:username])
+    create unique_index(:users, [:username])
   end
 end

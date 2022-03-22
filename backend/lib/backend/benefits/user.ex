@@ -14,5 +14,6 @@ defmodule Backend.Benefits.User do
     user
     |> cast(attrs, [:username, :balance])
     |> validate_required([:username, :balance])
+    |> unique_constraint(:username)
   end
 end
