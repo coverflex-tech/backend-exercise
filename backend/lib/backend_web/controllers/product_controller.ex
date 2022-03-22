@@ -1,6 +1,8 @@
 defmodule BackendWeb.ProductController do
   use BackendWeb, :controller
 
+  action_fallback BackendWeb.FallbackController
+
   alias Backend.Products
 
   def get(conn, _) do
