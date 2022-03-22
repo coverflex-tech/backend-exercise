@@ -1,13 +1,15 @@
 version: '3.7'
 services:
   frontend:
-    image: node:16
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
     ports:
       - '3000:3000'
     volumes:
       - ./frontend/:/app
+      - node_modules:/app/node_modules
     working_dir: /app
-    command: 'npm start'
   backend:
     build: ./backend/
     environment:
@@ -32,4 +34,4 @@ services:
       - 'pgdata:/var/lib/postgresql/data'
 volumes:
   pgdata:
-    
+  node_modules:  
