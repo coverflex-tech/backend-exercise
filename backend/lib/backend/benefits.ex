@@ -4,10 +4,10 @@ defmodule Backend.Benefits do
   """
 
   alias Backend.Repo
-
   alias Backend.Benefits.{Order, User}
   alias Backend.Benefits.Products.Query, as: ProductQuery
   alias Backend.Benefits.Products.Product
+  alias Ecto.Multi
 
   @default_balance 500_00
 
@@ -46,7 +46,7 @@ defmodule Backend.Benefits do
   end
 
   @doc """
-  Creates a order.
+  Creates an order.
   """
   def create_order(%{items: product_string_ids, user_id: username}) do
     with {:ok, user} <- get_or_create_user(%{username: username}),
@@ -56,9 +56,27 @@ defmodule Backend.Benefits do
       total_value = sum_product_prices(products)
       attrs = %{user: user, products: products, total_value: total_value}
 
-      %Order{}
-      |> Order.changeset(attrs)
-      |> Repo.insert()
+      user_changeset = User.changeset(user, %{balance: user.balance - total_value})
+      order_changeset = Order.changeset(%Order{}, attrs)
+
+      do_create_order(user_changeset, order_changeset)
+    end
+  end
+
+  defp do_create_order(user_changeset, order_changeset) do
+    Multi.new()
+    |> Multi.update(:user, user_changeset)
+    |> Multi.insert(:order, order_changeset)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{order: order}} ->
+        {:ok, order}
+
+      {:error, :user, %{errors: [balance: _]}, _} ->
+        {:error, :insufficient_balance}
+
+      {:error, _, changeset, _} ->
+        {:error, changeset}
     end
   end
 

@@ -14,10 +14,7 @@ defmodule BackendWeb.OrderControllerTest do
     test "renders order when data is valid", %{conn: conn} do
       product_fixture(%{string_id: "netflix", name: "Netflix", price: 7542})
       conn = post(conn, Routes.order_path(conn, :create), order: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["order"]
-
-      assert %{"id" => ^id, "data" => %{"items" => [], "total" => 7542}} =
-               json_response(conn, 201)["order"]
+      assert %{"data" => %{"items" => [], "total" => 7542}} = json_response(conn, 201)["order"]
     end
 
     test "renders error when user already bought product", %{conn: conn} do
@@ -26,6 +23,13 @@ defmodule BackendWeb.OrderControllerTest do
 
       conn = post(conn, Routes.order_path(conn, :create), order: @create_attrs)
       assert %{"error" => "products_already_purchased"} = json_response(conn, 400)
+    end
+
+    test "renders error when user balance isn't enough", %{conn: conn} do
+      product_fixture(%{string_id: "netflix", name: "Netflix", price: 2_147_483_647})
+      conn = post(conn, Routes.order_path(conn, :create), order: @create_attrs)
+
+      assert %{"error" => "insufficient_balance"} = json_response(conn, 400)
     end
 
     test "renders error when product is not found", %{conn: conn} do
