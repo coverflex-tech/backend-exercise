@@ -1,3 +1,12 @@
+## Up and Running
+
+1. ```docker-compose build``` to build container images
+1. ```docker-compose up -d``` to run projects
+1. ```docker-compose exec backend mix ecto.seed``` to create initital product seeds (Netflix, Spotify and Amazon Prime)
+1. ```docker-compose exec -e MIX_ENV=test backend mix test``` to run tests
+1. ```docker-compose exec -e MIX_ENV=test backend mix test.watch``` to run tests on changes
+1. ```docker-compose exec -e MIX_ENV=test backend mix credo``` to run credo analisys
+
 # Coverflex Backend Exercise
 
 Hello dear Backend developer!
@@ -56,14 +65,5 @@ In development mode, this react app is expecting the local backend service to ex
 
 For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
 As soon as you are finished, go ahead and make a Pull Request back to this repository.
-
-## Up and Running
-
-1. ```docker-compose build``` to build container images
-1. ```docker-compose up -d``` to run projects
-1. ```docker-compose exec backend mix ecto.seed``` to create initital product seeds (Netflix, Spotify and Amazon Prime)
-1. ```docker-compose exec -e MIX_ENV=test backend mix test``` to run tests
-1. ```docker-compose exec -e MIX_ENV=test backend mix test.watch``` to run tests on changes
-1. ```docker-compose exec -e MIX_ENV=test backend mix credo``` to run credo analisys
 
 Good Luck! 🙌
