@@ -17,13 +17,13 @@ defmodule Backend.Orders.Create do
       |> prepare_items()
       |> load_items_products()
 
-    order = %Order{
-      user_id: user_id,
-      order_items: order_items,
-      total: sum_total(order_items)
-    }
+    if all_items_exists?(order_items) do
+      order = %Order{
+        user_id: user_id,
+        order_items: order_items,
+        total: sum_total(order_items)
+      }
 
-    if all_items_exists?(order) do
       Multi.new()
       |> Multi.run(:load_user, fn repo, _changes ->
         load_user(repo, user_id)
@@ -121,8 +121,8 @@ defmodule Backend.Orders.Create do
     end)
   end
 
-  defp all_items_exists?(%Order{} = order) do
-    Enum.all?(order.order_items, fn item -> nil != item.product end)
+  defp all_items_exists?(order_items) do
+    Enum.all?(order_items, fn item -> :not_found != item.product end)
   end
 
   defp sum_total(order_items) do

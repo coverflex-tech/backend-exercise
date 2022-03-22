@@ -74,5 +74,16 @@ defmodule Backend.Orders.CreateTest do
 
       assert {:error, :products_already_purchased} = result
     end
+
+    test "should return a {:error, :products_not_found} if user already purchased a product" do
+      create_product(id: "netflix", price: Decimal.new("10.00"))
+      create_user(id: "frodo1", balance: Decimal.new("39.00"))
+
+      params = %{user_id: "frodo1", order_items: ["spotify"]}
+
+      result = Orders.Create.call(params)
+
+      assert {:error, :products_not_found} = result
+    end
   end
 end
