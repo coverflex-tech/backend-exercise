@@ -10,6 +10,7 @@ defmodule BackendWeb.Router do
 
     get "/users/:user_id", UserController, :show
     get "/products", ProductController, :get
+    post "/orders", OrderController, :post
   end
 
   # Enables LiveDashboard only for development
