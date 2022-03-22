@@ -1,11 +1,29 @@
 defmodule Benefits.CreateOrder do
   @moduledoc "Command for creating a new order"
 
-  import Ecto.Query
-
   require Logger
 
-  alias Benefits.{Repo, User, Wallet, CreateOrderInput, Order, OrderProduct, Product}
+  import Ecto.Query
+  import Ecto.Changeset
+
+  alias Benefits.{Repo, User, Wallet, Order, OrderProduct, Product}
+
+  use Ecto.Schema
+
+  @primary_key false
+
+  embedded_schema do
+    field(:user_id, :string)
+    field(:items, {:array, :integer})
+  end
+
+  @doc false
+  def changeset(order \\ %__MODULE__{}, attrs) do
+    order
+    |> cast(attrs, [:user_id, :items])
+    |> validate_required([:user_id, :items])
+    |> validate_length(:items, min: 1)
+  end
 
   @doc """
   Creates a new order
@@ -16,15 +34,18 @@ defmodule Benefits.CreateOrder do
   - the user doesn't have enough balance or
   - the order contains items previously bought or
   - one or more items doesn't point to an existing product
+
+  The input's field `user_id` is the user's username. That is 
+  because our clients use the user's username as its id
   """
-  @spec perform(input :: CreateOrderInput.t()) ::
+  @spec perform(input :: __MODULE__.t()) ::
           {:ok, Order.t()}
           | {:error,
              :user_not_found
              | :products_not_found
              | :insufficient_balance
              | :products_already_purchased}
-  def perform(%CreateOrderInput{} = input) do
+  def perform(%__MODULE__{} = input) do
     Logger.metadata(user_id: input.user_id, items: input.items)
 
     Repo.transaction(fn ->
@@ -46,9 +67,9 @@ defmodule Benefits.CreateOrder do
     end)
   end
 
-  defp get_user(user_id) do
+  defp get_user(username) do
     User
-    |> where([u], u.username == ^user_id)
+    |> where([u], u.username == ^username)
     |> Repo.one()
     |> case do
       nil -> {:error, :user_not_found}

@@ -3,7 +3,7 @@ defmodule Benefits.Factory do
   Factories to be used in tests
   """
 
-  alias Benefits.{Repo, User, Wallet, Order, OrderProduct, Product, CreateOrderInput}
+  alias Benefits.{Repo, User, Wallet, Order, OrderProduct, Product, CreateOrder}
 
   def build(:user) do
     %User{
@@ -28,7 +28,7 @@ defmodule Benefits.Factory do
   end
 
   def build(:create_order_input) do
-    %CreateOrderInput{user_id: build(:user).id, items: [build(:product).id]}
+    %CreateOrder{user_id: build(:user).id, items: [build(:product).id]}
   end
 
   # Convenience API
