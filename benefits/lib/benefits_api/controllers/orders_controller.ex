@@ -10,6 +10,7 @@ defmodule BenefitsAPI.OrdersController do
          {:ok, order} <- Benefits.create_order(input) do
       conn
       |> put_view(OrdersView)
+      |> put_status(:created)
       |> render("order.json", %{order: order})
     else
       {:error, reason}

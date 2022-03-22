@@ -17,7 +17,7 @@ defmodule BenefitsAPI.OrdersControllerTest do
       {:ok, products: products, user: user, total_price: total_price}
     end
 
-    test "returns 200 when creates the new order successfully", ctx do
+    test "returns 201 when creates the new order successfully", ctx do
       path = Routes.orders_path(@endpoint, :create)
       insert!(:wallet, user_id: ctx.user.id, amount: ctx.total_price)
 
@@ -39,7 +39,7 @@ defmodule BenefitsAPI.OrdersControllerTest do
              } =
                ctx.conn
                |> post(path, params)
-               |> json_response(200)
+               |> json_response(201)
     end
 
     test "returns 400 if the balance is insufficient", ctx do
