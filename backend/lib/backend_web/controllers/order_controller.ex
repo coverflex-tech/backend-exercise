@@ -8,7 +8,7 @@ defmodule BackendWeb.OrderController do
 
   def post(conn, %{"order" => %{"user_id" => user_id, "items" => order_items}}) do
     with {:ok, %Order{} = order} <-
-           Orders.Create.call(%{user_id: user_id, order_items: order_items}) do
+           Orders.create_order(%{user_id: user_id, order_items: order_items}) do
       conn
       |> put_status(:ok)
       |> render("show.json", order: order)
