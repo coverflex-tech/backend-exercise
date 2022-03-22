@@ -7,5 +7,7 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through :api
+
+    get "/users/:username", UserController, :get_or_create_user
   end
 end
