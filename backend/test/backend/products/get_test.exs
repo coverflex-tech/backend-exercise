@@ -13,7 +13,7 @@ defmodule Backend.Products.GetTest do
     end
 
     test "should return a nil given a invalid ID" do
-      assert nil == Get.call(%{id: "netflix"})
+      assert :not_found == Get.call(%{id: "netflix"})
     end
   end
 end

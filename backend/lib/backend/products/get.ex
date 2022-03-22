@@ -4,6 +4,9 @@ defmodule Backend.Products.Get do
 
   @spec call(%{id: String.t()}) :: Product.t() | any()
   def call(%{id: product_id}) do 
-    Repo.get(Product, product_id)
+    case Repo.get(Product, product_id) do 
+      %Product{} = product -> product
+        nil -> :not_found
+    end
   end
 end
