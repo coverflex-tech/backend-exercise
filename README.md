@@ -1,60 +1,165 @@
-# Coverflex Backend Exercise
+# Index
+1. [Getting Started](#getting-started)
+2. [Documentation](#documentation)
 
-Hello dear Backend developer!
+# Getting Started
 
-Your Project Manager needs you to quickly build an app that can be used by company employees to self-manage their benefits.
-Our Frontend Developer has already built a UI prototype to cover the required flows. You'll need to build an API to provide backend functionality to this prototype and integrate both.
+To set up the project locally, you will need to install [asdf](https://github.com/asdf-vm/asdf) and docker-compose, so before continuing, please make sure you have these two. 
 
-The API should include these use cases:
-* Retrieve data from a single user
-    * users are indexed and queried by username
-* Retrieve a collection of products
-    * products must have a unique identifier, a price and a name
-* Placing an order
-    * users aren't allowed to place an order if their current balance isn't enough for the order total
-    * users aren't allowed to order a product previously ordered
-    * orders must record which user is ordering, which products are being ordered and what the total amount is
+## Installation
+1. Clone the Repo
+```
+$ git clone https://github.com/coverflex-tech/backend-exercise
+```
+2. Change the directory:
+```
+$ cd backend-exercise
+```
+3. Install OTP and Elixir:
+```
+$ asdf install
+```
+4. Change the directory to ./benefits
+```
+$ cd benefits/
+```
+5. Fetch the dependencies
+```
+$ mix deps.get
+```
+6. Initiate the database using docker-compose
+```
+$ docker-compose up -d
+```
+7. Run the project's setup command
+```
+$ mix benefits.setup
+$ mix benefits.test_setup
+```
 
-Our Frontend Developer is expecting these API endpoints:
-- `GET /api/users/:user_id`
-    - returns a single user
-    - if user_id doesn't exist, it creates a new user
-    - output `{"user": {"user_id": "johndoe", "data": {"balance": 500, "product_ids": [...]}}}`
-- `GET /api/products`
-    - returns a list of all products
-    - output `{"products": [{id: "netflix", "name": "Netflix", price: 75.99}, ...] }`
-- `POST /api/orders`
-    - creates a new order
-    - input `{"order": {"items": ["product-1", "product-2"], "user_id": "johndoe"}}`
-    - output 200 `{"order": {"order_id": "123", "data": {"items": [...], "total": 500}}}`
-    - output 400 `{"error": "products_not_found"}`
-    - output 400 `{"error": "products_already_purchased"}`
-    - output 400 `{"error": "insufficient_balance"}`
+8. Start the Phoenix server
+```
+iex -S mix phx.server
+```
 
-**Notes:**
-- You're free to use whatever means and technology to achieve the goal
+# Documentation
 
+## Get or Create User
 
-## Web App
-Our Frontend Developer has kindly provided you a simple React app for you to test out your service.
+Retrieves a user by its username, creating it if it does not exist yet
 
-Let me guide you through how to set it up:
+### Request
+```http
+GET /api/users/{{user_id}}
+```
+### Response
 
-1. Go ahead and clone this repo.
-1. Go inside frontend folder : ```cd frontend/```
-1. Make sure you have Node installed.
-1. Install npm dependencies: ```npm install```
-1. Run it in development mode: ```npm start```
+#### Status 200
+```json
+{
+  "user": {
+    "user_id": "username",
+    "data": {
+      "balance": 50.0,
+      "product_ids": [1, 2]
+    }
+  }
+}
+```
 
-Now you should see something at ```http://localhost:3000```
+## List Products
 
-**Additional Requirements:**
+Returns all products available for purchasing
 
-In development mode, this react app is expecting the local backend service to expose port ```4000```.
+### Request
+```http
+GET /api/products
+```
+### Response
 
-## Setup
+#### Status 200
+```json
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Netflix",
+      "price": 30.5
+    },
+    {
+      "id": 2,
+      "name": "Apple Watch",
+      "price": 540.3
+    }
+  ]
+}
+```
 
-For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
-As soon as you are finished, go ahead and make a Pull Request back to this repository.
+## Create Order
 
-Good Luck! 🙌
+Creates a new order
+
+```http
+POST /api/orders
+```
+
+### Request Body
+```json
+{
+  "order": {
+    "user_id": "username",
+    "items": [1, 4, 6]
+  }
+}
+```
+
+### Response
+
+#### Status 201
+
+When the order creation succeed
+```json
+{
+  "order": {
+    "data": {
+      "items": [1],
+      "total": 500.3
+    },
+    "order_id": 2
+  }
+}
+```
+
+#### Status 400
+
+When the user doesn't have enough balance
+
+```json
+{
+  "error": "insufficient_balance"
+}
+```
+
+When one or more items are already purchased
+
+```json
+{
+  "error": "products_already_purchased"
+}
+```
+
+When one or more items are already purchased
+
+```json
+{
+  "error": "products_already_purchased"
+}
+```
+
+When a product is not found
+
+```json
+{
+  "error": "products_not_found"
+}
+```
