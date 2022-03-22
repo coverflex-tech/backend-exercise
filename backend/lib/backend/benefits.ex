@@ -6,7 +6,7 @@ defmodule Backend.Benefits do
   import Ecto.Query, warn: false
   alias Backend.Repo
 
-  alias Backend.Benefits.{Product, User}
+  alias Backend.Benefits.{Order, Product, User}
 
   @default_balance 500_00
 
@@ -39,6 +39,15 @@ defmodule Backend.Benefits do
   def create_product(attrs \\ %{}) do
     %Product{}
     |> Product.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a order.
+  """
+  def create_order(attrs \\ %{}) do
+    %Order{}
+    |> Order.changeset(attrs)
     |> Repo.insert()
   end
 end

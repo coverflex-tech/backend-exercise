@@ -52,4 +52,23 @@ defmodule Backend.BenefitsTest do
       assert {:error, %Ecto.Changeset{}} = Benefits.create_product(@invalid_attrs)
     end
   end
+
+  describe "orders" do
+    alias Backend.Benefits.Order
+
+    import Backend.BenefitsFixtures
+
+    @invalid_attrs %{total_value: nil}
+
+    test "create_order/1 with valid data creates a order" do
+      valid_attrs = %{total_value: 42}
+
+      assert {:ok, %Order{} = order} = Benefits.create_order(valid_attrs)
+      assert order.total_value == 42
+    end
+
+    test "create_order/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Benefits.create_order(@invalid_attrs)
+    end
+  end
 end
