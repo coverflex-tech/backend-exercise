@@ -2,7 +2,7 @@ defmodule BackendWeb.ProductController do
   use BackendWeb, :controller
 
   alias Backend.Benefits
-  alias Backend.Benefits.Product
+  alias Backend.Benefits.Products.Product
 
   action_fallback BackendWeb.FallbackController
 

@@ -6,8 +6,8 @@ defmodule BackendWeb.OrderController do
 
   action_fallback BackendWeb.FallbackController
 
-  def create(conn, %{"order" => order_params}) do
-    with {:ok, %Order{} = order} <- Benefits.create_order(order_params) do
+  def create(conn, %{"order" => %{"items" => items, "user_id" => user_id}}) do
+    with {:ok, %Order{} = order} <- Benefits.create_order(%{items: items, user_id: user_id}) do
       conn
       |> put_status(:created)
       |> render("show.json", order: order)

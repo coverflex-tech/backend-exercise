@@ -1,4 +1,4 @@
-defmodule Backend.Benefits.Product do
+defmodule Backend.Benefits.Products.Product do
   use Ecto.Schema
   import Ecto.Changeset
 

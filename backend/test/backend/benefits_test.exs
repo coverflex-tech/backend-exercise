@@ -2,12 +2,12 @@ defmodule Backend.BenefitsTest do
   use Backend.DataCase
 
   alias Backend.Benefits
+  alias Backend.Benefits.{Order, User}
+  alias Backend.Benefits.Products.Product
+
+  import Backend.BenefitsFixtures
 
   describe "users" do
-    alias Backend.Benefits.User
-
-    import Backend.BenefitsFixtures
-
     test "get_or_create_user/1 should get an existing user by username" do
       user = user_fixture()
       {:ok, returned_user} = Benefits.get_or_create_user(%{username: user.username})
@@ -21,10 +21,6 @@ defmodule Backend.BenefitsTest do
   end
 
   describe "products" do
-    alias Backend.Benefits.Product
-
-    import Backend.BenefitsFixtures
-
     @invalid_attrs %{name: nil, price: nil, string_id: nil}
 
     test "list_products/0 returns all products" do
@@ -54,21 +50,34 @@ defmodule Backend.BenefitsTest do
   end
 
   describe "orders" do
-    alias Backend.Benefits.Order
-
-    import Backend.BenefitsFixtures
-
-    @invalid_attrs %{total_value: nil}
-
     test "create_order/1 with valid data creates a order" do
-      valid_attrs = %{total_value: 42}
+      product_fixture(%{string_id: "netflix", name: "Netflix", price: 7542})
+      valid_attrs = %{items: ["netflix"], user_id: "foo"}
 
-      assert {:ok, %Order{} = order} = Benefits.create_order(valid_attrs)
-      assert order.total_value == 42
+      assert {:ok,
+              %Order{
+                total_value: 7542,
+                products: [%Product{string_id: "netflix"}],
+                user: %User{username: "foo"}
+              }} = Benefits.create_order(valid_attrs)
     end
 
-    test "create_order/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Benefits.create_order(@invalid_attrs)
+    test "create_order/1 with inexistent product returns error" do
+      attrs = %{items: ["foo"], user_id: "bar"}
+      assert {:error, :products_not_found} = Benefits.create_order(attrs)
+    end
+
+    test "create_order/1 when user already purchased product returns error" do
+      product_fixture(%{string_id: "netflix", name: "Netflix", price: 7542})
+      attrs = %{items: ["netflix"], user_id: "foo"}
+      {:ok, _order} = Benefits.create_order(attrs)
+
+      assert {:error, :products_already_purchased} = Benefits.create_order(attrs)
+    end
+
+    test "create_order/1 without items returns error changeset" do
+      invalid_attrs = %{items: [], user_id: "foo"}
+      assert {:error, %Ecto.Changeset{}} = Benefits.create_order(invalid_attrs)
     end
   end
 end

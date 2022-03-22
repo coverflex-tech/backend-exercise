@@ -21,4 +21,11 @@ defmodule BackendWeb.FallbackController do
     |> put_view(BackendWeb.ErrorView)
     |> render(:"404")
   end
+
+  def call(conn, {:error, reason}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(BackendWeb.ErrorView)
+    |> render("business_error.json", %{reason: reason})
+  end
 end
