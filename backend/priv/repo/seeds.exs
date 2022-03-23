@@ -9,3 +9,19 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias Backend.Benefits.Products.Product
+alias Backend.Repo
+
+Repo.insert!(Product.changeset(%Product{}, %{name: "Netflix", price: 4200, string_id: "netflix"}))
+
+Repo.insert!(
+  Product.changeset(%Product{}, %{name: "Amazon Prime", price: 900, string_id: "amazon_prime"})
+)
+
+Repo.insert!(
+  Product.changeset(%Product{}, %{
+    name: "Very Expensive Service",
+    price: 900_000,
+    string_id: "expensive"
+  })
+)
