@@ -10,7 +10,17 @@ defmodule Backend.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ]
     ]
   end
 
@@ -40,7 +50,16 @@ defmodule Backend.MixProject do
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+
+      # Static code analysis and linter
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+
+      # Code coverage and test helpers
+      {:excoveralls, "~> 0.10", only: :test},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_machina, "~> 2.7.0", only: :test}
     ]
   end
 

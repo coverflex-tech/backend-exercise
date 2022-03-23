@@ -5,17 +5,15 @@ defmodule Backend.Benefits do
 
   alias Backend.Repo
   alias Backend.Benefits.{Order, User}
-  alias Backend.Benefits.Products.Query, as: ProductQuery
   alias Backend.Benefits.Products.Product
+  alias Backend.Benefits.Products.Query, as: ProductQuery
   alias Ecto.Multi
 
-  @default_balance 500_00
+  @default_balance 50_000
 
   @doc """
   Gets a single user by username, or creates a new with default values.
   """
-  def get_or_create_user(%{username: nil}), do: {:error, :username_cant_be_nil}
-
   def get_or_create_user(%{username: username}) do
     case Repo.get_by(User, username: username) do
       nil -> create_user(%{username: username, balance: @default_balance})
@@ -92,14 +90,12 @@ defmodule Backend.Benefits do
       |> ProductQuery.filter_by_product_string_ids_list(product_string_ids)
       |> Repo.all()
 
-    if(length(found_products) == length(product_string_ids)) do
+    if length(found_products) == length(product_string_ids) do
       {:ok, found_products}
     else
       {:error, :products_not_found}
     end
   end
-
-  defp get_products_by_string_ids(_), do: {:error, :invalid_order}
 
   defp check_user_bought_products(user, product_string_ids) do
     user

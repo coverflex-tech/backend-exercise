@@ -15,7 +15,7 @@ defmodule BackendWeb.UserControllerTest do
 
       assert %{
                "user" => %{
-                 "data" => %{"balance" => 50000, "product_ids" => []},
+                 "data" => %{"balance" => 50_000, "product_ids" => []},
                  "user_id" => "some username"
                }
              } == json_response(conn, 200)
@@ -26,7 +26,7 @@ defmodule BackendWeb.UserControllerTest do
 
       assert %{
                "user" => %{
-                 "data" => %{"balance" => 50000, "product_ids" => []},
+                 "data" => %{"balance" => 50_000, "product_ids" => []},
                  "user_id" => "foo"
                }
              } = json_response(conn, 200)

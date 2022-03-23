@@ -2,8 +2,8 @@ defmodule Backend.Benefits.Order do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Backend.Benefits.User
   alias Backend.Benefits.Products.Product
+  alias Backend.Benefits.User
 
   schema "orders" do
     field :total_value, :integer

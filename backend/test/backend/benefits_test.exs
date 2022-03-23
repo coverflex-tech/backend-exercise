@@ -16,7 +16,7 @@ defmodule Backend.BenefitsTest do
 
     test "get_or_create_user/1 should create an user when it doesn't exist" do
       {:ok, created_user} = Benefits.get_or_create_user(%{username: "foo"})
-      assert %User{balance: 50000, username: "foo"} = created_user
+      assert %User{balance: 50_000, username: "foo"} = created_user
     end
   end
 
