@@ -8,10 +8,9 @@ services:
       context: ./frontend
     volumes:
       - './frontend:/app'
-    ports:
-      - 3000:3000
     depends_on:
       - backend
+    network_mode: "host"
   backend:
     container_name: backend
     build:
@@ -22,11 +21,11 @@ services:
       - ./backend/.env
     volumes:
       - './backend:/backend'
-    ports:
-      - 4000:4000
+    network_mode: "host"
     depends_on:
       - db
   db:
+    container_name: db
     image: postgres
     restart: always
     environment:
