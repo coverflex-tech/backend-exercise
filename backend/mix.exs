@@ -56,10 +56,8 @@ defmodule Backend.MixProject do
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
 
-      # Code coverage and test helpers
-      {:excoveralls, "~> 0.10", only: :test},
-      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.7.0", only: :test}
+      # Code coverage
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
