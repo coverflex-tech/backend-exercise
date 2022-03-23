@@ -36,6 +36,12 @@ defmodule Backend.Benefits do
     Repo.all(Product)
   end
 
+  def list_products_bought_by_user(user) do
+    user
+    |> ProductQuery.products_bought_by_user_query()
+    |> Repo.all()
+  end
+
   @doc """
   Creates a product.
   """
