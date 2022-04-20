@@ -2,9 +2,9 @@ defmodule Backend.Benefits.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:user_id, :string, autogenerate: false}
   schema "users" do
-    field :balance, :integer
-    field :user_id, :string
+    field :balance, :integer, default: 500
 
     timestamps()
   end

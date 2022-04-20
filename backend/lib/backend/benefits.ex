@@ -23,7 +23,7 @@ defmodule Backend.Benefits do
 
   """
   # TODO: retrieve the user's products simultaneously
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(user_id), do: Repo.get(User, user_id)
 
   @doc """
   Creates a user.

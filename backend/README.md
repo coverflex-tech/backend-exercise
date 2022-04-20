@@ -27,3 +27,11 @@ This requires running the following command:
 `mix phx.gen.json Benefits User users user_id:string:unique balance:integer`
 
 We then make several adjustments, like deleting code we likely won't use. (We can always bring it back later!) We also install the CORS Plug to allow cross-origin resource sharing to the frontend.
+
+## 3 - Create records in the database
+
+Our API spec says that, if provided with a non-existent `user_id`, we should create one. This suggests we should start using our database and make the `show` function in the UserController a bit smarter.
+
+For convenience, we will get rid of the default-generated `id` column and have `user_id` be the primary key for our table.
+
+Notice: the migration was changed before any entries had been inserted. No databases were hurt in the making of this project.
