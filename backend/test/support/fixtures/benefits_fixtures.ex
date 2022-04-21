@@ -23,4 +23,25 @@ defmodule Backend.BenefitsFixtures do
 
     user
   end
+
+  @doc """
+  Generate a unique product name.
+  """
+  def unique_product_name, do: "some product name#{System.unique_integer([:positive])}"
+
+  @doc """
+  Generate a product.
+  """
+  def product_fixture(attrs \\ %{}) do
+    {:ok, product} =
+      attrs
+      |> Enum.into(%{
+        id: unique_product_name(),
+        name: unique_product_name(),
+        price: 42
+      })
+      |> Backend.Benefits.create_product()
+
+    product
+  end
 end

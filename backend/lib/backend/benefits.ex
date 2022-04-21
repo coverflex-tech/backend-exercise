@@ -6,7 +6,7 @@ defmodule Backend.Benefits do
   import Ecto.Query, warn: false
   alias Backend.Repo
 
-  alias Backend.Benefits.User
+  alias Backend.Benefits.{Product, User}
 
   @doc """
   Gets a single user.
@@ -59,5 +59,34 @@ defmodule Backend.Benefits do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Returns the list of products.
+
+  ## Examples
+
+      iex> list_products()
+      [%Product{}, ...]
+
+  """
+  def list_products, do: Repo.all(Product)
+
+  @doc """
+  Creates a product.
+
+  ## Examples
+
+      iex> create_product(%{field: value})
+      {:ok, %Product{}}
+
+      iex> create_product(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_product(attrs \\ %{}) do
+    %Product{}
+    |> Product.changeset(attrs)
+    |> Repo.insert()
   end
 end

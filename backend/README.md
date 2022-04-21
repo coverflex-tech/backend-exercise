@@ -35,3 +35,7 @@ Our API spec says that, if provided with a non-existent `user_id`, we should cre
 For convenience, we will get rid of the default-generated `id` column and have `user_id` be the primary key for our table.
 
 Notice: the migration was changed before any entries had been inserted. No databases were hurt in the making of this project.
+
+## 4 - Implement /products endpoint
+
+We want to return all the products, with an `id`, `name` and `price`, as the response to a `GET /api/products` request. We'll assume the set of products is fixed and will be seeded into the database, since there are no endpoints for creating/updating this resource.

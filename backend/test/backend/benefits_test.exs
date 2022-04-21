@@ -3,16 +3,16 @@ defmodule Backend.BenefitsTest do
 
   alias Backend.Benefits
 
+  import Backend.BenefitsFixtures
+
   describe "users" do
     alias Backend.Benefits.User
 
-    import Backend.BenefitsFixtures
-
     @invalid_attrs %{balance: nil, user_id: nil}
 
-    test "get_user!/1 returns the user with given id" do
+    test "get_user/1 returns the user with given id" do
       user = user_fixture()
-      assert Benefits.get_user!(user.id) == user
+      assert Benefits.get_user(user.user_id) == user
     end
 
     test "create_user/1 with valid data creates a user" do
@@ -39,7 +39,15 @@ defmodule Backend.BenefitsTest do
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Benefits.update_user(user, @invalid_attrs)
-      assert user == Benefits.get_user!(user.id)
+      assert user == Benefits.get_user(user.user_id)
+    end
+  end
+
+  describe "products" do
+    test "list_products/0 returns all products" do
+      product = product_fixture()
+
+      assert Benefits.list_products() == [product]
     end
   end
 end
