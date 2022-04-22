@@ -6,7 +6,7 @@ defmodule Backend.Benefits do
   import Ecto.Query, warn: false
   alias Backend.Repo
 
-  alias Backend.Benefits.{Product, User}
+  alias Backend.Benefits.{Order, Product, User}
 
   @doc """
   Gets a single user.
@@ -87,5 +87,25 @@ defmodule Backend.Benefits do
     %Product{}
     |> Product.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates an order.
+
+  ## Examples
+
+      iex> create_order(%{field: value})
+      {:ok, %Order{}}
+
+      iex> create_order(%{field: bad_value})
+      {:error, ...}
+
+  """
+  def create_order(attrs \\ %{}) do
+    {:ok, order } = %Order{}
+    |> Order.changeset(attrs)
+    |> Repo.insert()
+
+    {:ok, order |> Repo.preload(:benefits)}
   end
 end

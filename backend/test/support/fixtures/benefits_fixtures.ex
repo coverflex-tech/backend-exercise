@@ -44,4 +44,16 @@ defmodule Backend.BenefitsFixtures do
 
     product
   end
+
+  @doc """
+  Generate an order.
+  """
+  def order_fixture(attrs \\ %{}) do
+    {:ok, order} =
+      attrs
+      |> Enum.into(%{})
+      |> Backend.Benefits.create_order()
+
+    order
+  end
 end

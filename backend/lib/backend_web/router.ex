@@ -10,5 +10,6 @@ defmodule BackendWeb.Router do
 
     get "/users/:user_id", UserController, :show
     get "/products", ProductController, :index
+    post "/orders", OrderController, :create
   end
 end

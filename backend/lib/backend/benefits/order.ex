@@ -13,7 +13,7 @@ defmodule Backend.Benefits.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:total])
-    |> validate_required([:total])
+    |> cast(attrs, [:user_id])
+    |> change(total: 120)
   end
 end

@@ -51,3 +51,7 @@ This commit focuses on the migrations, the next one(s) will focus on the schemas
 ## 6 - Create order and benefit schemas
 
 We now need to set up the associations between all our tables at the schema level. This time, instead of generating the whole JSON package all at once, we'll start by perfecting the schema and then building upper layers. We need to make clear that a User has many Orders, an Order has many Benefits and there is a many-to-many relationship between Products and Users through Benefits. With this association, we can include a user's Products in the corresponding view; once we are actually creating the Benefits with the respective Order, this should automatically make the Users endpoint work correctly.
+
+## 7 - Send basic response to orders endpoint
+
+In this commit, we begin to send appropriate responses from all three endpoints. Products is fine, but we need to allow the API consumer to place an order, and we also need to include a user's benefits in the response. At first we will focus on the orders endpoint, sending a dummy response without the items or the correct total as we are not yet saving all the associations. It is worth noting that the POST request to Orders causes the creation of an entry in the database; as such, we send the default Phoenix HTTP response status of 201 Created, instead of 200 OK, to better match the standard semantics of HTTP statuses.
