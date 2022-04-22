@@ -59,7 +59,7 @@ defmodule Backend.BenefitsTest do
     @invalid_attrs %{}
 
     test "create_order/1 with valid data creates an order" do
-      valid_attrs = %{}
+      valid_attrs = %{"items" => []}
 
       assert {:ok, %Order{} = _order} = Benefits.create_order(valid_attrs)
     end

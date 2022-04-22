@@ -4,8 +4,8 @@ defmodule Backend.Benefits do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Backend.Repo
-
   alias Backend.Benefits.{Order, Product, User}
 
   @doc """
@@ -102,9 +102,10 @@ defmodule Backend.Benefits do
 
   """
   def create_order(attrs \\ %{}) do
-    {:ok, order } = %Order{}
-    |> Order.changeset(attrs)
-    |> Repo.insert()
+    {:ok, order} =
+      %Order{}
+      |> Order.changeset(attrs)
+      |> Repo.insert()
 
     {:ok, order |> Repo.preload(:benefits)}
   end
