@@ -59,3 +59,7 @@ In this commit, we begin to send appropriate responses from all three endpoints.
 ## 8 - Save order total
 
 We need to calculate the total for the order and save it. We will assume for now that the product IDs sent in the POST request exist, that the requesting user does not yet have them and that they can afford these products.
+
+## 9 - Save benefits for an order
+
+Given the assumptions above, we'll create the Benefits corresponding to the order and include their IDs in the response to the POST request. This also allows us to send the products a user already owns in the response to the Users endpoint.

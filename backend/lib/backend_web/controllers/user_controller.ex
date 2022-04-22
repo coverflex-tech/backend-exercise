@@ -15,6 +15,7 @@ defmodule BackendWeb.UserController do
         existing_user ->
           existing_user
       end
+      |> Backend.Repo.preload(:products)
 
     render(conn, "show.json", user: user)
   end

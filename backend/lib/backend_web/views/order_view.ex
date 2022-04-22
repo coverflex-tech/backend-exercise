@@ -6,8 +6,8 @@ defmodule BackendWeb.OrderView do
       order: %{
         order_id: order.id,
         data: %{
-          items: order.benefits,
-          total: (order.total / 100) |> Float.round(2)
+          items: order.products,
+          total: (order.total || 0 / 100) |> Float.round(2)
         }
       }
     }

@@ -1,7 +1,8 @@
 defmodule BackendWeb.OrderControllerTest do
   use BackendWeb.ConnCase
 
-  @create_attrs %{}
+  import Backend.BenefitsFixtures
+
   @invalid_attrs %{}
 
   setup %{conn: conn} do
@@ -9,22 +10,21 @@ defmodule BackendWeb.OrderControllerTest do
   end
 
   describe "create order" do
-    @tag skip: "Associations not yet fully implemented"
     test "renders order when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.order_path(conn, :create), order: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
-
-      conn = get(conn, Routes.order_path(conn, :show, id))
-
-      assert %{
-               "id" => ^id
-             } = json_response(conn, 200)["data"]
+      conn = post(conn, Routes.order_path(conn, :create), order: order_params([]))
+      assert %{"data" => %{"items" => [], "total" => 0.0}} = json_response(conn, 201)["order"]
     end
 
+    # TODO: recover the method that returns a changeset
     @tag skip: "Associations not yet fully implemented"
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.order_path(conn, :create), order: @invalid_attrs)
+      conn = post(conn, Routes.order_path(conn, :create), order: order_params("a banana peel"))
       assert json_response(conn, 422)["errors"] != %{}
     end
+  end
+
+  defp order_params(items) do
+    user = user_fixture()
+    %{"items" => items, "user_id" => user.user_id}
   end
 end

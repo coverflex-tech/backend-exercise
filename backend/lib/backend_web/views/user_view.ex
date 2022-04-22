@@ -7,7 +7,7 @@ defmodule BackendWeb.UserView do
         user_id: user.user_id,
         data: %{
           balance: user.balance,
-          product_ids: user.products
+          product_ids: user.products |> Enum.map(fn product -> product.id end)
         }
       }
     }

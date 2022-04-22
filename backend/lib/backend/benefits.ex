@@ -6,7 +6,7 @@ defmodule Backend.Benefits do
   import Ecto.Query, warn: false
   alias Ecto.Multi
   alias Backend.Repo
-  alias Backend.Benefits.{Order, Product, User}
+  alias Backend.Benefits.{Benefit, Order, Product, User}
 
   @doc """
   Gets a single user.
@@ -22,7 +22,7 @@ defmodule Backend.Benefits do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user(user_id), do: Repo.get(User, user_id) |> Repo.preload(:products)
+  def get_user(user_id), do: Repo.get(User, user_id)
 
   @doc """
   Creates a user.
@@ -101,12 +101,22 @@ defmodule Backend.Benefits do
       {:error, ...}
 
   """
-  def create_order(attrs \\ %{}) do
-    {:ok, order} =
-      %Order{}
-      |> Order.changeset(attrs)
-      |> Repo.insert()
+  def create_order(attrs = %{"items" => products, "user_id" => user_id} \\ %{}) do
+    benefits =
+      products
+      |> Enum.map(&[user_id: user_id, product_id: &1])
 
-    {:ok, order |> Repo.preload(:benefits)}
+    {:ok, changes} =
+      Multi.new()
+      |> Multi.insert(:order, Order.changeset(%Order{}, attrs))
+      |> Multi.insert_all(:benefits, Benefit, &add_order_id(benefits, &1))
+      |> Repo.transaction()
+
+    {:ok, changes.order}
+  end
+
+  defp add_order_id(benefits, %{order: order}) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    Enum.map(benefits, &[{:inserted_at, now}, {:updated_at, now}, {:order_id, order.id} | &1])
   end
 end

@@ -10,7 +10,6 @@ defmodule Backend.BenefitsTest do
 
     @invalid_attrs %{balance: nil, user_id: nil}
 
-    @tag skip: "Associations not yet fully implemented"
     test "get_user/1 returns the user with given id" do
       user = user_fixture()
       assert Benefits.get_user(user.user_id) == user
@@ -37,7 +36,6 @@ defmodule Backend.BenefitsTest do
       assert user.user_id == "some updated user_id"
     end
 
-    @tag skip: "Associations not yet fully implemented"
     test "update_user/2 with invalid data returns error changeset" do
       user = user_fixture()
       assert {:error, %Ecto.Changeset{}} = Benefits.update_user(user, @invalid_attrs)
@@ -56,17 +54,18 @@ defmodule Backend.BenefitsTest do
   describe "orders" do
     alias Backend.Benefits.Order
 
-    @invalid_attrs %{}
-
     test "create_order/1 with valid data creates an order" do
-      valid_attrs = %{"items" => []}
+      valid_attrs = %{"items" => [], "user_id" => user_fixture().user_id}
 
       assert {:ok, %Order{} = _order} = Benefits.create_order(valid_attrs)
     end
 
+    # TODO: recover the method that returns a changeset
     @tag skip: "Associations not yet fully implemented"
     test "create_order/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Benefits.create_order(@invalid_attrs)
+      invalid_attrs = %{"items" => ["non-existent benefit"], "user_id" => user_fixture().user_id}
+
+      assert {:error, %Ecto.Changeset{}} = Benefits.create_order(invalid_attrs)
     end
   end
 end
