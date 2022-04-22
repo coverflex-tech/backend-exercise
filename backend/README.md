@@ -47,3 +47,7 @@ A user can buy many products, and one product can be bought by many users. This 
 The POST request for an order can contain many products for a given user in the same order. Furthermore, a user can only buy a given product once. Therefore, we are going to have two new tables. One is `orders`, which simply records the User who made that purchase. Another is `benefits`, with three foreign keys, to a User, a Product and an Order. The combination of User and Product must be unique. These two tables will allow us to fulfill the remaining requirements for the API: list all of a User's products, and return the items included in an order (or an error if the user already has a given benefit).
 
 This commit focuses on the migrations, the next one(s) will focus on the schemas and finally we'll implement the corresponding endpoint with its several possible responses.
+
+## 6 - Create order and benefit schemas
+
+We now need to set up the associations between all our tables at the schema level. This time, instead of generating the whole JSON package all at once, we'll start by perfecting the schema and then building upper layers. We need to make clear that a User has many Orders, an Order has many Benefits and there is a many-to-many relationship between Products and Users through Benefits. With this association, we can include a user's Products in the corresponding view; once we are actually creating the Benefits with the respective Order, this should automatically make the Users endpoint work correctly.

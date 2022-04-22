@@ -7,6 +7,11 @@ defmodule Backend.Benefits.Product do
     field :name, :string
     field :price, :integer
 
+    many_to_many :users, Backend.Benefits.User,
+      join_through: Backend.Benefits.Benefit,
+      join_keys: [product_id: :id, user_id: :user_id],
+      unique: true
+
     timestamps()
   end
 

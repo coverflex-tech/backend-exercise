@@ -4,6 +4,7 @@ defmodule Backend.Repo.Migrations.CreateOrders do
   def change do
     create table(:orders) do
       add :user_id, references(:users, column: :user_id, type: :string, on_delete: :delete_all)
+      add :total, :integer
 
       timestamps()
     end

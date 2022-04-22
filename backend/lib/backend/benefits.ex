@@ -22,8 +22,7 @@ defmodule Backend.Benefits do
       ** (Ecto.NoResultsError)
 
   """
-  # TODO: retrieve the user's products simultaneously
-  def get_user(user_id), do: Repo.get(User, user_id)
+  def get_user(user_id), do: Repo.get(User, user_id) |> Repo.preload(:products)
 
   @doc """
   Creates a user.

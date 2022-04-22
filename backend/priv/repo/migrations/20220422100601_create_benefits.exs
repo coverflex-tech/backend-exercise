@@ -11,6 +11,8 @@ defmodule Backend.Repo.Migrations.CreateBenefits do
     end
 
     create index(:benefits, [:order_id])
+    create index(:benefits, [:user_id])
+    create index(:benefits, [:product_id])
     create unique_index(:benefits, [:user_id, :product_id])
   end
 end
