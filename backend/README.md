@@ -39,3 +39,11 @@ Notice: the migration was changed before any entries had been inserted. No datab
 ## 4 - Implement /products endpoint
 
 We want to return all the products, with an `id`, `name` and `price`, as the response to a `GET /api/products` request. We'll assume the set of products is fixed and will be seeded into the database, since there are no endpoints for creating/updating this resource.
+
+## 5 - Migrate orders and benefits
+
+A user can buy many products, and one product can be bought by many users. This suggests a many-to-many relationship, so that is what we'll implement next, starting with the data layer.
+
+The POST request for an order can contain many products for a given user in the same order. Furthermore, a user can only buy a given product once. Therefore, we are going to have two new tables. One is `orders`, which simply records the User who made that purchase. Another is `benefits`, with three foreign keys, to a User, a Product and an Order. The combination of User and Product must be unique. These two tables will allow us to fulfill the remaining requirements for the API: list all of a User's products, and return the items included in an order (or an error if the user already has a given benefit).
+
+This commit focuses on the migrations, the next one(s) will focus on the schemas and finally we'll implement the corresponding endpoint with its several possible responses.
