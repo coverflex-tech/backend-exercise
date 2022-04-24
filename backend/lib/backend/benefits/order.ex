@@ -7,7 +7,7 @@ defmodule Backend.Benefits.Order do
   schema "orders" do
     belongs_to :user, User, type: :string, references: :user_id
     has_many :benefits, Benefit
-    field :total, :integer
+    field :total, :integer, default: 0
 
     timestamps()
   end
@@ -21,6 +21,6 @@ defmodule Backend.Benefits.Order do
 
     order
     |> cast(attrs, [:user_id])
-    |> change(total: total)
+    |> change(total: total || 0)
   end
 end

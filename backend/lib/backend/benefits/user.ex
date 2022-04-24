@@ -4,7 +4,7 @@ defmodule Backend.Benefits.User do
 
   @primary_key {:user_id, :string, autogenerate: false}
   schema "users" do
-    field :balance, :integer, default: 500
+    field :balance, :integer, default: 50000
     has_many :orders, Backend.Benefits.Order, foreign_key: :user_id
 
     many_to_many :products, Backend.Benefits.Product,

@@ -63,3 +63,7 @@ We need to calculate the total for the order and save it. We will assume for now
 ## 9 - Save benefits for an order
 
 Given the assumptions above, we'll create the Benefits corresponding to the order and include their IDs in the response to the POST request. This also allows us to send the products a user already owns in the response to the Users endpoint.
+
+## 10 - Deduct price from user balance
+
+Up until now we are not decreasing the user's balance by the amount necessary, so let's fix that. Let's also fix some tests.

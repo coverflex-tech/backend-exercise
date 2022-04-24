@@ -1,5 +1,6 @@
 defmodule BackendWeb.OrderView do
   use BackendWeb, :view
+  alias BackendWeb.AmountHelpers
 
   def render("show.json", %{order: order}) do
     %{
@@ -7,7 +8,7 @@ defmodule BackendWeb.OrderView do
         order_id: order.id,
         data: %{
           items: order.products,
-          total: (order.total || 0 / 100) |> Float.round(2)
+          total: AmountHelpers.centify(order.total)
         }
       }
     }

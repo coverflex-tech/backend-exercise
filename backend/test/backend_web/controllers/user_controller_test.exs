@@ -2,6 +2,7 @@ defmodule BackendWeb.UserControllerTest do
   use BackendWeb.ConnCase
 
   import Backend.BenefitsFixtures
+  alias BackendWeb.AmountHelpers
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -16,7 +17,7 @@ defmodule BackendWeb.UserControllerTest do
       expected = %{
         "user" => %{
           "user_id" => user.user_id,
-          "data" => %{"balance" => user.balance, "product_ids" => []}
+          "data" => %{"balance" => AmountHelpers.centify(user.balance), "product_ids" => []}
         }
       }
 

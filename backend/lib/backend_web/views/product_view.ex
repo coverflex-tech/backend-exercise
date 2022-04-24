@@ -1,6 +1,6 @@
 defmodule BackendWeb.ProductView do
   use BackendWeb, :view
-  alias BackendWeb.ProductView
+  alias BackendWeb.{AmountHelpers, ProductView}
 
   def render("index.json", %{products: products}) do
     %{products: render_many(products, ProductView, "product.json")}
@@ -10,7 +10,7 @@ defmodule BackendWeb.ProductView do
     %{
       id: product.id,
       name: product.name,
-      price: (product.price / 100) |> Float.round(2)
+      price: AmountHelpers.centify(product.price)
     }
   end
 end

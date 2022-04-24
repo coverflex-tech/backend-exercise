@@ -106,17 +106,38 @@ defmodule Backend.Benefits do
       products
       |> Enum.map(&[user_id: user_id, product_id: &1])
 
-    {:ok, changes} =
+    result =
       Multi.new()
       |> Multi.insert(:order, Order.changeset(%Order{}, attrs))
+      |> Multi.update(:user_balance, &adjust_user_balance(&1, user_id))
       |> Multi.insert_all(:benefits, Benefit, &add_order_id(benefits, &1))
       |> Repo.transaction()
 
-    {:ok, changes.order}
+    case result do
+      {:ok, changes} ->
+        {:ok, changes.order}
+
+      {:error, _user_balance, changeset, _order} ->
+        {:error, changeset}
+    end
   end
 
   defp add_order_id(benefits, %{order: order}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     Enum.map(benefits, &[{:inserted_at, now}, {:updated_at, now}, {:order_id, order.id} | &1])
+  end
+
+  defp adjust_user_balance(%{order: order}, user_id) do
+    user = Repo.get!(User, user_id)
+
+    case user.balance - order.total do
+      new_balance when new_balance >= 0 ->
+        Ecto.Changeset.change(user, balance: new_balance)
+
+      _insufficient_balance ->
+        user
+        |> Ecto.Changeset.cast(Map.from_struct(user), [:user_id, :balance])
+        |> Ecto.Changeset.add_error(:user, "Insufficient balance")
+    end
   end
 end
