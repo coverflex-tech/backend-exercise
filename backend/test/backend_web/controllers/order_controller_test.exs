@@ -3,8 +3,6 @@ defmodule BackendWeb.OrderControllerTest do
 
   import Backend.BenefitsFixtures
 
-  @invalid_attrs %{}
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
@@ -15,10 +13,8 @@ defmodule BackendWeb.OrderControllerTest do
       assert %{"data" => %{"items" => [], "total" => 0.0}} = json_response(conn, 201)["order"]
     end
 
-    # TODO: recover the method that returns a changeset
-    @tag skip: "Associations not yet fully implemented"
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.order_path(conn, :create), order: order_params("a banana peel"))
+      conn = post(conn, Routes.order_path(conn, :create), order: order_params(["a banana peel"]))
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

@@ -60,8 +60,6 @@ defmodule Backend.BenefitsTest do
       assert {:ok, %Order{} = _order} = Benefits.create_order(valid_attrs)
     end
 
-    # TODO: recover the method that returns a changeset
-    @tag skip: "Associations not yet fully implemented"
     test "create_order/1 with invalid data returns error changeset" do
       invalid_attrs = %{"items" => ["non-existent benefit"], "user_id" => user_fixture().user_id}
 

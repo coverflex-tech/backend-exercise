@@ -67,3 +67,9 @@ Given the assumptions above, we'll create the Benefits corresponding to the orde
 ## 10 - Deduct price from user balance
 
 Up until now we are not decreasing the user's balance by the amount necessary, so let's fix that. Let's also fix some tests.
+
+## 11 - Fix errors: product absent or already bought
+
+Due to DB-level constraints, we currently get Postgrex errors when trying to buy a non-existent product, or one that the user has already bought. We need to convert these errors into useful JSON messages for the frontend.
+
+In order to be more specific, the error code 422 Unprocessable Entity is used instead of the more general 400 Bad Request. 404 Not Found could be used for the case where the order contains a non-existent product, but its semantics do not seem to fit well with a POST request that aims to create an order rather than find a given product. So 422 it is then.
