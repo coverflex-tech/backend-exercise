@@ -1,9 +1,10 @@
 defmodule Backend.Benefits do
   @moduledoc """
-  The Benefits context.
+  The Benefits context. For simplicity, since this is a four-table app, it was decided to keep
+  operations for all of them under just this one context.
   """
-
   import Ecto.Query, warn: false
+
   alias Ecto.Multi
   alias Backend.Repo
   alias Backend.Benefits.{Benefit, Order, Product, User}
@@ -11,15 +12,15 @@ defmodule Backend.Benefits do
   @doc """
   Gets a single user.
 
-  Raises `Ecto.NoResultsError` if the User does not exist.
+  If the user does not exist, the calling function creates it, so there is no need to raise here.
 
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_user(123)
       %User{}
 
-      iex> get_user!(456)
-      ** (Ecto.NoResultsError)
+      iex> get_user(456)
+      nil
 
   """
   def get_user(user_id), do: Repo.get(User, user_id)
@@ -40,24 +41,6 @@ defmodule Backend.Benefits do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
-  end
-
-  @doc """
-  Updates a user.
-
-  ## Examples
-
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
-
-      iex> update_user(user, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
-    |> Repo.update()
   end
 
   @doc """
@@ -115,8 +98,12 @@ defmodule Backend.Benefits do
     end
   end
 
+  ###############################################
+
   defp add_user_to_products(%{"items" => products, "user_id" => user_id}),
     do: Enum.map(products, &[user_id: user_id, product_id: &1])
+
+  ###############################################
 
   defp adjust_user_balance(%{order: order}, user_id) do
     user = Repo.get!(User, user_id)
@@ -132,8 +119,10 @@ defmodule Backend.Benefits do
     end
   end
 
+  ###############################################
+
   defp build_error_value(error) do
-    {error_code, message} = do_build_error(error)
+    {error_code, message} = build_error_data(error)
 
     changeset =
       %Ecto.Changeset{changes: [], data: %{}, types: []}
@@ -142,16 +131,22 @@ defmodule Backend.Benefits do
     {:error, changeset}
   end
 
+  ###############################################
+
   defp build_success_value({:ok, changes}), do: {:ok, changes.order}
   defp build_success_value({:error, _user_balance, changeset, _order}), do: {:error, changeset}
 
-  defp do_build_error(%{postgres: %{code: code}}) when code == :unique_violation,
-    do: {code, "The user already has a product in this order."}
+  ###############################################
 
-  defp do_build_error(%{postgres: %{code: code}}) when code == :foreign_key_violation,
-    do: {code, "There is no such product."}
+  defp build_error_data(%{postgres: %{code: code}}) when code == :unique_violation,
+    do: {:user, "The user already owns a product in this order."}
 
-  defp do_build_error(_error), do: {:unknown_error, "An unknown error has occurred."}
+  defp build_error_data(%{postgres: %{code: code}}) when code == :foreign_key_violation,
+    do: {:product, "There is no such product."}
+
+  defp build_error_data(_error), do: {:unknown_error, "An unknown error has occurred."}
+
+  ###############################################
 
   defp do_db_transaction(attrs, benefits) do
     Multi.new()
@@ -160,6 +155,8 @@ defmodule Backend.Benefits do
     |> Multi.insert_all(:benefits, Benefit, &fill_out_benefits(benefits, &1))
     |> Repo.transaction()
   end
+
+  ###############################################
 
   defp fill_out_benefits(benefits, %{order: order}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)

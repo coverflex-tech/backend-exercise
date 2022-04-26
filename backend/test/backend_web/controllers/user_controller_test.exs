@@ -17,7 +17,10 @@ defmodule BackendWeb.UserControllerTest do
       expected = %{
         "user" => %{
           "user_id" => user.user_id,
-          "data" => %{"balance" => AmountHelpers.centify(user.balance), "product_ids" => []}
+          "data" => %{
+            "balance" => AmountHelpers.centify(user.balance),
+            "product_ids" => []
+          }
         }
       }
 

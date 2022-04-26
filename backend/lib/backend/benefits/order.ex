@@ -21,6 +21,7 @@ defmodule Backend.Benefits.Order do
 
     order
     |> cast(attrs, [:user_id])
+    |> foreign_key_constraint(:user_id)
     |> change(total: total || 0)
   end
 end

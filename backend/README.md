@@ -73,3 +73,7 @@ Up until now we are not decreasing the user's balance by the amount necessary, s
 Due to DB-level constraints, we currently get Postgrex errors when trying to buy a non-existent product, or one that the user has already bought. We need to convert these errors into useful JSON messages for the frontend.
 
 In order to be more specific, the error code 422 Unprocessable Entity is used instead of the more general 400 Bad Request. 404 Not Found could be used for the case where the order contains a non-existent product, but its semantics do not seem to fit well with a POST request that aims to create an order rather than find a given product. So 422 it is then.
+
+## 12 - Test the API
+
+Let's write and end-to-end test to make sure our API matches the spec. We'll also add some documentation and comments for clarity, delete an unused function, cleanup tasks like that.
