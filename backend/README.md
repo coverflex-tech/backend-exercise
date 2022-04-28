@@ -4,6 +4,7 @@ To start the Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate the database with `mix ecto.setup`
+  * Seed the database with `mix run priv/repo/seeds.exs`
   * Start the Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser, or use this address as the base URL for the frontend to call.
@@ -77,3 +78,13 @@ In order to be more specific, the error code 422 Unprocessable Entity is used in
 ## 12 - Test the API
 
 Let's write and end-to-end test to make sure our API matches the spec. We'll also add some documentation and comments for clarity, delete an unused function, cleanup tasks like that.
+
+## 13 - Perform a final cleanup
+
+There were a few things that I'd thought of doing in this final commit.
+
+We currently use `rescue` to deal with invalid products in orders, as they raise Postgrex errors. This is a deliberate choice over the option of inserting each product individually using a changeset; we use `Multi.insert_all`, which cannot use a changeset but batch-inserts the products, and this is a more efficient DB write operation. So we are not altering the code to use changesets there.
+
+Another consideration was to format the response body in error messages to conform literally to the API spec. However, the frontend code does not rely on a specific format (or a specific HTTP error code, for that matter), so I've decided to just use the default Ecto format for the response.
+
+Therefore, all that is left is to clarify a few parts of the code with docs and comments.
