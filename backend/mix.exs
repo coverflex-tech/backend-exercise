@@ -33,6 +33,7 @@ defmodule Backend.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # phoenix default
       {:phoenix, "~> 1.6.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
@@ -49,7 +50,10 @@ defmodule Backend.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
 
       # test coverage
-      {:excoveralls, "~> 0.14.4", only: :test}
+      {:excoveralls, "~> 0.14.4", only: :test},
+
+      # # soft delete
+      {:ecto_soft_delete, "~> 2.0"}
     ]
   end
 
