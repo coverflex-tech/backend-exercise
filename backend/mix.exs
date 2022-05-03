@@ -46,7 +46,10 @@ defmodule Backend.MixProject do
       {:plug_cowboy, "~> 2.5"},
 
       # code analysis
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+
+      # test coverage
+      {:excoveralls, "~> 0.14.4", only: :test}
     ]
   end
 
