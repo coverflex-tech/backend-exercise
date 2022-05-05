@@ -6,7 +6,6 @@ defmodule Backend.Users.Services.GetUser do
     case Get.call(username, orders: [:products]) do
       {:ok, user} -> {:ok, user}
       {:error, "User not found"} -> create_and_preload_orders(username)
-      error -> error
     end
   end
 

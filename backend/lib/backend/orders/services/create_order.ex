@@ -12,22 +12,16 @@ defmodule Backend.Orders.Services.CreateOrder do
          {:ok, user} <- GetUser.call(username),
          amount <- calculate_amount(products),
          true <- user_has_enough_balance(user, amount) do
-      response =
+      {:ok, %{id: order_id} = order} =
         params
         |> Map.merge(%{"total_amount" => amount})
         |> Create.call()
 
-      case response do
-        {:ok, %{id: order_id} = order} ->
-          update_products(products_ids, order_id)
+      update_products(products_ids, order_id)
 
-          UpdateUser.call(username, %{balance: Decimal.sub(user.balance, amount)})
+      UpdateUser.call(username, %{balance: Decimal.sub(user.balance, amount)})
 
-          {:ok, Map.merge(order, %{items: products_ids})}
-
-        error ->
-          error
-      end
+      {:ok, Map.merge(order, %{items: products_ids})}
     else
       error -> error
     end
@@ -40,8 +34,8 @@ defmodule Backend.Orders.Services.CreateOrder do
   defp get_all_products([head | tail], products) do
     case GetProduct.call(head) do
       {:error, "Product not found"} -> get_all_products([], [])
-      %{order_id: nil} = product -> get_all_products(tail, products ++ [product])
-      %{order_id: _order_id} = _product -> get_all_products(:already_purchased)
+      {:ok, %{order_id: nil} = product} -> get_all_products(tail, products ++ [product])
+      {:ok, %{order_id: _order_id}} -> get_all_products(:already_purchased)
     end
   end
 

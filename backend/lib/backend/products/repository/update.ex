@@ -11,10 +11,7 @@ defmodule Backend.Products.Repository.Update do
         |> Repo.update()
 
       nil ->
-        {:error, "Property not found"}
-
-      error ->
-        error
+        {:error, "Product not found"}
     end
   end
 end

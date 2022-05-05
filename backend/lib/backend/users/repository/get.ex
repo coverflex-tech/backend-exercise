@@ -6,7 +6,6 @@ defmodule Backend.Users.Repository.Get do
     case Repo.get(User, username) do
       %User{} = user -> {:ok, Repo.preload(user, requested_relationships)}
       nil -> {:error, "User not found"}
-      error -> error
     end
   end
 end

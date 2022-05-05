@@ -12,9 +12,6 @@ defmodule Backend.Users.Repository.Update do
 
       nil ->
         {:error, "User not found"}
-
-      error ->
-        error
     end
   end
 end

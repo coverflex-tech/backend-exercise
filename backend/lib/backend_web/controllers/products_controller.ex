@@ -1,10 +1,7 @@
 defmodule BackendWeb.ProductsController do
   use BackendWeb, :controller
 
-  alias Backend.FallbackController
   alias Backend.Products.Services.List
-
-  action_fallback FallbackController
 
   def list(conn, _) do
     {:ok, products} = List.call()

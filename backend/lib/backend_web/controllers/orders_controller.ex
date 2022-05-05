@@ -1,11 +1,8 @@
 defmodule BackendWeb.OrdersController do
   use BackendWeb, :controller
 
-  alias Backend.FallbackController
   alias Backend.Orders.Order
   alias Backend.Orders.Services.CreateOrder
-
-  action_fallback FallbackController
 
   def create(conn, params) do
     case CreateOrder.call(params) do

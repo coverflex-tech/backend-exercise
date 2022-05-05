@@ -7,7 +7,7 @@ defmodule BackendWeb.ProductsView do
 
   defp handle_products(products) do
     Enum.map(products, fn %{id: id, name: name, price: price} ->
-      %{id: id, name: name, price: Decimal.to_float(price)}
+      %{id: id, name: name, price: price}
     end)
   end
 end
