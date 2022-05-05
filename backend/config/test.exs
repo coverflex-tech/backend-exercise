@@ -10,7 +10,6 @@ config :backend, Backend.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "backend_test#{System.get_env("MIX_TEST_PARTITION")}",
-  port: 54_321,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
