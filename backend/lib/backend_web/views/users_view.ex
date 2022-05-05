@@ -19,8 +19,6 @@ defmodule BackendWeb.UsersView do
   end
 
   defp get_products_ids(orders) do
-    IO.puts("asdasdas")
-
     orders
     |> Enum.map(fn %{products: products} -> products end)
     |> List.first()
