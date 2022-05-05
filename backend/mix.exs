@@ -10,7 +10,14 @@ defmodule Backend.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -53,7 +60,10 @@ defmodule Backend.MixProject do
       {:excoveralls, "~> 0.14.4", only: :test},
 
       # # soft delete
-      {:ecto_soft_delete, "~> 2.0"}
+      {:ecto_soft_delete, "~> 2.0"},
+
+      # cors
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
