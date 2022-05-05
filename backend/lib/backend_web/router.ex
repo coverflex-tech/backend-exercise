@@ -3,10 +3,17 @@ defmodule BackendWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug
   end
 
   scope "/api", BackendWeb do
     pipe_through :api
+
+    get "/users/:user_id", UsersController, :get
+
+    get "/products", ProductsController, :list
+
+    post "/orders", OrdersController, :create
   end
 
   # Enables LiveDashboard only for development
