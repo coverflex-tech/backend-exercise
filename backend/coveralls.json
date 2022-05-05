@@ -1,0 +1,15 @@
+{
+  "skip_files": [
+    "test/support",
+    "lib/backend_web/views/error_helpers.ex",
+    "lib/backend_web/channels/user_socket.ex",
+    "lib/backend_web.ex",
+    "lib/backend_web/telemetry.ex",
+    "lib/backend/application.ex"
+  ],
+  "coverage_options": {
+      "treat_no_relevant_lines_as_covered": true,
+      "output_dir": "cover/",
+      "minimum_coverage": 90
+  }
+}
