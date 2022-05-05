@@ -1,8 +1,8 @@
 defmodule BackendWeb.OrdersControllerTest do
   use BackendWeb.ConnCase, async: true
 
-  alias Backend.Repo
   alias Backend.Products.Product
+  alias Backend.Repo
   alias Backend.Users.User
 
   describe "create/2" do

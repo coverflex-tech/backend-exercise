@@ -1,8 +1,8 @@
 defmodule BackendWeb.ProductsControllerTest do
   use BackendWeb.ConnCase, async: true
 
-  alias Backend.Repo
   alias Backend.Products.Product
+  alias Backend.Repo
 
   describe "list/2" do
     setup do
