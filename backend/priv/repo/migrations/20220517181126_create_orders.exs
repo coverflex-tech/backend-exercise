@@ -1,0 +1,28 @@
+defmodule Benefits.Repo.Migrations.CreateOrders do
+  use Ecto.Migration
+
+  def change do
+    create table(:orders) do
+      add :total, :decimal
+      add :user_id, :integer
+
+      timestamps()
+    end
+
+    create table(:orders_products) do
+      add :order_id, :integer
+      add :user_id, :integer
+      add :product_id, :integer
+
+      timestamps()
+    end
+
+    create index(:orders_products, [:user_id, :product_id], unique: true)
+
+    execute "CREATE EXTENSION btree_gist;"
+
+    create constraint(:orders_products, :unique_user_id_per_order_id,
+             exclude: ~s|gist (order_id with = , user_id with <>)|
+           )
+  end
+end
