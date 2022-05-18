@@ -11,7 +11,7 @@ defmodule Benefits.UsersFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-        username: "some username"
+        user_id: "some username"
       })
       |> Benefits.Users.create_user()
 

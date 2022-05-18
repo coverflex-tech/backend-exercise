@@ -4,41 +4,11 @@ defmodule Benefits.Orders do
   """
 
   import Ecto.Query, warn: false
+  alias Ecto.Multi
   alias Benefits.Repo
 
-  alias Benefits.Users
-  alias Benefits.Products
   alias Benefits.Orders.{Order, OrderProduct}
-  alias Benefits.Products.Product
 
-  @doc """
-  Returns the list of orders.
-
-  ## Examples
-
-      iex> list_orders()
-      [%Order{}, ...]
-
-  """
-  def list_orders do
-    Repo.all(Order)
-  end
-
-  @doc """
-  Gets a single order.
-
-  Raises `Ecto.NoResultsError` if the Order does not exist.
-
-  ## Examples
-
-      iex> get_order!(123)
-      %Order{}
-
-      iex> get_order!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_order!(id), do: Repo.get!(Order, id)
 
   @doc """
   Creates a order.
@@ -53,85 +23,27 @@ defmodule Benefits.Orders do
 
   """
   def create_order(attrs \\ %{}) do
-    items = Map.get(attrs, "items", [])
-    user_id = Map.get(attrs, "user_id")
+    Multi.new()
+    |> Multi.insert(:order, Order.changeset(%Order{}, attrs))
+    |> Multi.insert_all(:order_products, OrderProduct, fn %{order: order} ->
+      Enum.map(order.items, fn item ->
+        now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    order_total = Products.sum_product_price(items)
-
-    changeset =
-      %Order{total: order_total}
-      |> Order.changeset(attrs)
-
-    alias Ecto.Multi
-
-    case changeset.valid? do
-      true ->
-        Multi.new()
-        |> Multi.insert(:order, changeset)
-        |> Multi.insert_all(:order_products, OrderProduct, fn %{order: order} ->
-          Enum.map(items, fn item ->
-            now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
-            %{
-              order_id: order.id,
-              user_id: user_id,
-              product_id: item,
-              inserted_at: now,
-              updated_at: now
-            }
-          end)
-        end)
-        |> Repo.transaction()
-
-      false ->
-        changeset
-    end
-  end
-
-  @doc """
-  Updates a order.
-
-  ## Examples
-
-      iex> update_order(order, %{field: new_value})
-      {:ok, %Order{}}
-
-      iex> update_order(order, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_order(%Order{} = order, attrs) do
-    order
-    |> Order.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a order.
-
-  ## Examples
-
-      iex> delete_order(order)
-      {:ok, %Order{}}
-
-      iex> delete_order(order)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_order(%Order{} = order) do
-    Repo.delete(order)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking order changes.
-
-  ## Examples
-
-      iex> change_order(order)
-      %Ecto.Changeset{data: %Order{}}
-
-  """
-  def change_order(%Order{} = order, attrs \\ %{}) do
-    Order.changeset(order, attrs)
+        %{
+          order_id: order.id,
+          user_id: order.user_id,
+          product_id: item,
+          inserted_at: now,
+          updated_at: now
+        }
+      end)
+    end)
+    |> Repo.transaction()
+  rescue
+    e in Postgrex.Error ->
+      case e.postgres.constraint do
+        "orders_products_user_id_product_id_index" ->
+          {:error, :order, "products_already_purchased"}
+      end
   end
 end

@@ -8,7 +8,7 @@ defmodule BenefitsWeb.UserView do
 
   def render("user.json", %{user: user}) do
     %{
-      user_id: user.username,
+      user_id: user.user_id,
       data: %{
         balance: user.balance,
         product_ids: user.products |> Enum.map(& &1.id)

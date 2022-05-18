@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-Benefits.Repo.insert!(%Benefits.Users.User{username: "rafa", balance: 500})
+Benefits.Repo.insert!(%Benefits.Users.User{user_id: "rafa", balance: 500})
 
 Benefits.Repo.insert!(%Benefits.Products.Product{name: "Netflix", price: Decimal.new("100.00")})
 Benefits.Repo.insert!(%Benefits.Products.Product{name: "Amazon", price: Decimal.new("50.00")})

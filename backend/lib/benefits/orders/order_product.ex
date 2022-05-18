@@ -8,7 +8,7 @@ defmodule Benefits.Orders.OrderProduct do
 
   schema "orders_products" do
     belongs_to :product, Product
-    belongs_to :user, User
+    belongs_to :user, User, type: :string, references: :user_id
     belongs_to :order, Order
 
     timestamps()
@@ -19,5 +19,6 @@ defmodule Benefits.Orders.OrderProduct do
     order
     |> cast(attrs, [:order_id, :user_id, :product_id])
     |> validate_required([:order_id, :user_id, :product_id])
+    |> unique_constraint(:order_id, name: :orders_products_user_id_product_id_index)
   end
 end

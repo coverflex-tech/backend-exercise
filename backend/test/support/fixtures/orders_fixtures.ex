@@ -10,9 +10,7 @@ defmodule Benefits.OrdersFixtures do
   def order_fixture(attrs \\ %{}) do
     {:ok, order} =
       attrs
-      |> Enum.into(%{
-        user_id: 42
-      })
+      |> Enum.into(%{})
       |> Benefits.Orders.create_order()
 
     order

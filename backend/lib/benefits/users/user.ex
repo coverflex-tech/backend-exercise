@@ -5,12 +5,12 @@ defmodule Benefits.Users.User do
   alias Benefits.Orders.{Order, OrderProduct}
   alias Benefits.Products.Product
 
+  @primary_key {:user_id, :string, autogenerate: false}
   schema "users" do
-    field :username, :string
     field :balance, :decimal, default: Decimal.new("500")
 
-    has_many :orders, Order
-    many_to_many :products, Product, join_through: OrderProduct
+    has_many :orders, Order, foreign_key: :user_id
+    many_to_many :products, Product, join_through: OrderProduct, join_keys: [user_id: :user_id, product_id: :id]
 
     timestamps()
   end
@@ -18,7 +18,8 @@ defmodule Benefits.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username])
-    |> validate_required([:username])
+    |> cast(attrs, [:user_id, :balance])
+    |> validate_required([:user_id])
+    |> unique_constraint(:user_id)
   end
 end
