@@ -17,7 +17,7 @@ defmodule Benefits.Orders.OrderProduct do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:user_id])
-    |> validate_required([:user_id])
+    |> cast(attrs, [:order_id, :user_id, :product_id])
+    |> validate_required([:order_id, :user_id, :product_id])
   end
 end

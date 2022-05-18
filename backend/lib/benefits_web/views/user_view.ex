@@ -11,7 +11,7 @@ defmodule BenefitsWeb.UserView do
       user_id: user.username,
       data: %{
         balance: user.balance,
-        product_ids: user.products |> Enum.map(& &1.codename)
+        product_ids: user.products |> Enum.map(& &1.id)
       }
     }
   end

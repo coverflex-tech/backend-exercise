@@ -6,7 +6,10 @@ defmodule Benefits.Orders do
   import Ecto.Query, warn: false
   alias Benefits.Repo
 
-  alias Benefits.Orders.Order
+  alias Benefits.Users
+  alias Benefits.Products
+  alias Benefits.Orders.{Order, OrderProduct}
+  alias Benefits.Products.Product
 
   @doc """
   Returns the list of orders.
@@ -50,9 +53,39 @@ defmodule Benefits.Orders do
 
   """
   def create_order(attrs \\ %{}) do
-    %Order{}
-    |> Order.changeset(attrs)
-    |> Repo.insert()
+    items = Map.get(attrs, "items", [])
+    user_id = Map.get(attrs, "user_id")
+
+    order_total = Products.sum_product_price(items)
+
+    changeset =
+      %Order{total: order_total}
+      |> Order.changeset(attrs)
+
+    alias Ecto.Multi
+
+    case changeset.valid? do
+      true ->
+        Multi.new()
+        |> Multi.insert(:order, changeset)
+        |> Multi.insert_all(:order_products, OrderProduct, fn %{order: order} ->
+          Enum.map(items, fn item ->
+            now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+            %{
+              order_id: order.id,
+              user_id: user_id,
+              product_id: item,
+              inserted_at: now,
+              updated_at: now
+            }
+          end)
+        end)
+        |> Repo.transaction()
+
+      false ->
+        changeset
+    end
   end
 
   @doc """

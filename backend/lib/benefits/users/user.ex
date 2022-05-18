@@ -7,7 +7,7 @@ defmodule Benefits.Users.User do
 
   schema "users" do
     field :username, :string
-    field :balance, :decimal, default: 500
+    field :balance, :decimal, default: Decimal.new("500")
 
     has_many :orders, Order
     many_to_many :products, Product, join_through: OrderProduct

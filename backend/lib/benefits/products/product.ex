@@ -3,7 +3,6 @@ defmodule Benefits.Products.Product do
   import Ecto.Changeset
 
   schema "products" do
-    field :codename, :string
     field :name, :string
     field :price, :decimal
 
@@ -13,7 +12,7 @@ defmodule Benefits.Products.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:name, :codename, :price])
-    |> validate_required([:name, :codename, :price])
+    |> cast(attrs, [:name, :price])
+    |> validate_required([:name, :price])
   end
 end

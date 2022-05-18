@@ -11,7 +11,6 @@ defmodule Benefits.ProductsFixtures do
     {:ok, product} =
       attrs
       |> Enum.into(%{
-        codename: "some codename",
         name: "some name",
         price: "120.5"
       })

@@ -7,10 +7,10 @@
 #
 Benefits.Repo.insert!(%Benefits.Users.User{username: "rafa", balance: 500})
 
-Benefits.Repo.insert!(%Benefits.Products.Product{name: "Netflix", codename: "netflix", price: Decimal.new("100.00")})
-Benefits.Repo.insert!(%Benefits.Products.Product{name: "Amazon", codename: "amazon", price: Decimal.new("50.00")})
-Benefits.Repo.insert!(%Benefits.Products.Product{name: "Hulu", codename: "hulu", price: Decimal.new("74.99")})
-Benefits.Repo.insert!(%Benefits.Products.Product{name: "Disney+", codename: "disney", price: Decimal.new("18.23")})
+Benefits.Repo.insert!(%Benefits.Products.Product{name: "Netflix", price: Decimal.new("100.00")})
+Benefits.Repo.insert!(%Benefits.Products.Product{name: "Amazon", price: Decimal.new("50.00")})
+Benefits.Repo.insert!(%Benefits.Products.Product{name: "Hulu", price: Decimal.new("74.99")})
+Benefits.Repo.insert!(%Benefits.Products.Product{name: "Disney+", price: Decimal.new("18.23")})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.

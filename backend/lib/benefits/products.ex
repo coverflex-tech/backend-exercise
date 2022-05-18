@@ -101,4 +101,12 @@ defmodule Benefits.Products do
   def change_product(%Product{} = product, attrs \\ %{}) do
     Product.changeset(product, attrs)
   end
+
+  def sum_product_price(product_ids) when is_list(product_ids) do
+    query = from p in Product,
+      where: p.id in ^product_ids,
+      select: sum(p.price)
+
+    Repo.one(query)
+  end
 end

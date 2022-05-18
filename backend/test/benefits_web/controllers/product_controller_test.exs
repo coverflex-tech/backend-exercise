@@ -3,90 +3,27 @@ defmodule BenefitsWeb.ProductControllerTest do
 
   import Benefits.ProductsFixtures
 
-  alias Benefits.Products.Product
-
-  @create_attrs %{
-    codename: "some codename",
-    name: "some name",
-    price: "120.5"
-  }
-  @update_attrs %{
-    codename: "some updated codename",
-    name: "some updated name",
-    price: "456.7"
-  }
-  @invalid_attrs %{codename: nil, name: nil, price: nil}
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
   describe "index" do
     test "lists all products", %{conn: conn} do
+      p1 = product_fixture(%{name: "Netflix", price: Decimal.new("100.00")})
+      p2 = product_fixture(%{name: "Amazon", price: Decimal.new("50.00")})
+      p3 = product_fixture(%{name: "Hulu", price: Decimal.new("74.99")})
+      p4 = product_fixture(%{name: "Disney+", price: Decimal.new("18.23")})
+
       conn = get(conn, Routes.product_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+
+      assert json_response(conn, 200) == %{
+               "products" => [
+                 %{"id" => p1.id, "name" => "Netflix", "price" => 100.0},
+                 %{"id" => p2.id, "name" => "Amazon", "price" => 50.0},
+                 %{"id" => p3.id, "name" => "Hulu", "price" => 74.99},
+                 %{"id" => p4.id, "name" => "Disney+", "price" => 18.23}
+               ]
+             }
     end
-  end
-
-  describe "create product" do
-    test "renders product when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.product_path(conn, :create), product: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
-
-      conn = get(conn, Routes.product_path(conn, :show, id))
-
-      assert %{
-               "id" => ^id,
-               "codename" => "some codename",
-               "name" => "some name",
-               "price" => "120.5"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.product_path(conn, :create), product: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "update product" do
-    setup [:create_product]
-
-    test "renders product when data is valid", %{conn: conn, product: %Product{id: id} = product} do
-      conn = put(conn, Routes.product_path(conn, :update, product), product: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
-
-      conn = get(conn, Routes.product_path(conn, :show, id))
-
-      assert %{
-               "id" => ^id,
-               "codename" => "some updated codename",
-               "name" => "some updated name",
-               "price" => "456.7"
-             } = json_response(conn, 200)["data"]
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, product: product} do
-      conn = put(conn, Routes.product_path(conn, :update, product), product: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "delete product" do
-    setup [:create_product]
-
-    test "deletes chosen product", %{conn: conn, product: product} do
-      conn = delete(conn, Routes.product_path(conn, :delete, product))
-      assert response(conn, 204)
-
-      assert_error_sent 404, fn ->
-        get(conn, Routes.product_path(conn, :show, product))
-      end
-    end
-  end
-
-  defp create_product(_) do
-    product = product_fixture()
-    %{product: product}
   end
 end
