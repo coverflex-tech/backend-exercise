@@ -10,9 +10,9 @@ defmodule Benefits.Repo.Migrations.CreateOrders do
     end
 
     create table(:orders_products) do
-      add :order_id, :integer
+      add :order_id, references("orders")
       add :user_id, references("users", column: :user_id, type: :string)
-      add :product_id, :integer
+      add :product_id, references("products")
 
       timestamps()
     end

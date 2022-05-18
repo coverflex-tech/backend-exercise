@@ -6,6 +6,7 @@ defmodule Benefits.Users.User do
   alias Benefits.Products.Product
 
   @primary_key {:user_id, :string, autogenerate: false}
+
   schema "users" do
     field :balance, :decimal, default: Decimal.new("500")
 
@@ -20,6 +21,7 @@ defmodule Benefits.Users.User do
     user
     |> cast(attrs, [:user_id, :balance])
     |> validate_required([:user_id])
+    |> validate_number(:balance, greater_than: 0, message: "insufficient_balance")
     |> unique_constraint(:user_id)
   end
 end

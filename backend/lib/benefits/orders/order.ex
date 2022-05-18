@@ -3,7 +3,6 @@ defmodule Benefits.Orders.Order do
   import Ecto.Changeset
 
   alias Benefits.Orders.OrderProduct
-  alias Benefits.Users
   alias Benefits.Users.User
   alias Benefits.Products
   alias Benefits.Products.Product
@@ -24,51 +23,15 @@ defmodule Benefits.Orders.Order do
     order
     |> cast(attrs, [:user_id, :total, :items])
     |> validate_required([:user_id, :items])
-    |> put_total()
     |> validate_length(:items, min: 1)
-    |> validates_user_balance()
-    |> validates_products_exist()
+    |> calculate_total()
+    |> foreign_key_constraint(:user_id)
   end
 
-  defp put_total(changeset) when changeset.valid? == false, do: changeset
-  defp put_total(changeset) do
-    case get_change(changeset, :items) do
-      nil ->
-        changeset
+  defp calculate_total(changeset) when changeset.valid? == false, do: changeset
 
-      items ->
-        put_change(changeset, :total, Products.sum_product_price(items))
-    end
-  end
-
-  def validates_user_balance(changeset) when changeset.valid? == false, do: changeset
-  def validates_user_balance(changeset) do
-    total = get_field(changeset, :total)
-    user_id = get_field(changeset, :user_id)
-
-    balance = Users.get_user!(user_id).balance
-
-    case Decimal.compare(total, balance) do
-      :gt ->
-        changeset
-        |> add_error(:base, "insufficient_balance")
-
-      _ ->
-        changeset
-    end
-  end
-
-  def validates_products_exist(changeset) when changeset.valid? == false, do: changeset
-  def validates_products_exist(changeset) do
-    items = get_field(changeset, :items)
-
-    case Products.exists?(items) do
-      false ->
-        changeset
-        |> add_error(:base, "products_not_found")
-
-      _ ->
-        changeset
-    end
+  defp calculate_total(changeset) do
+    items = get_change(changeset, :items)
+    put_change(changeset, :total, Products.sum_product_price(items))
   end
 end

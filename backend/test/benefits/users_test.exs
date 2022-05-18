@@ -32,5 +32,12 @@ defmodule Benefits.UsersTest do
     test "create_user/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Users.create_user(@invalid_attrs)
     end
+
+    test "user cannot have negative balance" do
+      user = user_fixture(%{balance: Decimal.new("20")})
+
+      assert {:error, changeset} = Users.update_user(user, %{balance: Decimal.new("-10")})
+      assert errors_on(changeset) == %{balance: ["insufficient_balance"]}
+    end
   end
 end

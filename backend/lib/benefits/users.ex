@@ -7,6 +7,7 @@ defmodule Benefits.Users do
   alias Benefits.Repo
 
   alias Benefits.Users.User
+  alias Benefits.Orders.Order
 
   @doc """
   Gets a single user.
@@ -55,4 +56,20 @@ defmodule Benefits.Users do
     |> Repo.insert()
   end
 
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def pay_for_order(%Order{user_id: user_id, total: total}) do
+    user =
+      User
+      |> where([u], u.user_id == ^user_id)
+      |> lock("FOR UPDATE")
+      |> Repo.one!()
+
+    new_balance = Decimal.sub(user.balance, total)
+    update_user(user, %{balance: new_balance})
+  end
 end

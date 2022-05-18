@@ -29,11 +29,13 @@ defmodule BenefitsWeb.OrderControllerTest do
                "data" => %{"items" => ^items, "total" => 93.22}
              } = json_response(conn, 201)["order"]
     end
+
+
   end
 
-  describe "validations" do
+  describe "business validations" do
     test "it doesn't allow order creation when user ballance is insufficient", %{conn: conn} do
-      user = user_fixture(%{user_id: "rafa", balance: 90})
+      user = user_fixture(%{user_id: "rafa", balance: Decimal.new("90")})
 
       product1 = product_fixture(%{name: "Hulu", price: Decimal.new("74.99")})
       product2 = product_fixture(%{name: "Disney+", price: Decimal.new("18.23")})
@@ -51,7 +53,7 @@ defmodule BenefitsWeb.OrderControllerTest do
     end
 
     test "it doesn't allow order creation for unknown products", %{conn: conn} do
-      user = user_fixture(%{user_id: "rafa", balance: 90})
+      user = user_fixture(%{user_id: "rafa", balance: Decimal.new("90")})
 
       create_attrs = %{
         "order" => %{
@@ -67,6 +69,7 @@ defmodule BenefitsWeb.OrderControllerTest do
 
     test "it doesn't allow order creation for already purchased products", %{conn: conn} do
       user = user_fixture(%{user_id: "rafa", balance: Decimal.new("500")})
+
       product1 = product_fixture(%{name: "Hulu", price: Decimal.new("74.99")})
       product2 = product_fixture(%{name: "Disney+", price: Decimal.new("18.23")})
 

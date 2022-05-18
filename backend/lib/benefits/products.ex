@@ -39,7 +39,7 @@ defmodule Benefits.Products do
     |> Repo.insert()
   end
 
- def sum_product_price(product_ids) when is_list(product_ids) do
+  def sum_product_price(product_ids) when is_list(product_ids) do
     query =
       from p in Product,
         where: p.id in ^product_ids,
@@ -49,12 +49,5 @@ defmodule Benefits.Products do
       nil -> Decimal.new("0")
       result -> result
     end
-  end
-
-  def exists?(product_ids) when is_list(product_ids) do
-    Product
-    |> where([p], p.id in ^product_ids)
-    |> Repo.aggregate(:count)
-    |> then(fn count -> count == length(product_ids) end)
   end
 end
