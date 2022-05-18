@@ -4,15 +4,15 @@ defmodule Benefits.Repo.Migrations.CreateOrders do
   def change do
     create table(:orders) do
       add :total, :decimal
-      add :user_id, references("users", column: :user_id, type: :string)
+      add :user_id, references("users", column: :user_id, type: :string), null: false
 
       timestamps()
     end
 
     create table(:orders_products) do
-      add :order_id, references("orders")
-      add :user_id, references("users", column: :user_id, type: :string)
-      add :product_id, references("products")
+      add :order_id, references("orders"), null: false
+      add :user_id, references("users", column: :user_id, type: :string), null: false
+      add :product_id, references("products"), null: false
 
       timestamps()
     end

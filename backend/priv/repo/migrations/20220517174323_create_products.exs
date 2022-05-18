@@ -3,7 +3,7 @@ defmodule Benefits.Repo.Migrations.CreateProducts do
 
   def change do
     create table(:products) do
-      add :name, :string
+      add :name, :string, null: false
       add :price, :decimal
 
       timestamps()
