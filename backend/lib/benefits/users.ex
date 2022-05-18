@@ -49,7 +49,7 @@ defmodule Benefits.Users do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
+  def create_user(attrs) do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()

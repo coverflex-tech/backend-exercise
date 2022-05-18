@@ -10,7 +10,17 @@ defmodule Benefits.MixProject do
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [
+        ignore_modules: [
+          BenefitsWeb,
+          BenefitsWeb.ErrorHelpers,
+          BenefitsWeb.ChangesetView,
+          BenefitsWeb.FallbackController,
+          BenefitsWeb.Gettext,
+          Benefits.Repo
+        ]
+      ]
     ]
   end
 

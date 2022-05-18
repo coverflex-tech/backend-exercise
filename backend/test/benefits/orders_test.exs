@@ -18,7 +18,8 @@ defmodule Benefits.OrdersTest do
     end
 
     test "create_order/1 with invalid data returns error changeset" do
-      assert {:error, :order, %Ecto.Changeset{}, %{}} = Orders.create_order(%{user_id: nil})
+      assert {:error, :order, %Ecto.Changeset{} = changeset, %{}} = Orders.create_order(%{user_id: nil})
+      assert errors_on(changeset) == %{items: ["can't be blank"], user_id: ["can't be blank"]}
     end
   end
 end

@@ -7,7 +7,7 @@ defmodule Benefits.OrdersFixtures do
   @doc """
   Generate a order.
   """
-  def order_fixture(attrs \\ %{}) do
+  def order_fixture(attrs) do
     {:ok, order} =
       attrs
       |> Enum.into(%{})
