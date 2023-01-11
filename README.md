@@ -2,7 +2,7 @@
 
 Hello dear Backend developer!
 
-Your Project Manager needs you to quickly build an app that can be used by company employees to self-manage their benefits.
+Your Project Manager needs you to build an app that can be used by company employees to self-manage their benefits.
 Our Frontend Developer has already built a UI prototype to cover the required flows. You'll need to build an API to provide backend functionality to this prototype and integrate both.
 
 The API should include these use cases:
@@ -52,9 +52,5 @@ Now you should see something at ```http://localhost:3000```
 
 In development mode, this react app is expecting the local backend service to expose port ```4000```.
 
-## Setup
-
-For this challenge, please fork this repository, and create your solution inside of it, located inside `backend` folder.
-As soon as you are finished, go ahead and make a Pull Request back to this repository.
 
 Good Luck! 🙌
