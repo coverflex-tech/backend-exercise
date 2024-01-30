@@ -2,8 +2,8 @@
 
 Hello dear Backend developer!
 
-Your Project Manager needs you to build an app that can be used by company employees to self-manage their benefits.
-Our Frontend Developer has already built a UI prototype to cover the required flows. You'll need to build an API to provide backend functionality to this prototype and integrate both.
+Our team needs to build an app that can be used by company employees to self-manage their benefits.
+Our Frontend Engineer has already built a UI prototype to cover the required flows. We'll need to build an API to provide backend functionality to this prototype and integrate both.
 
 The API should include these use cases:
 * Retrieve data from a single user
@@ -36,7 +36,7 @@ Our Frontend Developer is expecting these API endpoints:
 
 
 ## Web App
-Our Frontend Developer has kindly provided you a simple React app for you to test out your service.
+Our Frontend Developer has kindly provided us a simple React app for you to test out our service.
 
 Let me guide you through how to set it up:
 
