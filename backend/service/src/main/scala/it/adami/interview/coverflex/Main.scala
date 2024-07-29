@@ -3,7 +3,7 @@ package it.adami.interview.coverflex
 import cats.effect.{IO, Resource, ResourceApp}
 import cats.implicits._
 import it.adami.interview.coverflex.config.AppConfig
-import it.adami.interview.coverflex.http.routes.{EntityHandler, HealthCheckHandler}
+import it.adami.interview.coverflex.http.routes.{DocumentationHandler, EntityHandler, HealthCheckHandler}
 import it.adami.interview.coverflex.service.specification.entity.EntityResource
 import it.adami.interview.coverflex.service.specification.healthCheck.HealthCheckResource
 import org.http4s.ember.client.EmberClientBuilder
@@ -19,10 +19,10 @@ object Main extends ResourceApp.Forever {
     for {
        _ <- logger.info("Starting application...").toResource
       config <- AppConfig.load.toResource
-      client <- EmberClientBuilder.default[IO].build
       healthCheckRoutes = new HealthCheckResource[IO]().routes(HealthCheckHandler)
       entityRoutes = new EntityResource[IO]().routes(EntityHandler)
-      allRoutes = healthCheckRoutes <+> entityRoutes <+> entityRoutes
+      documentRoutes = DocumentationHandler.routes
+      allRoutes = healthCheckRoutes <+> entityRoutes <+> documentRoutes
       _ <- EmberServerBuilder
         .default[IO]
         .withHost(config.server.host)
