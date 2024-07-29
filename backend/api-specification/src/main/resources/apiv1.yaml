@@ -1,0 +1,119 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Coverflex Interview API
+  description: API for the Coverflex interview
+  contact:
+    name: Alberto Adami
+    email: alberto.adami.7@gmail.com
+
+tags:
+  - name: coverflex
+    description: Coverflex interview endpoints
+
+servers:
+  - url: /api
+
+paths:
+  "/health":
+    get:
+      tags:
+        - coverflex
+      x-jvm-package: healthCheck
+      summary: Service health-check
+      operationId: healthCheck
+      responses:
+        "204":
+          description: Successful operation
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  "/entity":
+    post:
+      tags:
+        - coverflex
+      x-jvm-package: entity
+      summary: Create a new entity
+      operationId: createEntity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Entity"
+      responses:
+        "201":
+          description: Entity created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Entity"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  schemas:
+    Entity:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    ApiError:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      discriminator:
+        propertyName: error
+
+    BadRequest:
+      allOf:
+        - $ref: "#/components/schemas/ApiError"
+
+    NotFound:
+      allOf:
+        - $ref: "#/components/schemas/ApiError"
+
+    InternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/ApiError"
+
+  responses:
+    BadRequest: #400
+      description: 'Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/BadRequest"
+
+    NotFound: #404
+      description: 'Not Found'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/NotFound"
+
+    InternalServerError: #500
+      description: 'Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InternalServerError"
