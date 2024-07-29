@@ -1,0 +1,32 @@
+<!-- turn debug=true on for logback-test.xml to help debug logging configurations. -->
+<configuration debug="false">
+    <!--
+    We prefer logging to console instead of a File. Its very easy
+    to pipe console output to a file and most organizations already
+    have a log rotation setup in place. It can also be faster to use this
+    approach vs using a FileAppender directly
+    -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are  by default assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%date | %highlight(%.-5level) | [%thread] | T[%mdc{kamonTraceId:--}] | S[%mdc{kamonSpanId:--}] | %cyan(%logger{36}:%L) | %msg%n%rootException</pattern>
+        </encoder>
+    </appender>
+    <!--
+    Async appenders can drastically speed up logging as well as your application's
+    response time but with some potential drawbacks. Read more at.
+    https://logback.qos.ch/manual/appenders.html#AsyncAppender
+    http://blog.takipi.com/how-to-instantly-improve-your-java-logging-with-7-logback-tweaks/
+    Always be sure to test different configurations for yourself. Every
+    application has different requirements.
+     -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STDOUT"/>
+        <queueSize>1000</queueSize>
+        <includeCallerData>true</includeCallerData>
+    </appender>
+    <root level="ERROR">
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>
