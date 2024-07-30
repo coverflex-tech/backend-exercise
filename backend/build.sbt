@@ -21,7 +21,7 @@ lazy val apiSpecification = project
 lazy val service = project
   .in(file("service"))
   .settings(name := "coverflex-service")
-  .settings(libraryDependencies ++= http4s ++ log4Cats ++ munit ++ pureConfig ++ Seq(catsEffect))
+  .settings(libraryDependencies ++= http4s ++ database ++ log4Cats ++ munit ++ pureConfig ++ Seq(catsEffect, flyway))
   .dependsOn(apiSpecification)
 
 lazy val root = (project in file("."))
