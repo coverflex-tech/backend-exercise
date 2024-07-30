@@ -25,10 +25,13 @@ object Main extends ResourceApp.Forever {
       flyway <- FlywayMigration.create(config.flyway, config.database).toResource
       migrationResult <- flyway.migrate.toResource
        _ <- logger.info(s"Applied migration, result: ${migrationResult.success}").toResource
-
       transactor <- DoobieDbAccess.transactor(config.database)
       entityRepository = new DoobieEntityRepository(transactor)
-      _ <- entityRepository.createEntity(Entity(1, "test")).toResource
+      _ <- entityRepository.createEntity(Entity(3, "test", 2.23)).toResource
+      result <- entityRepository.getEntityById(3).toResource
+      _ <- logger.info(s"here the query response ${result}").toResource
+      allElements <- entityRepository.getAll.toResource
+      _ <- logger.info(s"here all the items: ${allElements}").toResource
       healthCheckRoutes = new HealthCheckResource[IO]().routes(HealthCheckHandler)
       entityRoutes = new EntityResource[IO]().routes(EntityHandler)
       documentRoutes = DocumentationHandler.routes
